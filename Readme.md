@@ -9,10 +9,10 @@ Main branch: production-ready code
 Commit Rules
 
 - Each feature should be on its own branch
-- Name of feature branches should follow this format: '<firstname>'-'<very brief description of feature>'
+- Name of feature branches should follow this format: `<firstname>`-`<very brief description of feature>`
   - For example, rich-user-authentication
 - Commits on branches should be small and incremental to easily allow for reverting if necessary
-- Commit description should follow this format: '<first-name>'-'<very brief description of feature>': '<1 sentence description of what this commit accomplished>'
+- Commit description should follow this format: `<firstname>`-`<very brief description of feature>`: `<1 sentence description of what this commit accomplished>`
   - For example, rich-user-authentication: added user authentication via google auth
 
 Pull Request Rules
