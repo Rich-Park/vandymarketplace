@@ -57,7 +57,6 @@ function SellItemForm() {
     }
     console.log('Form data submitted:', formData);
   };
-  console.log(formData);
   return (
     <Box p={4}>
       <Heading as="h2" size="lg" mb={4}>
