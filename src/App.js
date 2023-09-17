@@ -1,23 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import { ChakraProvider, Button } from '@chakra-ui/react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import SellItemForm from './SellItemForm';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <ChakraProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/sell-item"
+            element={
+              <>
+                <SellItemForm />
+                <Button
+                  as={Link}
+                  to="/"
+                  colorScheme="teal"
+                  size="lg"
+                  borderRadius="full"
+                  boxShadow="md"
+                  _hover={{ boxShadow: 'lg' }}
+                >
+                  Go back to Home
+                </Button>
+              </>
+            }
+          />
+        </Routes>
+      </Router>
+    </ChakraProvider>
+  );
+}
+
+function Home() {
+  return (
+    <div>
+      <p>This is the Home page</p>
+      {/* Button for navigating to Sell Item */}
+      <Link to="/sell-item">
+        <Button
+          colorScheme="teal"
+          size="lg"
+          borderRadius="full"
+          boxShadow="md"
+          _hover={{ boxShadow: 'lg' }}
         >
-          Learn React
-        </a>
-      </header>
+          Go to Sell Item
+        </Button>
+      </Link>
     </div>
   );
 }
