@@ -28,14 +28,20 @@ function App() {
                 <SellItemForm />
                 <Button
                   as={Link}
+                  bg={"brand.200"}
+                  color={"black"}
                   to="/"
-                  colorScheme="teal"
-                  size="lg"
                   borderRadius="full"
                   boxShadow="md"
-                  _hover={{ boxShadow: "lg" }}
+                  width={120}
+                  _hover={{
+                    bg: "brand.500",
+                    boxShadow: "lg",
+                  }}
+                  ml={"1rem"}
+                  
                 >
-                  Go back to Home
+                  Home Page
                 </Button>
               </>
             }
