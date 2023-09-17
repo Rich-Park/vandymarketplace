@@ -22,3 +22,4 @@ Pull Request Rules
 - Title: name of your feature branch
 - Description: description of changes implemented in this feature branch
 - At least one reviewer should approve before requester merges
+- Make sure to include before and after photos of your work in the description
