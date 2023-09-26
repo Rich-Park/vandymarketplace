@@ -1,68 +1,63 @@
-import { Box, Heading, Container, Text, Button, Stack } from "@chakra-ui/react";
+import { Box, Heading, Container, Text, Button, Stack, InputGroup, InputRightElement } from "@chakra-ui/react";
+import {
+  Flex,
+  Input,
+  Spacer,
+  ChakraProvider,
+  extendTheme,
+} from '@chakra-ui/react';
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { db, auth } from "../firebaseConfig";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+//import { SearchIcon } from "@chakra-ui/icons";
+import Header from "./Header";
+
 
 export default function HomePage() {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Observe auth state to redirect to login/home page
+    onAuthStateChanged(auth, async (user) => {
+      console.log("check auth");
+      if (user) {
+        console.log("user auth");
+        navigate("/");
+        const userEmail = user.email;
+        const userIdRef = doc(db, "userIdMap", userEmail);
+        const docSnap = await getDoc(userIdRef);
+
+        if (docSnap.exists()) {
+        } else {
+          console.error("Could not find document.");
+        }
+      } else {
+        console.log("redirect");
+        navigate("/log-in");
+      }
+    });
+  }, [auth]);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <>
-      <Container maxW={"3xl"}>
-        <Stack
-          as={Box}
-          textAlign={"center"}
-          spacing={{ base: 8, md: 14 }}
-          py={{ base: 20, md: 36 }}
-        >
-          <Heading
-            fontWeight={600}
-            fontSize={{ base: "2xl", sm: "4xl", md: "6xl" }}
-            lineHeight={"110%"}
-            color={"brand.200"}
-          >
-            Vanderbilt <br />
-            <Text as={"span"} color={"brand.100"}>
-              Marketplace
-            </Text>
-          </Heading>
-          <Text color={"gray.500"}>
-            Buy and sell items with other Vanderbilt students. Post your items,
-            browse for items, and get in contact to find the perfect price!
-          </Text>
-          <Stack
-            direction={"column"}
-            spacing={3}
-            align={"center"}
-            alignSelf={"center"}
-            position={"relative"}
-          >
-            <Button
-              bg={"brand.100"}
-              color="white"
-              rounded={"full"}
-              _hover={{
-                bg: "brand.300",
-                boxShadow: "lg",
-              }}
-              width={120}
-            >
-              Find items
-            </Button>
-            <Button
-              as={Link}
-              bg={"brand.200"}
-              color={"black"}
-              to="/sell-item"
-              borderRadius="full"
-              boxShadow="md"
-              width={120}
-              _hover={{
-                bg: "brand.500",
-                boxShadow: "lg",
-              }}
-            >
-              Sell items
-            </Button>
-          </Stack>
-        </Stack>
-      </Container>
+      <Header/>
+
+      <InputGroup>
+        <Input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </InputGroup>
+ 
+
     </>
   );
 }

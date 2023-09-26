@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import {
+  getDoc,
+  doc
+} from "firebase/firestore";
+import {
   Box,
   Button,
   FormControl,
@@ -12,8 +16,11 @@ import {
   InputRightElement,
   Image,
 } from '@chakra-ui/react';
+import { storeItemsSell } from '../firebaseFunctions/firebaseWrite';  
+import { db, auth } from "../firebaseConfig";
 
 function SellItemForm() {
+
   const [formData, setFormData] = useState({
     productName: '',
     email: '',
@@ -49,14 +56,31 @@ function SellItemForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email.endsWith('@vanderbilt.edu')) {
       alert('Email must end with "@vanderbilt.edu"');
       return;
     }
+    const userEmail = auth.currentUser.email;
+    const userIdRef = doc(db, "userIDMap", userEmail);
+    const docSnap = await getDoc(userIdRef);
+    let userId = "temp";
+    console.log(docSnap)
+    if (docSnap.exists()) {
+      userId = docSnap.data().userId;
+      console.log(userId);
+    } else {
+      console.log("error");
+      console.error("Could not find document.");
+    }
+    console.log("userId: ", userId);
+    storeItemsSell(userId,formData);
     console.log('Form data submitted:', formData);
   };
+
+
+
   return (
     <Box p={4}>
       <Heading as="h2" size="lg" mb={4}>
@@ -169,6 +193,7 @@ function SellItemForm() {
                 bg: "brand.300",
                 boxShadow: "lg",
               }}
+            //onClick={() => storeItemsSell(userId, formData)}
           >
             Submit
           </Button>

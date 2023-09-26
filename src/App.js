@@ -2,6 +2,7 @@ import { ChakraProvider, Button, extendTheme } from "@chakra-ui/react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import SellItemForm from "./components/SellItemForm";
 import HomePage from "./components/HomePage";
+import LogInPage from "./components/LogInPage";
 
 const colors = {
   brand: {
@@ -20,6 +21,7 @@ function App() {
     <ChakraProvider theme={theme}>
       <Router>
         <Routes>
+          <Route path="/log-in" element={<LogInPage />} />
           <Route path="/" element={<HomePage />} />
           <Route
             path="/sell-item"
