@@ -18,8 +18,11 @@ import {
 } from '@chakra-ui/react';
 import { storeItemsSell } from '../firebaseFunctions/firebaseWrite';  
 import { db, auth } from "../firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 function SellItemForm() {
+
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     productName: '',
@@ -77,6 +80,7 @@ function SellItemForm() {
     console.log("userId: ", userId);
     storeItemsSell(userId,formData);
     console.log('Form data submitted:', formData);
+    navigate('/');
   };
 
 
