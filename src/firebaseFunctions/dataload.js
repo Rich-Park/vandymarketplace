@@ -39,7 +39,7 @@ export async function AllSellItemsImageLoader() {
         }
       });
     });
-    //console.log(imageURLs);
+
     return imageURLs;
   } catch (error) {
     console.error("Error fetching documents:", error);

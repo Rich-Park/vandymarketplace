@@ -23,8 +23,9 @@ export default function HomePage() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
+  
 
+  useEffect(() => {
     // Observe auth state to redirect to login/home page
     onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -42,12 +43,17 @@ export default function HomePage() {
       }
     });
     
+
   }, [auth]);  
+
+  
 
   return (
     <>
       <Header/>
       <ImageGallery/>
+ 
     </>
   );
 }
+/** */
