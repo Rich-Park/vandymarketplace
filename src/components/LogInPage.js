@@ -70,7 +70,7 @@ export default function LogInPage() {
 
           if (!userDataSnap.exists()) {
             await setDoc(doc(db, "users", id), {
-              name: ""
+              
             });
           }
       }
