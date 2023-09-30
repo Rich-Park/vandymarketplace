@@ -20,6 +20,7 @@ import { storeItemsSell } from '../firebaseFunctions/firebaseWrite';
 import { db, auth } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { getUserID } from '../firebaseFunctions/dataload';
+import ImageGallery from './ImageGallery';
 
 
 function SellItemForm() {

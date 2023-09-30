@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { AllSellItemsImageLoader } from '../firebaseFunctions/dataload';
-import { db, auth } from "../firebaseConfig";
+import { AllSellItemsLoader } from '../firebaseFunctions/dataload';
+import { db } from "../firebaseConfig";
+import ContactForm from './ContactForm';
+import { auth } from "../firebaseConfig";
+
 const ImageGallery = () => {
+  const [itemsData, setItemsData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [userEmail, setUserEmail] = useState('');
 
     useEffect(() => {
         
@@ -18,10 +26,18 @@ const ImageGallery = () => {
        
         async function load(){
             setLoading(true);
-            const result = await AllSellItemsImageLoader();
-            setImageURLs(result);
-            const delay = ms => new Promise(res => setTimeout(res, ms));
-            await delay(1000);
+            try{
+              const result = await AllSellItemsLoader();
+              setItemsData(result);
+              const user = auth.currentUser;
+              if (user && user.email) {
+                setUserEmail(user.email);
+              }
+              const delay = ms => new Promise(res => setTimeout(res, ms));
+              await delay(1000);
+            } catch (error){
+              console.error("Error fetching data:", error);
+            }
             setLoading(false);
             
         }
@@ -31,32 +47,60 @@ const ImageGallery = () => {
 
     }, []);
 
-    const [imageURLs, setImageURLs] = useState([]);
-    const [loading, setLoading] = useState(false);
 
-    
+
+     // Event handler to open the modal
+     const openModal = (item) => {
+      setIsModalOpen(true);
+      setSelectedItem(item);
+
+    };
+
+    // Event handler to close the modal
+    const closeModal = () => {
+      setIsModalOpen(false);
+      setSelectedItem(null);
+    };
 
     return (
-        <div>
+      <div>
         {loading ? ( // Show loading message while data is being fetched
           <p>Loading images...</p>
-        ) : imageURLs.length > 0 ? (
-          imageURLs.map((url, index) => (
-            <div key = {index}>
+        ) : itemsData.length > 0 ? (
+          itemsData.map((item, index) => (
+            <div key={index}>
               <span>hihi</span>
-              <img
-                src={url}
-                key={index}
-                alt={`Image ${index} ${url}`}
-                style={{ maxWidth: "100px", maxHeight: "100px", margin: "10px" }}
-              />
+              {item.imageURLs.map((url, imageIndex) => (
+                <img
+                  src={url}
+                  key={imageIndex}
+                  alt={`Image ${imageIndex} ${url}`}
+                  style={{
+                    maxWidth: '100px',
+                    maxHeight: '100px',
+                    margin: '10px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => openModal(item)}
+                />
+              ))}
             </div>
           ))
         ) : (
           <p>No images available.</p>
         )}
+        {selectedItem && (
+        <ContactForm 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+        sellerEmail={selectedItem.email}
+        productName={selectedItem.productName} 
+        productPrice={selectedItem.price} 
+        userEmail = {userEmail}
+        />
+        )}
       </div>
-    )
+    );
 }
 
 export default ImageGallery;
