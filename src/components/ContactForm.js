@@ -17,7 +17,7 @@ const ContactForm = ({ isOpen, onClose, sellerEmail, productName, productPrice, 
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/send-email', {
+      const response = await axios.post('http://localhost:8080/send-email', {
         sellerEmail,
         productName,
         productPrice,

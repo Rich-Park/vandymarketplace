@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer');
 const cors = require('cors'); // Import the cors middleware
 
 const app = express();
-const port = 5000; // Use port 5000 for your Node.js server
+const port = 8080; // Use port 5000 for your Node.js server
 
 // Middleware to allow cross-origin requests
 app.use(cors());

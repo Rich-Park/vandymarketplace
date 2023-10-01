@@ -29,8 +29,7 @@ export async function AllSellItemsLoader() {
 
     querySnapshot.forEach(async (userDoc) => {
 
-      const userId = userDoc.id;
-      const itemsToSellCollectionRef = collection(doc(itemsToSellRef, userId), "ItemsToSell");
+      const itemsToSellCollectionRef = collection(userDoc.ref, "ItemsToSell");
       
       // Create a query to retrieve documents that have imageURLs
 
