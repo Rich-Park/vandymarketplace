@@ -19,9 +19,9 @@ export async function getUserID(){
   return userId;
 }
 
-export async function AllSellItemsImageLoader() {
+export async function AllSellItemsLoader() {
   const itemsToSellRef = collection(db, "users"); // Assuming "users" is the top-level collection
-  const imageURLs = [];
+  const itemsData = [];
 
   try {
     const querySnapshot = await getDocs(itemsToSellRef);
@@ -33,21 +33,17 @@ export async function AllSellItemsImageLoader() {
       const itemsToSellCollectionRef = collection(doc(itemsToSellRef, userId), "ItemsToSell");
       
       // Create a query to retrieve documents that have imageURLs
-      const itemsQuerySnapshot = await getDocs(query(itemsToSellCollectionRef));
 
-      if(!itemsQuerySnapshot.empty){
-        itemsQuerySnapshot.forEach((doc) => {
-          const data = doc.data();
-          if (data.imageURLs && data.imageURLs.length > 0) {
-            imageURLs.push(...data.imageURLs);
-          }
-        });
-      }
-      
+      const itemsQuerySnapshot = await getDocs(itemsToSellCollectionRef);
+
+      itemsQuerySnapshot.forEach((doc) => {
+        const itemData = doc.data();
+        itemsData.push(itemData);
+      });
     });
-   
-    console.log(imageURLs);
-    return imageURLs;
+
+    return itemsData;
+
   } catch (error) {
     console.error("Error fetching documents:", error);
     return []; // Return an empty array in case of an error
