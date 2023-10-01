@@ -26,20 +26,27 @@ export async function AllSellItemsImageLoader() {
   try {
     const querySnapshot = await getDocs(itemsToSellRef);
 
+
     querySnapshot.forEach(async (userDoc) => {
-      const itemsToSellCollectionRef = collection(userDoc.ref, "ItemsToSell");
+
+      const userId = userDoc.id;
+      const itemsToSellCollectionRef = collection(doc(itemsToSellRef, userId), "ItemsToSell");
       
       // Create a query to retrieve documents that have imageURLs
-      const itemsQuerySnapshot = await getDocs(query(itemsToSellCollectionRef, where("imageURLs", "!=", null)));
+      const itemsQuerySnapshot = await getDocs(query(itemsToSellCollectionRef));
 
-      itemsQuerySnapshot.forEach((doc) => {
-        const data = doc.data();
-        if (data.imageURLs && data.imageURLs.length > 0) {
-          imageURLs.push(...data.imageURLs);
-        }
-      });
+      if(!itemsQuerySnapshot.empty){
+        itemsQuerySnapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.imageURLs && data.imageURLs.length > 0) {
+            imageURLs.push(...data.imageURLs);
+          }
+        });
+      }
+      
     });
-
+   
+    console.log(imageURLs);
     return imageURLs;
   } catch (error) {
     console.error("Error fetching documents:", error);
