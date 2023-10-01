@@ -18,8 +18,14 @@ import {
 } from '@chakra-ui/react';
 import { storeItemsSell } from '../firebaseFunctions/firebaseWrite';  
 import { db, auth } from "../firebaseConfig";
+import { useNavigate } from "react-router-dom";
+import { getUserID } from '../firebaseFunctions/dataload';
+import ImageGallery from './ImageGallery';
+
 
 function SellItemForm() {
+
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     productName: '',
@@ -62,6 +68,7 @@ function SellItemForm() {
       alert('Email must end with "@vanderbilt.edu"');
       return;
     }
+    /*
     const userEmail = auth.currentUser.email;
     const userIdRef = doc(db, "userIDMap", userEmail);
     const docSnap = await getDoc(userIdRef);
@@ -75,8 +82,12 @@ function SellItemForm() {
       console.error("Could not find document.");
     }
     console.log("userId: ", userId);
-    storeItemsSell(userId,formData);
+    */
+    let userId = await getUserID();
+    console.log("get user ID form the function getUserID", userId);
+    await storeItemsSell(userId,formData);
     console.log('Form data submitted:', formData);
+    navigate('/');
   };
 
 

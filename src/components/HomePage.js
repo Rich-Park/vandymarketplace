@@ -5,6 +5,7 @@ import {
   Spacer,
   ChakraProvider,
   extendTheme,
+  Image
 } from '@chakra-ui/react';
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -14,23 +15,24 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 //import { SearchIcon } from "@chakra-ui/icons";
 import Header from "./Header";
+import { AllSellItemsImageLoader } from '../firebaseFunctions/dataload';
+import ImageGallery from "./ImageGallery";
 
 
 export default function HomePage() {
 
   const navigate = useNavigate();
 
+  
+
   useEffect(() => {
     // Observe auth state to redirect to login/home page
     onAuthStateChanged(auth, async (user) => {
-      console.log("check auth");
       if (user) {
-        console.log("user auth");
-        navigate("/");
         const userEmail = user.email;
-        const userIdRef = doc(db, "userIdMap", userEmail);
+        const userIdRef = doc(db, "userIDMap", userEmail);
         const docSnap = await getDoc(userIdRef);
-
+    
         if (docSnap.exists()) {
         } else {
           console.error("Could not find document.");
@@ -40,24 +42,18 @@ export default function HomePage() {
         navigate("/log-in");
       }
     });
-  }, [auth]);
+    
 
-  const [searchQuery, setSearchQuery] = useState("");
+  }, [auth]);  
+
+  
 
   return (
     <>
       <Header/>
-
-      <InputGroup>
-        <Input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </InputGroup>
+      <ImageGallery/>
  
-
     </>
   );
 }
+/** */

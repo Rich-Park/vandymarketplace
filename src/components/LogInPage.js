@@ -57,7 +57,7 @@ export default function LogInPage() {
 
         if (!docSnap.exists()) {
           let newId = user.email.substring(0, user.email.indexOf("@"));
-          //newId = newId.replace(/[^a-zA-Z ]/g, "")
+          newId = newId.replace(/[^a-zA-Z ]/g, "")
           await setDoc(doc(db, "userIDMap", user.email), {
             userId: newId,
           });
@@ -70,7 +70,7 @@ export default function LogInPage() {
 
           if (!userDataSnap.exists()) {
             await setDoc(doc(db, "users", id), {
-              name: ""
+              
             });
           }
       }
