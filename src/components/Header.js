@@ -30,12 +30,25 @@ const Header = () => {
  
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [userImage, setUserImage] = useState(null);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  const userProfileImageUrl = auth.currentUser?.photoURL;
+  useEffect(() => {
+    // Observe auth state to redirect to login/home page
+
+    async function load(){
+      const delay1 = ms => new Promise(res => setTimeout(res, ms));
+      await delay1(1000);
+      setUserImage(auth.currentUser?.photoURL)
+    }
+    load();
+    
+
+  }, []);  
+  //const userProfileImageUrl = auth.currentUser?.photoURL;
 
   return (
         <Flex
@@ -53,18 +66,24 @@ const Header = () => {
             <Box position="relative">
               <Menu>
                 <MenuButton as={Box} p={2} cursor="pointer">
-                  Menu
+                  <Image
+                    src= {userImage}  // Replace with the URL of your image
+                    width="30px"
+                    height="30px"
+                    borderRadius="50%"
+                  />
                 </MenuButton>
                 <MenuList>
                   <MenuItem>
                     <Link to="/">Home</Link>
                   </MenuItem>
                   <MenuItem>
-                    <Link to="/about">About</Link>
+                    <Link to="/my-page">My Page</Link>
                   </MenuItem>
                   <MenuItem>
-                    <Link to="/contact">Contact</Link>
+                    <Link to="/sell-item">Sell Item Form</Link>
                   </MenuItem>
+                  
                 </MenuList>
               </Menu>
             </Box>
