@@ -70,37 +70,41 @@ const ImageGallery = () => {
           itemsData.map((item, index) => (
             <div key={index}>
               <span>hihi</span>
-              {item.imageURLs.map((url, imageIndex) => (
-                <img
-                  src={url}
-                  key={imageIndex}
-                  alt={`Image ${imageIndex} ${url}`}
-                  style={{
-                    maxWidth: '100px',
-                    maxHeight: '100px',
-                    margin: '10px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => openModal(item)}
-                />
-              ))}
+              {item.imageURLs && Array.isArray(item.imageURLs) ? (
+                item.imageURLs.map((url, imageIndex) => (
+                  <img
+                    src={url}
+                    key={imageIndex}
+                    alt={`Image ${imageIndex} ${url}`}
+                    style={{
+                      maxWidth: '100px',
+                      maxHeight: '100px',
+                      margin: '10px',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => openModal(item)}
+                  />
+                ))
+              ) : (
+                <p>No images available for this item.</p>
+              )}
             </div>
           ))
         ) : (
           <p>No images available.</p>
         )}
         {selectedItem && (
-        <ContactForm 
-        isOpen={isModalOpen} 
-        onClose={closeModal} 
-        sellerEmail={selectedItem.email}
-        productName={selectedItem.productName} 
-        productPrice={selectedItem.price} 
-        userEmail = {userEmail}
-        />
+          <ContactForm
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            sellerEmail={selectedItem.email}
+            productName={selectedItem.productName}
+            productPrice={selectedItem.price}
+            userEmail={userEmail}
+          />
         )}
       </div>
     );
-}
+  }
 
-export default ImageGallery;
+  export default ImageGallery;
