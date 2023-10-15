@@ -17,11 +17,17 @@ import { onAuthStateChanged } from "firebase/auth";
 import Header from "./Header";
 import { AllSellItemsImageLoader } from '../firebaseFunctions/dataload';
 import ImageGallery from "./ImageGallery";
-
+import SearchBar from "./searchbar";
 
 export default function HomePage() {
 
   const navigate = useNavigate();
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
 
   
 
@@ -51,7 +57,8 @@ export default function HomePage() {
   return (
     <>
       <Header/>
-      <ImageGallery/>
+      <SearchBar onSearch={handleSearch} />
+      <ImageGallery searchQuery={searchQuery}/>
  
     </>
   );

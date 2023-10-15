@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { AllSellItemsLoader } from '../firebaseFunctions/dataload';
+import { AllSellItemsLoader,  QueryItemsLoader} from '../firebaseFunctions/dataload';
 import { db } from "../firebaseConfig";
 import ContactForm from './ContactForm';
 import { auth } from "../firebaseConfig";
 
-const ImageGallery = () => {
+const ImageGallery = ({ searchQuery })  => {
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,40 +12,44 @@ const ImageGallery = () => {
   const [userEmail, setUserEmail] = useState('');
 
     useEffect(() => {
-        
-        // // Call the function to load image URLs and update the state
-        //setLoading(false)
-        //load();
-        // AllSellItemsImageLoader()
-        //   .then((result) => {
-        //     setImageURLs(result);
-        //   })
-        //   .catch((error) => {
-        //     console.error("Error fetching imageURLs:", error);
-        //   });
-       
+      
         async function load(){
+
             setLoading(true);
-            try{
-              const result = await AllSellItemsLoader();
-              setItemsData(result);
-              const user = auth.currentUser;
-              if (user && user.email) {
-                setUserEmail(user.email);
+            if(searchQuery == ""){
+              try{
+                const result = await AllSellItemsLoader();
+                setItemsData(result);
+                const user = auth.currentUser;
+                if (user && user.email) {
+                  setUserEmail(user.email);
+                }
+                const delay = ms => new Promise(res => setTimeout(res, ms));
+                await delay(1000);
+              } catch (error){
+                console.error("Error fetching data:", error);
               }
-              const delay = ms => new Promise(res => setTimeout(res, ms));
-              await delay(1000);
-            } catch (error){
-              console.error("Error fetching data:", error);
+            }else{
+              try{
+                const result = await QueryItemsLoader(searchQuery);
+                setItemsData(result);
+                const user = auth.currentUser;
+                if (user && user.email) {
+                  setUserEmail(user.email);
+                }
+                const delay = ms => new Promise(res => setTimeout(res, ms));
+                await delay(1000);
+              } catch (error){
+                console.error("Error fetching data:", error);
+              }
             }
+
             setLoading(false);
             
         }
         load();
-        
-  
 
-    }, []);
+    }, [searchQuery]);
 
 
 
@@ -69,7 +73,7 @@ const ImageGallery = () => {
         ) : itemsData.length > 0 ? (
           itemsData.map((item, index) => (
             <div key={index}>
-              <span>hihi</span>
+              <span></span>
               {item.imageURLs.map((url, imageIndex) => (
                 <img
                   src={url}

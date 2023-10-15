@@ -11,14 +11,33 @@ import {
   extendTheme,
   CSSReset,
   ThemeProvider,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Image
 } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { onAuthStateChanged } from "firebase/auth";
+import 'firebase/auth';
+import { auth, db } from "../firebaseConfig";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+
 
 const Header = () => {
-  // Replace this with actual user information
+ 
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const userProfileImageUrl = auth.currentUser?.photoURL;
 
   return (
-
         <Flex
           p={4}
           alignItems="center"
@@ -30,7 +49,37 @@ const Header = () => {
             Vandy Market
           </Box>
           <Flex alignItems="center">
-            <Button
+            
+            <Box position="relative">
+              <Menu>
+                <MenuButton as={Box} p={2} cursor="pointer">
+                  Menu
+                </MenuButton>
+                <MenuList>
+                  <MenuItem>
+                    <Link to="/">Home</Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link to="/about">About</Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link to="/contact">Contact</Link>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </Box>
+            
+          </Flex>
+        </Flex>
+
+  );
+}
+
+export default Header;
+
+/*
+
+<Button
                   as={Link}
                   bg={"brand.200"}
                   color={"black"}
@@ -56,11 +105,5 @@ const Header = () => {
             >
               Logout
             </Button>
-          </Flex>
-        </Flex>
 
-  );
-}
-
-export default Header;
-
+*/
