@@ -76,34 +76,3 @@ const Header = () => {
 }
 
 export default Header;
-
-/*
-
-<Button
-                  as={Link}
-                  bg={"brand.200"}
-                  color={"black"}
-                  to="/sell-item"
-                  borderRadius="full"
-                  boxShadow="md"
-                  width={120}
-                  _hover={{
-                    bg: "brand.500",
-                    boxShadow: "lg",
-                  }}
-                  ml={"1rem"}
-                  
-                >
-              Sell Item
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                logout();
-              }}
-            >
-              Logout
-            </Button>
-
-*/
