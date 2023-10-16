@@ -14,7 +14,9 @@ const colors = {
   },
 };
 
-const theme = extendTheme({ colors });
+const theme = extendTheme({
+  colors,
+});
 
 function App() {
   return (
@@ -41,7 +43,6 @@ function App() {
                     boxShadow: "lg",
                   }}
                   ml={"1rem"}
-                  
                 >
                   Home Page
                 </Button>
