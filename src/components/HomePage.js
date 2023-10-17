@@ -1,21 +1,9 @@
-import { Box, Heading, Container, Text, Button, Stack, InputGroup, InputRightElement } from "@chakra-ui/react";
-import {
-  Flex,
-  Input,
-  Spacer,
-  ChakraProvider,
-  extendTheme,
-  Image
-} from '@chakra-ui/react';
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db, auth } from "../firebaseConfig";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-//import { SearchIcon } from "@chakra-ui/icons";
 import Header from "./Header";
-import { AllSellItemsImageLoader } from '../firebaseFunctions/dataload';
 import ImageGallery from "./ImageGallery";
 import SearchBar from "./searchbar";
 

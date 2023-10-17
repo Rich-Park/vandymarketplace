@@ -1,11 +1,8 @@
-
 import React, { useEffect, useState } from 'react'
 import { AllSellItemsLoader,  QueryItemsLoader} from '../firebaseFunctions/dataload';
-
-import { db } from "../firebaseConfig";
 import ContactForm from "./ContactForm";
 import { auth } from "../firebaseConfig";
-import { Grid, Flex, Heading, Box, useBreakpointValue } from "@chakra-ui/react";
+import { Grid, Heading, Box, useBreakpointValue } from "@chakra-ui/react";
 import ItemCard from "./ItemCard";
 
 const ImageGallery = ({ searchQuery })  => {
@@ -20,7 +17,7 @@ const ImageGallery = ({ searchQuery })  => {
         async function load(){
 
             setLoading(true);
-            if(searchQuery == ""){
+            if(searchQuery === ""){
               try{
                 const result = await AllSellItemsLoader();
                 setItemsData(result);
@@ -68,9 +65,6 @@ const ImageGallery = ({ searchQuery })  => {
     setIsModalOpen(false);
     setSelectedItem(null);
   };
-
-  const columns = useBreakpointValue({ base: 2, md: 4, lg: 5, xl: 6 });
-
 
   return (
     <Box>

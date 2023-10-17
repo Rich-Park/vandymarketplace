@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { Input, Button, Stack, InputGroup, InputRightElement, Flex, Center,  Select} from "@chakra-ui/react";
+import { Input, Button, InputGroup, InputRightElement, Flex, Center,  Select} from "@chakra-ui/react";
 
 function SearchBar({ onSearch }) {
     
   const [searchQuery, setSearchQuery] = useState('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
 
   const handleSearch = () => {
     onSearch(searchQuery);

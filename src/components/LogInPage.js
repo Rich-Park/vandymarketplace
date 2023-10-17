@@ -38,13 +38,6 @@ export default function LogInPage() {
     })
     .catch((error) => {
       // Handle Errors here.
-      //const errorCode = error.code;
-      //const errorMessage = error.message;
-      // The email of the user's account used.
-      //const email = error.customData.email;
-      // The AuthCredential type that was used.
-      //const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
     });
   
     onAuthStateChanged(auth, async (user) => {
@@ -131,61 +124,3 @@ export default function LogInPage() {
     </>
   );
 }
-
-/*
-<Button
-              bg={"brand.100"}
-              color="white"
-              rounded={"full"}
-              _hover={{
-                bg: "brand.300",
-                boxShadow: "lg",
-              }}
-              width={120}
-            >
-              Find items
-            </Button>
-            <Button
-              as={Link}
-              bg={"brand.200"}
-              color={"black"}
-              to="/sell-item"
-              borderRadius="full"
-              boxShadow="md"
-              width={120}
-              _hover={{
-                bg: "brand.500",
-                boxShadow: "lg",
-              }}
-            >
-              Sell items
-            </Button>
-*/
-/*
-await signInWithRedirect(auth, provider);
-    await getRedirectResult(auth)
-    .then((result) => {
-      // This gives you a Google Access Token. You can use it to access Google APIs.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-  
-      // The signed-in user info.
-      const user = result.user;
-
-      if(!(user.email.endsWith("@vanderbilt.edu"))){
-        console.log("logout");
-        logOut();
-      }
-      // IdP data available using getAdditionalUserInfo(result)
-      // ...
-    }).catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
-    });
-*/

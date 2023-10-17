@@ -61,10 +61,6 @@ function SellItemForm() {
       alert('Email must end with "@vanderbilt.edu"');
       return;
     }
-<<<<<<< Updated upstream
-=======
-    
->>>>>>> Stashed changes
     let userId = await getUserID();
     console.log("get user ID form the function getUserID", userId);
     await storeItemsSell(userId,formData);

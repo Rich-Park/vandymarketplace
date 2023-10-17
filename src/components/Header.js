@@ -3,26 +3,17 @@ import {logout} from "../authentication/logout";
 import {
   Box,
   Flex,
-  Text,
   Button,
-  Avatar,
-  Spacer,
-  ChakraProvider,
-  extendTheme,
-  CSSReset,
-  ThemeProvider,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
   Image
 } from '@chakra-ui/react';
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged } from "firebase/auth";
 import 'firebase/auth';
-import { auth, db } from "../firebaseConfig";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 
 
@@ -30,12 +21,8 @@ import { useNavigate } from "react-router-dom";
 const Header = () => {
  
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
   const [userImage, setUserImage] = useState(auth.currentUser ? auth.currentUser.photoURL : null);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
 
   useEffect(() => {
     // Observe auth state to redirect to login/home page

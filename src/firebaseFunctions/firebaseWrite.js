@@ -1,13 +1,7 @@
-//import React from 'react'
 import {
-    //arrayUnion,
-    //updateDoc,
-    //setDoc,
-    //getDoc,
     doc,
     addDoc,
     collection
-    //arrayRemove,
   } from "firebase/firestore";
 import { db, storage } from "../firebaseConfig";
 import { ref, uploadBytes } from "firebase/storage";

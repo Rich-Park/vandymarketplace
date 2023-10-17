@@ -1,15 +1,11 @@
 import {
   Flex,
-  Circle,
   Box,
   Image,
-  Badge,
   useColorModeValue,
   Icon,
   chakra,
   Tooltip,
-  Button,
-  AspectRatio,
 } from "@chakra-ui/react";
 import { FiShoppingCart } from "react-icons/fi";
 import { BiMessageRoundedDetail } from "react-icons/bi";
