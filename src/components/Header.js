@@ -26,11 +26,12 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 
+
 const Header = () => {
  
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [userImage, setUserImage] = useState(null);
+  const [userImage, setUserImage] = useState(auth.currentUser ? auth.currentUser.photoURL : null);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -41,14 +42,26 @@ const Header = () => {
 
     async function load(){
       const delay1 = ms => new Promise(res => setTimeout(res, ms));
-      await delay1(1000);
+      await delay1(10000);
+      if(auth.currentUser){
+        console.log('user is logged in');
+      }
       setUserImage(auth.currentUser?.photoURL)
     }
     load();
+    console.log(userImage);
     
 
-  }, []);  
+  }, [auth]);  
   //const userProfileImageUrl = auth.currentUser?.photoURL;
+
+  const handleLogout = async () => {
+    try {
+      logout(); // Call the logout function to sign the user out
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
 
   return (
         <Flex
@@ -67,7 +80,7 @@ const Header = () => {
               <Menu>
                 <MenuButton as={Box} p={2} cursor="pointer">
                   <Image
-                    src= {userImage}  // Replace with the URL of your image
+                    src = {userImage}  // Replace with the URL of your image
                     width="30px"
                     height="30px"
                     borderRadius="50%"
@@ -83,6 +96,7 @@ const Header = () => {
                   <MenuItem>
                     <Link to="/sell-item">Sell Item Form</Link>
                   </MenuItem>
+                  <MenuItem onClick={handleLogout}>Log Out</MenuItem>
                   
                 </MenuList>
               </Menu>
