@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import SellItemForm from "./components/SellItemForm";
 import HomePage from "./components/HomePage";
 import LogInPage from "./components/LogInPage";
-
+import MyPage from "./components/MyPage";
 const colors = {
   brand: {
     100: "#000000", // main black
@@ -23,6 +23,7 @@ function App() {
         <Routes>
           <Route path="/log-in" element={<LogInPage />} />
           <Route path="/" element={<HomePage />} />
+          <Route path='/my-page' element = {<MyPage/>}/>
           <Route
             path="/sell-item"
             element={
