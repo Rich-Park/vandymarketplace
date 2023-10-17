@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import {
-  getDoc,
-  doc
-} from "firebase/firestore";
-import {
   Box,
   Button,
   FormControl,
@@ -17,10 +13,8 @@ import {
   Image,
 } from '@chakra-ui/react';
 import { storeItemsSell } from '../firebaseFunctions/firebaseWrite';  
-import { db, auth } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { getUserID } from '../firebaseFunctions/dataload';
-import ImageGallery from './ImageGallery';
 
 
 function SellItemForm() {
@@ -48,19 +42,19 @@ function SellItemForm() {
     if (files.length > 0) {
       setFormData({
         ...formData,
-        images: [...formData.images, ...files],
+        images: [files[0]],
       });
     }
   };
 
-  const handleRemoveImage = (index) => {
-    const updatedImages = [...formData.images];
-    updatedImages.splice(index, 1);
-    setFormData({
-      ...formData,
-      images: updatedImages,
-    });
-  };
+  // const handleRemoveImage = (index) => {
+  //   const updatedImages = [...formData.images];
+  //   updatedImages.splice(index, 1);
+  //   setFormData({
+  //     ...formData,
+  //     images: updatedImages,
+  //   });
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,21 +62,6 @@ function SellItemForm() {
       alert('Email must end with "@vanderbilt.edu"');
       return;
     }
-    /*
-    const userEmail = auth.currentUser.email;
-    const userIdRef = doc(db, "userIDMap", userEmail);
-    const docSnap = await getDoc(userIdRef);
-    let userId = "temp";
-    console.log(docSnap)
-    if (docSnap.exists()) {
-      userId = docSnap.data().userId;
-      console.log(userId);
-    } else {
-      console.log("error");
-      console.error("Could not find document.");
-    }
-    console.log("userId: ", userId);
-    */
     let userId = await getUserID();
     console.log("get user ID form the function getUserID", userId);
     await storeItemsSell(userId,formData);
@@ -151,7 +130,6 @@ function SellItemForm() {
                 type="file"
                 name="images"
                 onChange={handleImageUpload}
-                multiple
                 accept="image/*"
               />
               <InputRightElement style={{ width: '130px' }}>
@@ -166,30 +144,18 @@ function SellItemForm() {
                     });
                   }}
                 >
-                  Clear All Images
+                  Clear Image
                 </Button>
               </InputRightElement>
             </InputGroup>
-            {formData.images.map((image, index) => (
-              <div key={index}>
-                <Image
-                  src={URL.createObjectURL(image)}
-                  alt={`Image ${index + 1}`}
-                  maxH="100px"
-                  mt={2}
-                />
-                <Button
-                  size="sm"
-                  mt={2}
-                  onClick={() => handleRemoveImage(index)}
-                  bg={"brand.200"}
-                  color={"black"}
-                  borderRadius="full"
-                >
-                  Remove Image
-                </Button>
-              </div>
-            ))}
+            {formData.images.length > 0 && (
+              <Image
+                src={URL.createObjectURL(formData.images[0])}
+                alt="Uploaded Image"
+                maxH="100px"
+                mt={2}
+              />
+            )}
           </FormControl>
 
           <Button

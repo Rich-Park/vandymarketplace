@@ -1,15 +1,19 @@
+
 import React, { useEffect, useState } from 'react'
 import { AllSellItemsLoader,  QueryItemsLoader} from '../firebaseFunctions/dataload';
+
 import { db } from "../firebaseConfig";
-import ContactForm from './ContactForm';
+import ContactForm from "./ContactForm";
 import { auth } from "../firebaseConfig";
+import { Grid, Flex, Heading, Box, useBreakpointValue } from "@chakra-ui/react";
+import ItemCard from "./ItemCard";
 
 const ImageGallery = ({ searchQuery })  => {
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState("");
 
     useEffect(() => {
       
@@ -52,59 +56,62 @@ const ImageGallery = ({ searchQuery })  => {
     }, [searchQuery]);
 
 
+  // Event handler to open the modal
+  const openModal = (item) => {
+    setIsModalOpen(true);
+    setSelectedItem(item);
+  };
 
-     // Event handler to open the modal
-     const openModal = (item) => {
-      setIsModalOpen(true);
-      setSelectedItem(item);
 
-    };
+  // Event handler to close the modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedItem(null);
+  };
 
-    // Event handler to close the modal
-    const closeModal = () => {
-      setIsModalOpen(false);
-      setSelectedItem(null);
-    };
+  const columns = useBreakpointValue({ base: 2, md: 4, lg: 5, xl: 6 });
 
-    return (
-      <div>
-        {loading ? ( // Show loading message while data is being fetched
-          <p>Loading images...</p>
-        ) : itemsData.length > 0 ? (
-          itemsData.map((item, index) => (
-            <div key={index}>
-              <span></span>
-              {item.imageURLs.map((url, imageIndex) => (
-                <img
-                  src={url}
-                  key={imageIndex}
-                  alt={`Image ${imageIndex} ${url}`}
-                  style={{
-                    maxWidth: '100px',
-                    maxHeight: '100px',
-                    margin: '10px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => openModal(item)}
-                />
-              ))}
-            </div>
-          ))
-        ) : (
-          <p>No images available.</p>
-        )}
-        {selectedItem && (
-        <ContactForm 
-        isOpen={isModalOpen} 
-        onClose={closeModal} 
-        sellerEmail={selectedItem.email}
-        productName={selectedItem.productName} 
-        productPrice={selectedItem.price} 
-        userEmail = {userEmail}
+
+  return (
+    <Box>
+      {loading ? ( // Show loading message while data is being fetched
+        <p>Loading images...</p>
+      ) : itemsData.length > 0 ? (
+        <>
+          <Heading size="md" m={2}>
+            Featured Items
+          </Heading>
+
+          <Grid
+            templateColumns={{
+              base: "repeat(auto-fit, minmax(150px, 1fr))", // On smaller screens, minimum width is 150px
+              md: "repeat(auto-fit, minmax(200px, 1fr))", // Adjust as needed for different breakpoints
+              lg: "repeat(auto-fit, minmax(250px, 1fr))",
+            }}
+            gridAutoRows="1fr"
+            gap={4}
+            p={5}
+          >
+            {itemsData.map((item, index) => (
+              <ItemCard key={index} item={item} openModal={openModal} />
+            ))}
+          </Grid>
+        </>
+      ) : (
+        <p>No images available.</p>
+      )}
+      {selectedItem && (
+        <ContactForm
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          sellerEmail={selectedItem.email}
+          productName={selectedItem.productName}
+          productPrice={selectedItem.price}
+          userEmail={userEmail}
         />
-        )}
-      </div>
-    );
-}
+      )}
+    </Box>
+  );
+};
 
 export default ImageGallery;
