@@ -1,110 +1,103 @@
-import React, { useEffect, useState } from 'react'
-import { AllSellItemsLoader } from '../firebaseFunctions/dataload';
+import React, { useEffect, useState } from "react";
+import { AllSellItemsLoader } from "../firebaseFunctions/dataload";
 import { db } from "../firebaseConfig";
-import ContactForm from './ContactForm';
+import ContactForm from "./ContactForm";
 import { auth } from "../firebaseConfig";
+import { Grid, Flex, Heading, Box, useBreakpointValue } from "@chakra-ui/react";
+import ItemCard from "./ItemCard";
 
 const ImageGallery = () => {
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState("");
 
-    useEffect(() => {
-        
-        // // Call the function to load image URLs and update the state
-        //setLoading(false)
-        //load();
-        // AllSellItemsImageLoader()
-        //   .then((result) => {
-        //     setImageURLs(result);
-        //   })
-        //   .catch((error) => {
-        //     console.error("Error fetching imageURLs:", error);
-        //   });
-       
-        async function load(){
-            setLoading(true);
-            try{
-              const result = await AllSellItemsLoader();
-              setItemsData(result);
-              const user = auth.currentUser;
-              if (user && user.email) {
-                setUserEmail(user.email);
-              }
-              const delay = ms => new Promise(res => setTimeout(res, ms));
-              await delay(1000);
-            } catch (error){
-              console.error("Error fetching data:", error);
-            }
-            setLoading(false);
-            
+  useEffect(() => {
+    // // Call the function to load image URLs and update the state
+    //setLoading(false)
+    //load();
+    // AllSellItemsImageLoader()
+    //   .then((result) => {
+    //     setImageURLs(result);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching imageURLs:", error);
+    //   });
+
+    async function load() {
+      setLoading(true);
+      try {
+        const result = await AllSellItemsLoader();
+        setItemsData(result);
+        const user = auth.currentUser;
+        if (user && user.email) {
+          setUserEmail(user.email);
         }
-        load();
-        
-  
+        const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+        await delay(1000);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+      setLoading(false);
+    }
+    load();
+  }, []);
 
-    }, []);
+  // Event handler to open the modal
+  const openModal = (item) => {
+    setIsModalOpen(true);
+    setSelectedItem(item);
+  };
 
+  // Event handler to close the modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedItem(null);
+  };
 
+  const columns = useBreakpointValue({ base: 2, md: 4, lg: 5, xl: 6 });
 
-     // Event handler to open the modal
-     const openModal = (item) => {
-      setIsModalOpen(true);
-      setSelectedItem(item);
+  return (
+    <Box>
+      {loading ? ( // Show loading message while data is being fetched
+        <p>Loading images...</p>
+      ) : itemsData.length > 0 ? (
+        <>
+          <Heading size="md" m={2}>
+            Featured Items
+          </Heading>
 
-    };
+          <Grid
+            templateColumns={{
+              base: "repeat(auto-fit, minmax(150px, 1fr))", // On smaller screens, minimum width is 150px
+              md: "repeat(auto-fit, minmax(200px, 1fr))", // Adjust as needed for different breakpoints
+              lg: "repeat(auto-fit, minmax(250px, 1fr))",
+            }}
+            gridAutoRows="1fr"
+            gap={4}
+            p={5}
+          >
+            {itemsData.map((item, index) => (
+              <ItemCard key={index} item={item} openModal={openModal} />
+            ))}
+          </Grid>
+        </>
+      ) : (
+        <p>No images available.</p>
+      )}
+      {selectedItem && (
+        <ContactForm
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          sellerEmail={selectedItem.email}
+          productName={selectedItem.productName}
+          productPrice={selectedItem.price}
+          userEmail={userEmail}
+        />
+      )}
+    </Box>
+  );
+};
 
-    // Event handler to close the modal
-    const closeModal = () => {
-      setIsModalOpen(false);
-      setSelectedItem(null);
-    };
-
-    return (
-      <div>
-        {loading ? ( // Show loading message while data is being fetched
-          <p>Loading images...</p>
-        ) : itemsData.length > 0 ? (
-          itemsData.map((item, index) => (
-            <div key={index}>
-              <span>hihi</span>
-              {item.imageURLs && Array.isArray(item.imageURLs) ? (
-                item.imageURLs.map((url, imageIndex) => (
-                  <img
-                    src={url}
-                    key={imageIndex}
-                    alt={`Image ${imageIndex} ${url}`}
-                    style={{
-                      maxWidth: '100px',
-                      maxHeight: '100px',
-                      margin: '10px',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => openModal(item)}
-                  />
-                ))
-              ) : (
-                <p>No images available for this item.</p>
-              )}
-            </div>
-          ))
-        ) : (
-          <p>No images available.</p>
-        )}
-        {selectedItem && (
-          <ContactForm
-            isOpen={isModalOpen}
-            onClose={closeModal}
-            sellerEmail={selectedItem.email}
-            productName={selectedItem.productName}
-            productPrice={selectedItem.price}
-            userEmail={userEmail}
-          />
-        )}
-      </div>
-    );
-  }
-
-  export default ImageGallery;
+export default ImageGallery;
