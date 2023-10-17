@@ -16,7 +16,6 @@ import { storeItemsSell } from '../firebaseFunctions/firebaseWrite';
 import { useNavigate } from "react-router-dom";
 import { getUserID } from '../firebaseFunctions/dataload';
 
-
 function SellItemForm() {
 
   const navigate = useNavigate();
@@ -62,6 +61,10 @@ function SellItemForm() {
       alert('Email must end with "@vanderbilt.edu"');
       return;
     }
+<<<<<<< Updated upstream
+=======
+    
+>>>>>>> Stashed changes
     let userId = await getUserID();
     console.log("get user ID form the function getUserID", userId);
     await storeItemsSell(userId,formData);
@@ -170,7 +173,6 @@ function SellItemForm() {
                 bg: "brand.300",
                 boxShadow: "lg",
               }}
-            //onClick={() => storeItemsSell(userId, formData)}
           >
             Submit
           </Button>
