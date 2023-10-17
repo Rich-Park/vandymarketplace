@@ -20,7 +20,7 @@ export default function MyPage() {
         <div>
             <Header />
             <Box textAlign={"center"} spacing={{ base: 8, md: 14 }} py={{ base: 20, md: 36 }}>
-        <Image src={userPhotoURL} boxSize="150px" m="auto" borderRadius="full" />
+  
         <Text fontSize="xl" fontWeight="bold" mt={5}>{userDisplayName}</Text>
   
         <Button 

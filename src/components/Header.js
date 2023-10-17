@@ -76,7 +76,26 @@ const Header = () => {
           </Box>
           <Flex alignItems="center">
             
+              <Button
+                    as={Link}
+                    bg={"brand.400"}
+                    color={"black"}
+                    to="/sell-item"
+                    borderRadius="full"
+                    boxShadow="md"
+                    width={120}
+                    _hover={{
+                      bg: "brand.500",
+                      boxShadow: "lg",
+                    }}
+                    ml={"1rem"}
+                    
+                  >
+                Sell Item
+              </Button>
+
             <Box position="relative">
+
               <Menu>
                 <MenuButton as={Box} p={2} cursor="pointer">
                   <Image
@@ -85,21 +104,20 @@ const Header = () => {
                     height="30px"
                     borderRadius="50%"
                   />
-            </MenuButton>
-            <MenuList>
-              <MenuItem onClick={() => navigate("/")}>
-                Home
-              </MenuItem>
+               </MenuButton>
+
+              <MenuList>
+                <MenuItem onClick={() => navigate("/")}>
+                  Home
+                </MenuItem>
               <MenuItem onClick={() => navigate("/my-page")}>
                 My Page
               </MenuItem>
-              <MenuItem onClick={() => navigate("/sell-item")}>
-                Sell Item Form
-              </MenuItem> 
-              <MenuItem onClick={handleLogout}>Log Out</MenuItem>
-                  
-                </MenuList>
+              <MenuItem onClick={handleLogout}>Log Out</MenuItem>    
+              </MenuList>
+
               </Menu>
+
             </Box>
             
           </Flex>
