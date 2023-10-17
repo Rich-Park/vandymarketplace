@@ -85,18 +85,18 @@ const Header = () => {
                     height="30px"
                     borderRadius="50%"
                   />
-                </MenuButton>
-                <MenuList>
-                  <MenuItem>
-                    <Link to="/">Home</Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link to="/my-page">My Page</Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link to="/sell-item">Sell Item Form</Link>
-                  </MenuItem>
-                  <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={() => navigate("/")}>
+                Home
+              </MenuItem>
+              <MenuItem onClick={() => navigate("/my-page")}>
+                My Page
+              </MenuItem>
+              <MenuItem onClick={() => navigate("/sell-item")}>
+                Sell Item Form
+              </MenuItem> 
+              <MenuItem onClick={handleLogout}>Log Out</MenuItem>
                   
                 </MenuList>
               </Menu>
