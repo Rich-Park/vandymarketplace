@@ -26,16 +26,42 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 
+
 const Header = () => {
  
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [userImage, setUserImage] = useState(auth.currentUser ? auth.currentUser.photoURL : null);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  const userProfileImageUrl = auth.currentUser?.photoURL;
+  useEffect(() => {
+    // Observe auth state to redirect to login/home page
+
+    async function load(){
+      const delay1 = ms => new Promise(res => setTimeout(res, ms));
+      await delay1(10000);
+      if(auth.currentUser){
+        console.log('user is logged in');
+      }
+      setUserImage(auth.currentUser?.photoURL)
+    }
+    load();
+    console.log(userImage);
+    
+
+  }, [auth]);  
+  //const userProfileImageUrl = auth.currentUser?.photoURL;
+
+  const handleLogout = async () => {
+    try {
+      logout(); // Call the logout function to sign the user out
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
 
   return (
         <Flex
@@ -50,23 +76,48 @@ const Header = () => {
           </Box>
           <Flex alignItems="center">
             
+              <Button
+                    as={Link}
+                    bg={"brand.400"}
+                    color={"black"}
+                    to="/sell-item"
+                    borderRadius="full"
+                    boxShadow="md"
+                    width={120}
+                    _hover={{
+                      bg: "brand.500",
+                      boxShadow: "lg",
+                    }}
+                    ml={"1rem"}
+                    
+                  >
+                Sell Item
+              </Button>
+
             <Box position="relative">
+
               <Menu>
                 <MenuButton as={Box} p={2} cursor="pointer">
-                  Menu
-                </MenuButton>
-                <MenuList>
-                  <MenuItem>
-                    <Link to="/">Home</Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link to="/about">About</Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link to="/contact">Contact</Link>
-                  </MenuItem>
-                </MenuList>
+                  <Image
+                    src = {userImage}  // Replace with the URL of your image
+                    width="30px"
+                    height="30px"
+                    borderRadius="50%"
+                  />
+               </MenuButton>
+
+              <MenuList>
+                <MenuItem onClick={() => navigate("/")}>
+                  Home
+                </MenuItem>
+              <MenuItem onClick={() => navigate("/my-page")}>
+                My Page
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>Log Out</MenuItem>    
+              </MenuList>
+
               </Menu>
+
             </Box>
             
           </Flex>
@@ -76,34 +127,3 @@ const Header = () => {
 }
 
 export default Header;
-
-/*
-
-<Button
-                  as={Link}
-                  bg={"brand.200"}
-                  color={"black"}
-                  to="/sell-item"
-                  borderRadius="full"
-                  boxShadow="md"
-                  width={120}
-                  _hover={{
-                    bg: "brand.500",
-                    boxShadow: "lg",
-                  }}
-                  ml={"1rem"}
-                  
-                >
-              Sell Item
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                logout();
-              }}
-            >
-              Logout
-            </Button>
-
-*/
