@@ -20,7 +20,6 @@
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
-    "stream-browserify": "^3.0.0",
     "util": "^0.12.5",
     "web-vitals": "^2.1.4"
   },
@@ -47,8 +46,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "webpack-cli": "^5.1.4"
   }
 }
