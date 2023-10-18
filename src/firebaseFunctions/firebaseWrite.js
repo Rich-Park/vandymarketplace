@@ -30,6 +30,7 @@ export async function storeItemsSell(userId, form_item){
     price: form_item.price,
     description: form_item.description,
     imageURLs: imageURLs,
+    timestamp: form_item.timestamp,
   });
   console.log("finished adding document")
 

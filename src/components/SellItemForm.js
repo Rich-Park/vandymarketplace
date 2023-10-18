@@ -15,10 +15,39 @@ import {
 import { storeItemsSell } from '../firebaseFunctions/firebaseWrite';  
 import { useNavigate } from "react-router-dom";
 import { getUserID } from '../firebaseFunctions/dataload';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Text } from '@chakra-ui/react';
+import { collection, getDocs, serverTimestamp, Timestamp, query, where } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
+
+async function rateLimitFormSubmissions(userId) {
+  console.log("test");
+  const itemsCollectionRef = collection(db, "users", userId, "ItemsToSell");
+  const oneHourAgo = new Date();
+  oneHourAgo.setHours(oneHourAgo.getHours() - 1); // Calculate 1 hour ago
+  const oneHourAgoTimestamp = Timestamp.fromDate(oneHourAgo);
+  console.log("onehourago", oneHourAgoTimestamp);
+  const userItemsQuery = query(
+    itemsCollectionRef,
+    where('timestamp', '>=', oneHourAgoTimestamp)
+  );
+
+  try {
+    const querySnapshot = await getDocs(userItemsQuery);
+    const userItemsCount = querySnapshot.size;
+    console.log("userItem", userItemsCount);
+    return userItemsCount >= 3;
+  } catch (error) {
+    console.error('Error fetching user items:', error);
+    return false; // Handle the error and return an appropriate value
+  }
+}
 
 function SellItemForm() {
 
   const navigate = useNavigate();
+
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [error, setError] = useState(null);
 
   const [formData, setFormData] = useState({
     productName: '',
@@ -26,6 +55,7 @@ function SellItemForm() {
     price: '',
     description: '', 
     images: [],
+    timestamp: serverTimestamp(),
   });
 
   const handleChange = (e) => {
@@ -61,11 +91,23 @@ function SellItemForm() {
       alert('Email must end with "@vanderbilt.edu"');
       return;
     }
-    let userId = await getUserID();
-    console.log("get user ID form the function getUserID", userId);
-    await storeItemsSell(userId,formData);
-    console.log('Form data submitted:', formData);
-    navigate('/');
+    try {
+      let userId = await getUserID();
+      const tooManyItems = await rateLimitFormSubmissions(userId);
+
+      if (tooManyItems) {
+        setError('Submission limit exceeded. You may only post 3 items every hour. Try again later.');
+        setIsErrorModalOpen(true); // Open the error modal
+        return;
+      }
+
+      console.log('heeej', tooManyItems);
+      await storeItemsSell(userId, formData);
+      console.log('Form data submitted:', formData);
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
 
@@ -172,6 +214,16 @@ function SellItemForm() {
           >
             Submit
           </Button>
+          <Modal isOpen={isErrorModalOpen} onClose={() => setIsErrorModalOpen(false)}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Error</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Text color="red">{error}</Text>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
         </VStack>
       </form>
     </Box>

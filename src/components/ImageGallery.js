@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { AllSellItemsLoader,  QueryItemsLoader} from '../firebaseFunctions/dataload';
 import ContactForm from "./ContactForm";
 import { auth } from "../firebaseConfig";
-import { Grid, Heading, Box, useBreakpointValue } from "@chakra-ui/react";
+import { Grid, Heading, Box } from "@chakra-ui/react";
 import ItemCard from "./ItemCard";
 
 const ImageGallery = ({ searchQuery })  => {
