@@ -20,12 +20,10 @@ import { collection, getDocs, serverTimestamp, Timestamp, query, where } from 'f
 import { db } from '../firebaseConfig';
 
 async function rateLimitFormSubmissions(userId) {
-  console.log("test");
   const itemsCollectionRef = collection(db, "users", userId, "ItemsToSell");
   const oneHourAgo = new Date();
   oneHourAgo.setHours(oneHourAgo.getHours() - 1); // Calculate 1 hour ago
   const oneHourAgoTimestamp = Timestamp.fromDate(oneHourAgo);
-  console.log("onehourago", oneHourAgoTimestamp);
   const userItemsQuery = query(
     itemsCollectionRef,
     where('timestamp', '>=', oneHourAgoTimestamp)
@@ -34,7 +32,6 @@ async function rateLimitFormSubmissions(userId) {
   try {
     const querySnapshot = await getDocs(userItemsQuery);
     const userItemsCount = querySnapshot.size;
-    console.log("userItem", userItemsCount);
     return userItemsCount >= 3;
   } catch (error) {
     console.error('Error fetching user items:', error);
@@ -100,8 +97,6 @@ function SellItemForm() {
         setIsErrorModalOpen(true); // Open the error modal
         return;
       }
-
-      console.log('heeej', tooManyItems);
       await storeItemsSell(userId, formData);
       console.log('Form data submitted:', formData);
       navigate('/');
