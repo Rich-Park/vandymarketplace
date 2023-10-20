@@ -19,24 +19,38 @@ export async function getUserID(){
   return userId;
 }
 
-export async function AllSellItemsLoader() {
+export async function AllSellItemsLoader(userId) {
   const itemsToSellRef = collection(db, "users"); // Assuming "users" is the top-level collection
   const itemsData = [];
 
   try {
-    const querySnapshot = await getDocs(itemsToSellRef);
-
-    querySnapshot.forEach(async (userDoc) => {
-      const itemsToSellCollectionRef = collection(userDoc.ref, "ItemsToSell");
+    if (userId) {
+      const userRef = doc(db, "users", userId);
       
-      // Create a query to retrieve documents that have imageURLs
+      const itemsToSellCollectionRef = collection(userRef, "ItemsToSell");
+
       const itemsQuerySnapshot = await getDocs(itemsToSellCollectionRef);
 
       itemsQuerySnapshot.forEach((doc) => {
         const itemData = doc.data();
         itemsData.push(itemData);
       });
-    });
+    }
+    else{
+      const querySnapshot = await getDocs(itemsToSellRef);
+
+      querySnapshot.forEach(async (userDoc) => {
+        const itemsToSellCollectionRef = collection(userDoc.ref, "ItemsToSell");
+        
+        // Create a query to retrieve documents that have imageURLs
+        const itemsQuerySnapshot = await getDocs(itemsToSellCollectionRef);
+
+        itemsQuerySnapshot.forEach((doc) => {
+          const itemData = doc.data();
+          itemsData.push(itemData);
+        });
+      });
+    }
 
     return itemsData;
   } catch (error) {
@@ -45,7 +59,7 @@ export async function AllSellItemsLoader() {
   }
 }
 
-export async function QueryItemsLoader(searchQuery){
+export async function QueryItemsLoader(searchQuery, userId, myItems= false){
   const itemsToSellRef = collection(db, "users"); // Assuming "users" is the top-level collection
   const itemsData = [];
 
@@ -60,7 +74,16 @@ export async function QueryItemsLoader(searchQuery){
 
       itemsQuerySnapshot.forEach((doc) => {
         const itemData = doc.data();
-        if (
+        if (myItems) {
+          // If myItems is true, filter by userId
+          if (
+            itemData.email === userId &&
+            (itemData.productName.includes(searchQuery) ||
+              itemData.description.includes(searchQuery))
+          ) {
+            itemsData.push(itemData);
+          }
+        } else if (
           itemData.productName.includes(searchQuery) ||
           itemData.description.includes(searchQuery)
         ) {
