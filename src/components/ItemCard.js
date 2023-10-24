@@ -38,18 +38,16 @@ const ItemCard = ({ item, openModal, myItems }) => {
           <Box fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
             {item.productName}
           </Box>
-          {!myItems && (
-            <Tooltip
-              label="Add to cart"
-              bg="white"
-              placement={"top"}
-              color={"gray.800"}
-            >
-              <chakra.a href={"#"} display={"flex"}>
-                <Icon as={FiShoppingCart} h={7} w={7} alignSelf={"center"} />
-              </chakra.a>
-            </Tooltip>
-          )}
+          <Tooltip
+            label="Add to cart"
+            bg="white"
+            placement={"top"}
+            color={"gray.800"}
+          >
+            <chakra.a href={"#"} display={"flex"}>
+              <Icon as={FiShoppingCart} h={7} w={7} alignSelf={"center"} />
+            </chakra.a>
+          </Tooltip>
         </Flex>
 
         <Flex justifyContent="space-between" alignContent="center">
