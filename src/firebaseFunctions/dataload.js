@@ -1,6 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
 import { db, auth } from "../firebaseConfig";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 
 
 
@@ -43,8 +43,7 @@ export async function AllSellItemsLoader(userId) {
         const itemsToSellCollectionRef = collection(userDoc.ref, "ItemsToSell");
         
         // Create a query to retrieve documents that have imageURLs
-        const itemsQuerySnapshot = await getDocs(itemsToSellCollectionRef);
-
+        const itemsQuerySnapshot = await getDocs(query(itemsToSellCollectionRef, orderBy("timestamp", "desc")));
         itemsQuerySnapshot.forEach((doc) => {
           const itemData = doc.data();
           itemsData.push(itemData);
@@ -70,7 +69,7 @@ export async function QueryItemsLoader(searchQuery, userId, myItems= false){
       const itemsToSellCollectionRef = collection(userDoc.ref, "ItemsToSell");
       
       // Create a query to retrieve documents that have imageURLs
-      const itemsQuerySnapshot = await getDocs(itemsToSellCollectionRef);
+      const itemsQuerySnapshot = await getDocs(query(itemsToSellCollectionRef, orderBy("timestamp", "desc")));
 
       itemsQuerySnapshot.forEach((doc) => {
         const itemData = doc.data();
