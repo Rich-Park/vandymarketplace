@@ -58,9 +58,11 @@ const Header = () => {
           bg="brand.200"
           color="brand.100"
         >
-          <Box fontSize="2xl" fontWeight="bold">
-            Vandy Market
-          </Box>
+          <Link to="/"> {/* Replace "/" with the path to your home page */}
+            <Box fontSize="2xl" fontWeight="bold" as="button">
+              Vandy Market
+            </Box>
+          </Link>
           <Flex alignItems="center">
             
               <Button
@@ -97,8 +99,11 @@ const Header = () => {
                 <MenuItem onClick={() => navigate("/")}>
                   Home
                 </MenuItem>
-              <MenuItem onClick={() => navigate("/my-page")}>
-                My Page
+              <MenuItem onClick={() => navigate("/favorites")}>
+                Favorites
+              </MenuItem>
+              <MenuItem onClick={() => navigate("/my-items")}>
+                My Items
               </MenuItem>
               <MenuItem onClick={handleLogout}>Log Out</MenuItem>    
               </MenuList>

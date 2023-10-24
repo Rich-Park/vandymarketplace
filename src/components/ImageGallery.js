@@ -5,7 +5,7 @@ import { auth } from "../firebaseConfig";
 import { Grid, Heading, Box } from "@chakra-ui/react";
 import ItemCard from "./ItemCard";
 
-const ImageGallery = ({ searchQuery })  => {
+const ImageGallery = ({ searchQuery, myItems })  => {
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,9 +17,17 @@ const ImageGallery = ({ searchQuery })  => {
         async function load(){
 
             setLoading(true);
-            if(searchQuery === ""){
+            if (searchQuery === ""){
               try{
-                const result = await AllSellItemsLoader();
+                let result;
+                if (myItems){
+                  let userId = auth.currentUser.email.substring(0, auth.currentUser.email.indexOf("@"));
+                  userId = userId.replace(/[^a-zA-Z0-9]/g, "");
+                  result = await AllSellItemsLoader(userId);
+                }
+                else {
+                  result = await AllSellItemsLoader();
+                }
                 setItemsData(result);
                 const user = auth.currentUser;
                 if (user && user.email) {
@@ -32,7 +40,14 @@ const ImageGallery = ({ searchQuery })  => {
               }
             }else{
               try{
-                const result = await QueryItemsLoader(searchQuery);
+                let result;
+                if (myItems) {
+                  result = await QueryItemsLoader(searchQuery, auth.currentUser.email, myItems);
+                  console.log(auth.currentUser.email, 'hi');
+                }
+                else {
+                  result = await QueryItemsLoader(searchQuery, auth.currentUser.email, false);
+                }
                 setItemsData(result);
                 const user = auth.currentUser;
                 if (user && user.email) {
@@ -50,7 +65,7 @@ const ImageGallery = ({ searchQuery })  => {
         }
         load();
 
-    }, [searchQuery]);
+    }, [searchQuery, myItems]);
 
 
   // Event handler to open the modal
@@ -73,7 +88,7 @@ const ImageGallery = ({ searchQuery })  => {
       ) : itemsData.length > 0 ? (
         <>
           <Heading size="md" m={2}>
-            Featured Items
+            {myItems ? 'My Items For Sale' : 'Featured Items'}
           </Heading>
 
           <Grid
@@ -87,7 +102,7 @@ const ImageGallery = ({ searchQuery })  => {
             p={5}
           >
             {itemsData.map((item, index) => (
-              <ItemCard key={index} item={item} openModal={openModal} />
+              <ItemCard key={index} item={item} openModal={openModal} myItems={myItems} />
             ))}
           </Grid>
         </>
