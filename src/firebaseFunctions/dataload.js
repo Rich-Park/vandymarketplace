@@ -1,6 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
 import { db, auth } from "../firebaseConfig";
-import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 
 
@@ -21,35 +21,31 @@ export async function getUserID(){
 
 export async function AllSellItemsLoader(userId) {
   const itemsToSellRef = collection(db, "users"); // Assuming "users" is the top-level collection
-  const itemsData = [];
+  let itemsData = [];
 
   try {
     if (userId) {
       const userRef = doc(db, "users", userId);
-      
       const itemsToSellCollectionRef = collection(userRef, "ItemsToSell");
-
       const itemsQuerySnapshot = await getDocs(itemsToSellCollectionRef);
-
       itemsQuerySnapshot.forEach((doc) => {
         const itemData = doc.data();
         itemsData.push(itemData);
       });
     }
-    else{
+    else {
       const querySnapshot = await getDocs(itemsToSellRef);
-
-      querySnapshot.forEach(async (userDoc) => {
+      await Promise.all(querySnapshot.docs.map(async (userDoc) => {
         const itemsToSellCollectionRef = collection(userDoc.ref, "ItemsToSell");
-        
-        // Create a query to retrieve documents that have imageURLs
-        const itemsQuerySnapshot = await getDocs(query(itemsToSellCollectionRef, orderBy("timestamp", "desc")));
+        const itemsQuerySnapshot = await getDocs(itemsToSellCollectionRef);
         itemsQuerySnapshot.forEach((doc) => {
           const itemData = doc.data();
           itemsData.push(itemData);
         });
-      });
+      }));
     }
+
+    itemsData.sort((a, b) => b.timestamp - a.timestamp);
 
     return itemsData;
   } catch (error) {
@@ -58,18 +54,17 @@ export async function AllSellItemsLoader(userId) {
   }
 }
 
-export async function QueryItemsLoader(searchQuery, userId, myItems= false){
+export async function QueryItemsLoader(searchQuery, userId, myItems = false) {
   const itemsToSellRef = collection(db, "users"); // Assuming "users" is the top-level collection
-  const itemsData = [];
+  let itemsData = [];
 
   try {
     const querySnapshot = await getDocs(itemsToSellRef);
 
-    querySnapshot.forEach(async (userDoc) => {
+    await Promise.all(querySnapshot.docs.map(async (userDoc) => {
       const itemsToSellCollectionRef = collection(userDoc.ref, "ItemsToSell");
-      
-      // Create a query to retrieve documents that have imageURLs
-      const itemsQuerySnapshot = await getDocs(query(itemsToSellCollectionRef, orderBy("timestamp", "desc")));
+
+      const itemsQuerySnapshot = await getDocs(itemsToSellCollectionRef);
 
       itemsQuerySnapshot.forEach((doc) => {
         const itemData = doc.data();
@@ -89,14 +84,16 @@ export async function QueryItemsLoader(searchQuery, userId, myItems= false){
           itemsData.push(itemData);
         }
       });
-    });
-
+    }));
+    itemsData.sort((a, b) => b.timestamp - a.timestamp);
+  
     return itemsData;
   } catch (error) {
     console.error("Error fetching documents:", error);
     return []; // Return an empty array in case of an error
   }
 }
+
 
 export async function UserSellItemsLoader(userId){
   const itemsToSellRef = collection(db, "users", userId, "ItemsToSell");

@@ -43,7 +43,6 @@ const ImageGallery = ({ searchQuery, myItems })  => {
                 let result;
                 if (myItems) {
                   result = await QueryItemsLoader(searchQuery, auth.currentUser.email, myItems);
-                  console.log(auth.currentUser.email, 'hi');
                 }
                 else {
                   result = await QueryItemsLoader(searchQuery, auth.currentUser.email, false);
