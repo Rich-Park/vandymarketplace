@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -11,13 +11,28 @@ import {
   InputGroup,
   InputRightElement,
   Image,
-} from '@chakra-ui/react';
-import { storeItemsSell } from '../firebaseFunctions/firebaseWrite';  
+} from "@chakra-ui/react";
+import { storeItemsSell } from "../firebaseFunctions/firebaseWrite";
 import { useNavigate } from "react-router-dom";
-import { getUserID } from '../firebaseFunctions/dataload';
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Text } from '@chakra-ui/react';
-import { collection, getDocs, serverTimestamp, Timestamp, query, where } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
+import { getUserID } from "../firebaseFunctions/dataload";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  Text,
+} from "@chakra-ui/react";
+import {
+  collection,
+  getDocs,
+  serverTimestamp,
+  Timestamp,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 async function rateLimitFormSubmissions(userId) {
   const itemsCollectionRef = collection(db, "users", userId, "ItemsToSell");
@@ -26,7 +41,7 @@ async function rateLimitFormSubmissions(userId) {
   const oneHourAgoTimestamp = Timestamp.fromDate(oneHourAgo);
   const userItemsQuery = query(
     itemsCollectionRef,
-    where('timestamp', '>=', oneHourAgoTimestamp)
+    where("timestamp", ">=", oneHourAgoTimestamp)
   );
 
   try {
@@ -34,23 +49,22 @@ async function rateLimitFormSubmissions(userId) {
     const userItemsCount = querySnapshot.size;
     return userItemsCount >= 3;
   } catch (error) {
-    console.error('Error fetching user items:', error);
+    console.error("Error fetching user items:", error);
     return false; // Handle the error and return an appropriate value
   }
 }
 
 function SellItemForm() {
-
   const navigate = useNavigate();
 
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [error, setError] = useState(null);
 
   const [formData, setFormData] = useState({
-    productName: '',
-    email: '',
-    price: '',
-    description: '', 
+    productName: "",
+    email: "",
+    price: "",
+    description: "",
     images: [],
     timestamp: serverTimestamp(),
   });
@@ -84,7 +98,7 @@ function SellItemForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.email.endsWith('@vanderbilt.edu')) {
+    if (!formData.email.endsWith("@vanderbilt.edu")) {
       alert('Email must end with "@vanderbilt.edu"');
       return;
     }
@@ -93,19 +107,20 @@ function SellItemForm() {
       const tooManyItems = await rateLimitFormSubmissions(userId);
 
       if (tooManyItems) {
-        setError('Submission limit exceeded. You may only post 3 items every hour. Try again later.');
+        setError(
+          "Submission limit exceeded. You may only post 3 items every hour. Try again later."
+        );
         setIsErrorModalOpen(true); // Open the error modal
         return;
       }
       await storeItemsSell(userId, formData);
-      console.log('Form data submitted:', formData);
-      navigate('/');
+      console.log("Form data submitted:", formData);
+      navigate("/");
     } catch (error) {
       console.error(error);
     }
+    console.log(formData);
   };
-
-
 
   return (
     <Box p={4}>
@@ -168,7 +183,7 @@ function SellItemForm() {
                 onChange={handleImageUpload}
                 accept="image/*"
               />
-              <InputRightElement style={{ width: '130px' }}>
+              <InputRightElement style={{ width: "130px" }}>
                 <Button
                   size="md"
                   bg={"brand.200"}
@@ -202,14 +217,17 @@ function SellItemForm() {
             borderRadius="full"
             boxShadow="md"
             width={120}
-              _hover={{
-                bg: "brand.300",
-                boxShadow: "lg",
-              }}
+            _hover={{
+              bg: "brand.300",
+              boxShadow: "lg",
+            }}
           >
             Submit
           </Button>
-          <Modal isOpen={isErrorModalOpen} onClose={() => setIsErrorModalOpen(false)}>
+          <Modal
+            isOpen={isErrorModalOpen}
+            onClose={() => setIsErrorModalOpen(false)}
+          >
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>Error</ModalHeader>

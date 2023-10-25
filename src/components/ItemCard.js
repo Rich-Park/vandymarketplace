@@ -7,10 +7,11 @@ import {
   chakra,
   Tooltip,
 } from "@chakra-ui/react";
-import { FiShoppingCart } from "react-icons/fi";
+import { AiOutlineHeart } from "react-icons/ai";
 import { BiMessageRoundedDetail } from "react-icons/bi";
 
 const ItemCard = ({ item, openModal, myItems }) => {
+  console.log(item.id);
   return (
     <Flex
       direction="column"
@@ -38,16 +39,18 @@ const ItemCard = ({ item, openModal, myItems }) => {
           <Box fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
             {item.productName}
           </Box>
-          <Tooltip
-            label="Add to cart"
-            bg="white"
-            placement={"top"}
-            color={"gray.800"}
-          >
-            <chakra.a href={"#"} display={"flex"}>
-              <Icon as={FiShoppingCart} h={7} w={7} alignSelf={"center"} />
-            </chakra.a>
-          </Tooltip>
+          {!myItems && (
+            <Tooltip
+              label="Add to favorites"
+              bg="white"
+              placement={"top"}
+              color={"gray.800"}
+            >
+              <chakra.a href={"#"} display={"flex"}>
+                <Icon as={AiOutlineHeart} h={7} w={7} alignSelf={"center"} />
+              </chakra.a>
+            </Tooltip>
+          )}
         </Flex>
 
         <Flex justifyContent="space-between" alignContent="center">
