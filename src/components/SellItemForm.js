@@ -119,7 +119,6 @@ function SellItemForm() {
     } catch (error) {
       console.error(error);
     }
-    console.log(formData);
   };
 
   return (

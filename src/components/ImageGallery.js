@@ -75,10 +75,6 @@ const ImageGallery = ({ searchQuery, myItems }) => {
     load();
   }, [searchQuery, myItems]);
 
-  console.log(itemsData);
-  for (const item in itemsData) {
-    console.log(item.id);
-  }
   // Event handler to open the modal
   const openModal = (item) => {
     setIsModalOpen(true);

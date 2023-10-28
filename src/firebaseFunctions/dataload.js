@@ -1,10 +1,8 @@
 import { doc, getDoc } from "firebase/firestore";
 import { db, auth } from "../firebaseConfig";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 
-
-
-export async function getUserID(){
+export async function getUserID() {
   const userEmail = auth.currentUser.email;
   const userIdRef = doc(db, "userIDMap", userEmail);
   const docSnap = await getDoc(userIdRef);
@@ -30,19 +28,29 @@ export async function AllSellItemsLoader(userId) {
       const itemsQuerySnapshot = await getDocs(itemsToSellCollectionRef);
       itemsQuerySnapshot.forEach((doc) => {
         const itemData = doc.data();
+        itemData.id = doc.id;
         itemsData.push(itemData);
       });
-    }
-    else {
+    } else {
       const querySnapshot = await getDocs(itemsToSellRef);
-      await Promise.all(querySnapshot.docs.map(async (userDoc) => {
-        const itemsToSellCollectionRef = collection(userDoc.ref, "ItemsToSell");
-        const itemsQuerySnapshot = await getDocs(itemsToSellCollectionRef);
-        itemsQuerySnapshot.forEach((doc) => {
-          const itemData = doc.data();
-          itemsData.push(itemData);
-        });
-      }));
+      await Promise.all(
+        querySnapshot.docs.map(async (userDoc) => {
+          const itemsToSellCollectionRef = collection(
+            userDoc.ref,
+            "ItemsToSell"
+          );
+
+          // Create a query to retrieve documents that have imageURLs
+          const itemsQuerySnapshot = await getDocs(
+            query(itemsToSellCollectionRef, orderBy("timestamp", "desc"))
+          );
+          itemsQuerySnapshot.forEach((doc) => {
+            const itemData = doc.data();
+            itemData.id = doc.id;
+            itemsData.push(itemData);
+          });
+        })
+      );
     }
 
     itemsData.sort((a, b) => b.timestamp - a.timestamp);
@@ -61,32 +69,39 @@ export async function QueryItemsLoader(searchQuery, userId, myItems = false) {
   try {
     const querySnapshot = await getDocs(itemsToSellRef);
 
-    await Promise.all(querySnapshot.docs.map(async (userDoc) => {
-      const itemsToSellCollectionRef = collection(userDoc.ref, "ItemsToSell");
+    await Promise.all(
+      querySnapshot.docs.map(async (userDoc) => {
+        const itemsToSellCollectionRef = collection(userDoc.ref, "ItemsToSell");
 
-      const itemsQuerySnapshot = await getDocs(itemsToSellCollectionRef);
+        // Create a query to retrieve documents that have imageURLs
+        const itemsQuerySnapshot = await getDocs(
+          query(itemsToSellCollectionRef, orderBy("timestamp", "desc"))
+        );
 
-      itemsQuerySnapshot.forEach((doc) => {
-        const itemData = doc.data();
-        if (myItems) {
-          // If myItems is true, filter by userId
-          if (
-            itemData.email === userId &&
-            (itemData.productName.includes(searchQuery) ||
-              itemData.description.includes(searchQuery))
+        itemsQuerySnapshot.forEach((doc) => {
+          const itemData = doc.data();
+          if (myItems) {
+            // If myItems is true, filter by userId
+            if (
+              itemData.email === userId &&
+              (itemData.productName.includes(searchQuery) ||
+                itemData.description.includes(searchQuery))
+            ) {
+              itemData.id = doc.id;
+              itemsData.push(itemData);
+            }
+          } else if (
+            itemData.productName.includes(searchQuery) ||
+            itemData.description.includes(searchQuery)
           ) {
+            itemData.id = doc.id;
             itemsData.push(itemData);
           }
-        } else if (
-          itemData.productName.includes(searchQuery) ||
-          itemData.description.includes(searchQuery)
-        ) {
-          itemsData.push(itemData);
-        }
-      });
-    }));
+        });
+      })
+    );
     itemsData.sort((a, b) => b.timestamp - a.timestamp);
-  
+
     return itemsData;
   } catch (error) {
     console.error("Error fetching documents:", error);
@@ -94,11 +109,12 @@ export async function QueryItemsLoader(searchQuery, userId, myItems = false) {
   }
 }
 
-
-export async function UserSellItemsLoader(userId){
+export async function UserSellItemsLoader(userId) {
   const itemsToSellRef = collection(db, "users", userId, "ItemsToSell");
   // Create a query to retrieve documents that have imageURLs
-  const querySnapshot = await getDoc(query(itemsToSellRef, where("imageURLs", "!=", null)));
+  const querySnapshot = await getDoc(
+    query(itemsToSellRef, where("imageURLs", "!=", null))
+  );
 
   // Initialize an array to store the imageURLs
   let imageURLs = [];
@@ -107,7 +123,6 @@ export async function UserSellItemsLoader(userId){
     const data = querySnapshot.data();
     imageURLs = data.imageURLs;
   }
-  
+
   return imageURLs;
 }
-
