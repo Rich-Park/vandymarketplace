@@ -1,3 +1,4 @@
+import React from "react";
 import { useState, useEffect } from "react";
 import {
   Flex,
@@ -21,12 +22,16 @@ const ItemCard = ({ item, openModal, myItems }) => {
 
   useEffect(() => {
     const fetchLikedStatus = async () => {
-      const userId = await getUserID();
-      const userRef = doc(db, "users", userId);
-      const userData = await getDoc(userRef);
-      if (userData.exists) {
-        const userLikedItems = userData.data().likedItems || [];
-        setLiked(userLikedItems.includes(item.id));
+      try {
+        const userId = await getUserID();
+        const userRef = doc(db, "users", userId);
+        const userData = await getDoc(userRef);
+        if (userData.exists) {
+          const userLikedItems = userData.data().likedItems || [];
+          setLiked(userLikedItems.includes(item.id));
+        }
+      } catch (error) {
+        console.error("Error fetching liked status:", error);
       }
     };
 
@@ -35,16 +40,20 @@ const ItemCard = ({ item, openModal, myItems }) => {
 
   // Function to handle the liking and unliking process
   const handleLikeToggle = async () => {
-    const userId = await getUserID();
+    try {
+      const userId = await getUserID();
 
-    if (liked) {
-      await unlikeItem(userId, item.sellerId, item.id);
-      setLiked(false);
-      setLikesCount((prevCount) => prevCount - 1); // Decrement likes count
-    } else {
-      await likeItem(userId, item.sellerId, item.id);
-      setLiked(true);
-      setLikesCount((prevCount) => prevCount + 1); // Increment likes count
+      if (liked) {
+        await unlikeItem(userId, item.sellerId, item.id);
+        setLiked(false);
+        setLikesCount((prevCount) => prevCount - 1); // Decrement likes count
+      } else {
+        await likeItem(userId, item.sellerId, item.id);
+        setLiked(true);
+        setLikesCount((prevCount) => prevCount + 1); // Increment likes count
+      }
+    } catch (error) {
+      console.error("Error toggling like status:", error);
     }
   };
 
@@ -81,13 +90,18 @@ const ItemCard = ({ item, openModal, myItems }) => {
               placement={"top"}
               color={"gray.800"}
             >
-              <chakra.button onClick={handleLikeToggle} display={"flex"}>
+              <chakra.button
+                onClick={handleLikeToggle}
+                display={"flex"}
+                aria-label="Favorite Button"
+              >
                 <Icon
                   as={liked ? AiFillHeart : AiOutlineHeart}
                   h={7}
                   w={7}
                   alignSelf={"center"}
                   color={liked && "red"}
+                  data-testid="favorite-icon"
                 />
                 <chakra.span marginLeft="2" color="gray.600">
                   {likesCount}
@@ -111,15 +125,18 @@ const ItemCard = ({ item, openModal, myItems }) => {
               placement={"top"}
               color={"gray.800"}
             >
-              <chakra.a href={"#"} display={"flex"}>
+              <chakra.button display={"flex"}>
                 <Icon
                   as={BiMessageRoundedDetail}
                   h={7}
                   w={7}
                   alignSelf={"center"}
-                  onClick={() => openModal(item)}
+                  onClick={() => {
+                    openModal(item);
+                  }}
+                  aria-label="Contact Button"
                 />
-              </chakra.a>
+              </chakra.button>
             </Tooltip>
           )}
         </Flex>
