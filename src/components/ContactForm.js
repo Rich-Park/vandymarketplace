@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, FormControl, FormLabel, Input, Textarea } from "@chakra-ui/react";
-import axios from 'axios';
 
 
 const ContactForm = ({ isOpen, onClose, sellerEmail, productName, productPrice, userEmail }) => {
@@ -14,20 +13,30 @@ const ContactForm = ({ isOpen, onClose, sellerEmail, productName, productPrice, 
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
-
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/send-email', {
-        sellerEmail,
-        productName,
-        productPrice,
-        offerPrice,
-        message,
-        userEmail,
+      const response = await fetch('http://localhost:5000/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sellerEmail,
+          productName,
+          productPrice,
+          offerPrice,
+          message,
+          userEmail,
+        }),
       });
-  
-      console.log(response.data.message); // Log the server's response
-      onClose(); // Close the modal after submission
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.message); // Log the server's response
+        onClose(); // Close the modal after submission
+      } else {
+        console.error('Error submitting form:', response.statusText);
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
     }
