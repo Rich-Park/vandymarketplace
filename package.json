@@ -25,7 +25,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest --coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -57,6 +57,7 @@
     "babel-jest": "^29.7.0",
     "babel-plugin-styled-components": "^2.1.4",
     "babel-preset-flow": "^6.23.0",
-    "jest": "^27.5.1"
+    "jest": "^27.5.1",
+    "nyc": "^15.1.0"
   }
 }
