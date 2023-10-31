@@ -8,7 +8,7 @@ import { auth } from "../firebaseConfig";
 import { Grid, Heading, Box } from "@chakra-ui/react";
 import ItemCard from "./ItemCard";
 
-const ImageGallery = ({ searchQuery, myItems }) => {
+const ImageGallery = ({ searchQuery, selectedPrice, myItems }) => {
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,6 +16,8 @@ const ImageGallery = ({ searchQuery, myItems }) => {
   const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
+    console.log(searchQuery)
+    console.log(selectedPrice)
     async function load() {
       setLoading(true);
       if (searchQuery === "") {
@@ -73,7 +75,7 @@ const ImageGallery = ({ searchQuery, myItems }) => {
       setLoading(false);
     }
     load();
-  }, [searchQuery, myItems]);
+  }, [searchQuery, selectedPrice, myItems]);
 
   // Event handler to open the modal
   const openModal = (item) => {
