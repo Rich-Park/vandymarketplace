@@ -1,78 +1,85 @@
-import React, { useEffect, useState } from 'react'
-import { AllSellItemsLoader,  QueryItemsLoader} from '../firebaseFunctions/dataload';
+import React, { useEffect, useState } from "react";
+import {
+  AllSellItemsLoader,
+  QueryItemsLoader,
+} from "../firebaseFunctions/dataload";
 import ContactForm from "./ContactForm";
 import { auth } from "../firebaseConfig";
 import { Grid, Heading, Box } from "@chakra-ui/react";
 import ItemCard from "./ItemCard";
 
-const ImageGallery = ({ searchQuery, myItems })  => {
+const ImageGallery = ({ searchQuery, myItems }) => {
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [userEmail, setUserEmail] = useState("");
 
-    useEffect(() => {
-      
-        async function load(){
-
-            setLoading(true);
-            if (searchQuery === ""){
-              try{
-                let result;
-                if (myItems){
-                  let userId = auth.currentUser.email.substring(0, auth.currentUser.email.indexOf("@"));
-                  userId = userId.replace(/[^a-zA-Z0-9]/g, "");
-                  result = await AllSellItemsLoader(userId);
-                }
-                else {
-                  result = await AllSellItemsLoader();
-                }
-                setItemsData(result);
-                const user = auth.currentUser;
-                if (user && user.email) {
-                  setUserEmail(user.email);
-                }
-                const delay = ms => new Promise(res => setTimeout(res, ms));
-                await delay(1000);
-              } catch (error){
-                console.error("Error fetching data:", error);
-              }
-            }else{
-              try{
-                let result;
-                if (myItems) {
-                  result = await QueryItemsLoader(searchQuery, auth.currentUser.email, myItems);
-                }
-                else {
-                  result = await QueryItemsLoader(searchQuery, auth.currentUser.email, false);
-                }
-                setItemsData(result);
-                const user = auth.currentUser;
-                if (user && user.email) {
-                  setUserEmail(user.email);
-                }
-                const delay = ms => new Promise(res => setTimeout(res, ms));
-                await delay(1000);
-              } catch (error){
-                console.error("Error fetching data:", error);
-              }
-            }
-
-            setLoading(false);
-            
+  useEffect(() => {
+    async function load() {
+      setLoading(true);
+      if (searchQuery === "") {
+        try {
+          let result;
+          if (myItems) {
+            let userId = auth.currentUser.email.substring(
+              0,
+              auth.currentUser.email.indexOf("@")
+            );
+            userId = userId.replace(/[^a-zA-Z0-9]/g, "");
+            result = await AllSellItemsLoader(userId);
+          } else {
+            result = await AllSellItemsLoader();
+          }
+          setItemsData(result);
+          const user = auth.currentUser;
+          if (user && user.email) {
+            setUserEmail(user.email);
+          }
+          const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+          await delay(1000);
+        } catch (error) {
+          console.error("Error fetching data:", error);
         }
-        load();
+      } else {
+        try {
+          let result;
+          if (myItems) {
+            result = await QueryItemsLoader(
+              searchQuery,
+              auth.currentUser.email,
+              myItems
+            );
+            console.log(auth.currentUser.email, "hi");
+          } else {
+            result = await QueryItemsLoader(
+              searchQuery,
+              auth.currentUser.email,
+              false
+            );
+          }
+          setItemsData(result);
+          const user = auth.currentUser;
+          if (user && user.email) {
+            setUserEmail(user.email);
+          }
+          const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+          await delay(1000);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
 
-    }, [searchQuery, myItems]);
-
+      setLoading(false);
+    }
+    load();
+  }, [searchQuery, myItems]);
 
   // Event handler to open the modal
   const openModal = (item) => {
     setIsModalOpen(true);
     setSelectedItem(item);
   };
-
 
   // Event handler to close the modal
   const closeModal = () => {
@@ -87,7 +94,7 @@ const ImageGallery = ({ searchQuery, myItems })  => {
       ) : itemsData.length > 0 ? (
         <>
           <Heading size="md" m={2}>
-            {myItems ? 'My Items For Sale' : 'Featured Items'}
+            {myItems ? "My Items For Sale" : "Featured Items"}
           </Heading>
 
           <Grid
@@ -101,7 +108,12 @@ const ImageGallery = ({ searchQuery, myItems })  => {
             p={5}
           >
             {itemsData.map((item, index) => (
-              <ItemCard key={index} item={item} openModal={openModal} myItems={myItems} />
+              <ItemCard
+                key={index}
+                item={item}
+                openModal={openModal}
+                myItems={myItems}
+              />
             ))}
           </Grid>
         </>

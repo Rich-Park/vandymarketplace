@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Flex,
   Box,
@@ -7,10 +8,46 @@ import {
   chakra,
   Tooltip,
 } from "@chakra-ui/react";
-import { FiShoppingCart } from "react-icons/fi";
+import { getUserID } from "../firebaseFunctions/dataload";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { BiMessageRoundedDetail } from "react-icons/bi";
+import { likeItem, unlikeItem } from "../firebaseFunctions/firebaseWrite";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 const ItemCard = ({ item, openModal, myItems }) => {
+  const [liked, setLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(item.likesCount || 0);
+
+  useEffect(() => {
+    const fetchLikedStatus = async () => {
+      const userId = await getUserID();
+      const userRef = doc(db, "users", userId);
+      const userData = await getDoc(userRef);
+      if (userData.exists) {
+        const userLikedItems = userData.data().likedItems || [];
+        setLiked(userLikedItems.includes(item.id));
+      }
+    };
+
+    fetchLikedStatus();
+  }, [item.id]);
+
+  // Function to handle the liking and unliking process
+  const handleLikeToggle = async () => {
+    const userId = await getUserID();
+
+    if (liked) {
+      await unlikeItem(userId, item.sellerId, item.id);
+      setLiked(false);
+      setLikesCount((prevCount) => prevCount - 1); // Decrement likes count
+    } else {
+      await likeItem(userId, item.sellerId, item.id);
+      setLiked(true);
+      setLikesCount((prevCount) => prevCount + 1); // Increment likes count
+    }
+  };
+
   return (
     <Flex
       direction="column"
@@ -21,7 +58,6 @@ const ItemCard = ({ item, openModal, myItems }) => {
       borderWidth="1px"
       rounded="lg"
       _hover={{ transform: "scale(1.05)", transition: ".3s" }}
-      // shadow="sm"
     >
       <Box width="100%" height="100%" overflow="hidden">
         <Image
@@ -38,16 +74,27 @@ const ItemCard = ({ item, openModal, myItems }) => {
           <Box fontWeight="semibold" as="h4" lineHeight="tight" isTruncated>
             {item.productName}
           </Box>
-          <Tooltip
-            label="Add to cart"
-            bg="white"
-            placement={"top"}
-            color={"gray.800"}
-          >
-            <chakra.a href={"#"} display={"flex"}>
-              <Icon as={FiShoppingCart} h={7} w={7} alignSelf={"center"} />
-            </chakra.a>
-          </Tooltip>
+          {!myItems && (
+            <Tooltip
+              label={liked ? "Remove from favorites" : "Add to favorites"}
+              bg="white"
+              placement={"top"}
+              color={"gray.800"}
+            >
+              <chakra.button onClick={handleLikeToggle} display={"flex"}>
+                <Icon
+                  as={liked ? AiFillHeart : AiOutlineHeart}
+                  h={7}
+                  w={7}
+                  alignSelf={"center"}
+                  color={liked && "red"}
+                />
+                <chakra.span marginLeft="2" color="gray.600">
+                  {likesCount}
+                </chakra.span>
+              </chakra.button>
+            </Tooltip>
+          )}
         </Flex>
 
         <Flex justifyContent="space-between" alignContent="center">
@@ -77,8 +124,6 @@ const ItemCard = ({ item, openModal, myItems }) => {
           )}
         </Flex>
       </Box>
-      {/* </Box> */}
-      {/* </AspectRatio> */}
     </Flex>
   );
 };

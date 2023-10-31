@@ -1,12 +1,15 @@
 import { Box, Heading, Container, Text, Button, Stack } from "@chakra-ui/react";
-import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+} from "firebase/auth";
 import { auth, db } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
-
 export default function LogInPage() {
-
   const navigate = useNavigate();
 
   const logOut = () => {
@@ -20,28 +23,26 @@ export default function LogInPage() {
   };
 
   const handleLogIn = async () => {
-
     const provider = new GoogleAuthProvider();
-    
+
     await signInWithPopup(auth, provider)
-    .then((result) => {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      //const credential = GoogleAuthProvider.credentialFromResult(result);
-      //const token = credential.accessToken;
-      // The signed-in user info.
-      const user = result.user;
-      // IdP data available using getAdditionalUserInfo(result)
-      // ...
-      if (!(user.email.endsWith("@vanderbilt.edu"))) {
-        logOut();
-      }
-    })
-    .catch((error) => {
-      // Handle Errors here.
-    });
-  
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        //const credential = GoogleAuthProvider.credentialFromResult(result);
+        //const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+        if (!user.email.endsWith("@vanderbilt.edu")) {
+          logOut();
+        }
+      })
+      .catch((error) => {
+        // Handle Errors here.
+      });
+
     onAuthStateChanged(auth, async (user) => {
-  
       if (user && user.email.endsWith("@vanderbilt.edu")) {
         console.log("auth changed");
         const userEmail = user.email;
@@ -50,27 +51,25 @@ export default function LogInPage() {
 
         if (!docSnap.exists()) {
           let newId = user.email.substring(0, user.email.indexOf("@"));
-          newId = newId.replace(/[^a-zA-Z ]/g, "")
+          newId = newId.replace(/[^a-zA-Z ]/g, "");
           await setDoc(doc(db, "userIDMap", user.email), {
             userId: newId,
           });
 
           docSnap = await getDoc(userIdRef);
         }
-          let id = docSnap.data().userId;
-          const userDataRef = doc(db, "users", id);
-          const userDataSnap = await getDoc(userDataRef);
+        let id = docSnap.data().userId;
+        const userDataRef = doc(db, "users", id);
+        const userDataSnap = await getDoc(userDataRef);
 
-          if (!userDataSnap.exists()) {
-            await setDoc(doc(db, "users", id), {
-              
-            });
-          }
+        if (!userDataSnap.exists()) {
+          await setDoc(doc(db, "users", id), {
+            likedItems: [],
+          });
+        }
       }
       navigate("/");
     });
-  
-  
   };
 
   return (
