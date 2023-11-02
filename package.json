@@ -58,6 +58,7 @@
     "babel-plugin-styled-components": "^2.1.4",
     "babel-preset-flow": "^6.23.0",
     "jest": "^27.5.1",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "supertest": "^6.3.3"
   }
 }
