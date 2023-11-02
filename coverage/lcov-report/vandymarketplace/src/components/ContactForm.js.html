@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.94% </span>
+                <span class="strong">5.88% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/17</span>
+                <span class='fraction'>1/17</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/4</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.94% </span>
+                <span class="strong">5.88% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/17</span>
+                <span class='fraction'>1/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -160,17 +160,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -199,7 +199,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -251,18 +251,18 @@
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, FormControl, FormLabel, Input, Textarea } from "@chakra-ui/react";
 &nbsp;
 &nbsp;
-const ContactForm = ({ isOpen, onClose, sellerEmail, productName, productPrice, userEmail }) =&gt; {
-  const [offerPrice, setOfferPrice] = useState('');
-  const [message, setMessage] = useState('');
+const ContactForm = <span class="fstat-no" title="function not covered" >({</span> isOpen, onClose, sellerEmail, productName, productPrice, userEmail }) =&gt; {
+  const [offerPrice, setOfferPrice] = <span class="cstat-no" title="statement not covered" >useState('');</span>
+  const [message, setMessage] = <span class="cstat-no" title="statement not covered" >useState('');</span>
 &nbsp;
-  const handleOfferPriceChange = (event) =&gt; {
-    setOfferPrice(event.target.value);
+  const handleOfferPriceChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>vent) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setOfferPrice(event.target.value);</span>
   };
 &nbsp;
-  const handleMessageChange = (event) =&gt; {
-    setMessage(event.target.value);
+  const handleMessageChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>vent) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setMessage(event.target.value);</span>
   };
-  const handleSubmit = <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
+  const handleSubmit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const response = <span class="cstat-no" title="statement not covered" >await fetch('http://localhost:5000/send-email', {</span>
         method: 'POST',
@@ -291,7 +291,7 @@ const ContactForm = ({ isOpen, onClose, sellerEmail, productName, productPrice, 
     }
   };
 &nbsp;
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Modal isOpen={isOpen} onClose={onClose}&gt;
       &lt;ModalOverlay /&gt;
       &lt;ModalContent&gt;
@@ -346,7 +346,7 @@ export default ContactForm;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-31T15:21:17.327Z
+                at 2023-11-02T14:52:03.878Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

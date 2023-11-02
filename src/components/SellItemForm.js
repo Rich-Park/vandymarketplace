@@ -34,7 +34,8 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
-async function rateLimitFormSubmissions(userId) {
+export async function rateLimitFormSubmissions(userId) {
+
   const itemsCollectionRef = collection(db, "users", userId, "ItemsToSell");
   const oneHourAgo = new Date();
   oneHourAgo.setHours(oneHourAgo.getHours() - 1); // Calculate 1 hour ago
@@ -49,6 +50,7 @@ async function rateLimitFormSubmissions(userId) {
     const userItemsCount = querySnapshot.size;
     return userItemsCount >= 3;
   } catch (error) {
+
     console.error("Error fetching user items:", error);
     return false; // Handle the error and return an appropriate value
   }
@@ -104,17 +106,15 @@ function SellItemForm() {
     }
     try {
       let userId = await getUserID();
-      const tooManyItems = await rateLimitFormSubmissions(userId);
-
+      const tooManyItems = await rateLimitFormSubmissions('user');
       if (tooManyItems) {
         setError(
           "Submission limit exceeded. You may only post 3 items every hour. Try again later."
         );
-        setIsErrorModalOpen(true); // Open the error modal
+        setIsErrorModalOpen(true); // Open the error modal     
         return;
       }
       await storeItemsSell(userId, formData);
-      console.log("Form data submitted:", formData);
       navigate("/");
     } catch (error) {
       console.error(error);
@@ -174,13 +174,14 @@ function SellItemForm() {
 
           {/* Image Upload */}
           <FormControl id="images" isRequired>
-            <FormLabel>Upload Images</FormLabel>
+            <FormLabel>Upload Image</FormLabel>
             <InputGroup>
               <Input
                 type="file"
                 name="images"
                 onChange={handleImageUpload}
                 accept="image/*"
+                data-testid="upload-images-input" 
               />
               <InputRightElement style={{ width: "130px" }}>
                 <Button
@@ -226,6 +227,7 @@ function SellItemForm() {
           <Modal
             isOpen={isErrorModalOpen}
             onClose={() => setIsErrorModalOpen(false)}
+            data-testid="error-modal"
           >
             <ModalOverlay />
             <ModalContent>
