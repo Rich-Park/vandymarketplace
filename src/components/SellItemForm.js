@@ -34,7 +34,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
-async function rateLimitFormSubmissions(userId) {
+export async function rateLimitFormSubmissions(userId) {
   const itemsCollectionRef = collection(db, "users", userId, "ItemsToSell");
   const oneHourAgo = new Date();
   oneHourAgo.setHours(oneHourAgo.getHours() - 1); // Calculate 1 hour ago
@@ -114,7 +114,6 @@ function SellItemForm() {
         return;
       }
       await storeItemsSell(userId, formData);
-      console.log("Form data submitted:", formData);
       navigate("/");
     } catch (error) {
       console.error(error);
@@ -174,13 +173,14 @@ function SellItemForm() {
 
           {/* Image Upload */}
           <FormControl id="images" isRequired>
-            <FormLabel>Upload Images</FormLabel>
+            <FormLabel>Upload Image</FormLabel>
             <InputGroup>
               <Input
                 type="file"
                 name="images"
                 onChange={handleImageUpload}
                 accept="image/*"
+                data-testid="upload-images-input" 
               />
               <InputRightElement style={{ width: "130px" }}>
                 <Button
