@@ -1,80 +1,206 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import SellItemForm from '../components/SellItemForm';
-// import { storeItemsSell } from '../firebaseFunctions/firebaseWrite';
+import { render, screen, fireEvent, waitFor} from '@testing-library/react';
+import SellItemForm, { rateLimitFormSubmissions } from '../components/SellItemForm';
 import * as dataload from '../firebaseFunctions/dataload';
+import '@testing-library/jest-dom/extend-expect';
 import { MemoryRouter } from 'react-router-dom';
 
-// Mock any dependencies and functions that are used in your component
-jest.mock('../firebaseFunctions/firebaseWrite', () => ({
-  storeItemsSell: jest.fn(),
-}));
-  
-  
-test('it should submit the form with valid data', async () => {
-  // Mock the getUserID function to return a user ID
-  dataload.getUserID = jest.fn(() => Promise.resolve('user'));
-  render(
-    <MemoryRouter>
-      <SellItemForm />
-    </MemoryRouter>
-  );
 
-  const productNameInput = screen.getByPlaceholderText('Product Name');
-  const priceInput = screen.getByPlaceholderText('Price (USD)');
-  const descriptionInput = screen.getByPlaceholderText('Enter a description of your item...');
-  const emailInput = screen.getByPlaceholderText('Your Email (so potential buyers can contact you!)');
-
-  fireEvent.change(productNameInput, { target: { value: 'Sample Product' } });
-  fireEvent.change(priceInput, { target: { value: '100' } });
-  fireEvent.change(descriptionInput, { target: { value: 'Sample description' } });
-  fireEvent.change(emailInput, { target: { value: 'user@vanderbilt.edu' } });
-
-  // Access the form elements to retrieve the updated values
-  const updatedProductName = productNameInput.value;
-  const updatedPrice = priceInput.value;
-  const updatedDescription = descriptionInput.value;
-  const updatedEmail = emailInput.value;
-
-  // Check if the form inputs are updated correctly
-  expect(updatedProductName).toBe('Sample Product');
-  expect(updatedPrice).toBe('100');
-  expect(updatedDescription).toBe('Sample description');
-  expect(updatedEmail).toBe('user@vanderbilt.edu');
+// mock 3 items in db
+jest.mock('firebase/firestore', () => {
+const originalModule = jest.requireActual('firebase/firestore');
+return {
+...originalModule,
+getDocs: jest.fn(() => {
+return {
+size: 3, // Simulating 3 items
+};
+}),
+};
 });
 
-// test.only('it should show an error modal if submission limit is exceeded', async () => {
-//     dataload.getUserID = jest.fn(() => Promise.resolve('user'));
-//     SellItemForm.rateLimitFormSubmissions = jest.fn().mockResolvedValue(true);
-//     render(
-//         <MemoryRouter>
-//         <SellItemForm />
-//         </MemoryRouter>
-//     );
 
-//     // Fill in the form inputs
-//     const productNameInput = screen.getByPlaceholderText('Product Name');
-//     const priceInput = screen.getByPlaceholderText('Price (USD)');
-//     const descriptionInput = screen.getByPlaceholderText('Enter a description of your item...');
-//     const emailInput = screen.getByPlaceholderText('Your Email (so potential buyers can contact you!)');
-//     const submitButton = screen.getByText('Submit');
-//     const submitSpy = jest.spyOn(SellItemForm, 'handleSubmit');
+test('it should send an error saying that the email must be a Vanderbilt email', async () => {
+// Mock the getUserID function to return a user ID
+URL.createObjectURL = jest.fn((blob) => `blob:${blob}`);
 
 
-//     fireEvent.change(productNameInput, { target: { value: 'Sample Product' } });
-//     fireEvent.change(priceInput, { target: { value: '100' } });
-//     fireEvent.change(descriptionInput, { target: { value: 'Sample description' } });
-//     fireEvent.change(emailInput, { target: { value: 'user@vanderbilt.edu' } });
+dataload.getUserID = jest.fn(() => Promise.resolve('user'));
+const alertSpy = jest.spyOn(window, 'alert');
+alertSpy.mockImplementation(() => {});
 
-//     // // Mock rateLimitFormSubmissions to return true (exceeding the limit)
-//     // jest.spyOn(SellItemForm, 'rateLimitFormSubmissions').mockResolvedValue(true);
 
-//     // Submit the form
-//     fireEvent.click(submitButton);
-//       // Assert that the submit button was clicked
-//     expect(submitSpy).toHaveBeenCalled();
+render(
+<MemoryRouter>
+<SellItemForm />
+</MemoryRouter>
+);
 
-//     // // Assert that the error modal is displayed
-//     // const errorModal = await screen.findByText('Submission limit exceeded. You may only post 3 items every hour. Try again later.');
-//     // expect(errorModal).toBeInTheDocument();
-// });
+
+const productNameInput = screen.getByPlaceholderText('Product Name');
+const priceInput = screen.getByPlaceholderText('Price (USD)');
+const descriptionInput = screen.getByPlaceholderText('Enter a description of your item...');
+const emailInput = screen.getByPlaceholderText('Your Email (so potential buyers can contact you!)');
+const imageInput = screen.getByTestId('upload-images-input');
+const submitButton = screen.getByText('Submit');
+
+
+const imageFile = new File(['(binary content)'], 'logo192.png', { type: 'image/png' });
+
+
+fireEvent.change(productNameInput, { target: { value: 'Sample Product' } });
+fireEvent.change(priceInput, { target: { value: '100' } });
+fireEvent.change(descriptionInput, { target: { value: 'Sample description' } });
+fireEvent.change(emailInput, { target: { value: 'user@gmail.com' } });
+fireEvent.change(imageInput, { target: { files: [imageFile] } });
+// Submit the form
+fireEvent.click(submitButton);
+const consoleErrorSpy = jest.spyOn(console, 'error');
+consoleErrorSpy.mockImplementation(() => {});
+
+
+expect(alertSpy).toHaveBeenCalledWith('Email must end with "@vanderbilt.edu"');
+alertSpy.mockRestore();
+});
+
+
+test('it should submit the form with valid data', async () => {
+// Mock the getUserID function to return a user ID
+URL.createObjectURL = jest.fn((blob) => `blob:${blob}`);
+
+
+dataload.getUserID = jest.fn(() => Promise.resolve('user'));
+
+
+render(
+<MemoryRouter>
+<SellItemForm />
+</MemoryRouter>
+);
+
+
+const productNameInput = screen.getByPlaceholderText('Product Name');
+const priceInput = screen.getByPlaceholderText('Price (USD)');
+const descriptionInput = screen.getByPlaceholderText('Enter a description of your item...');
+const emailInput = screen.getByPlaceholderText('Your Email (so potential buyers can contact you!)');
+const imageInput = screen.getByTestId('upload-images-input');
+const submitButton = screen.getByText('Submit');
+
+
+const imageFile = new File(['(binary content)'], 'logo192.png', { type: 'image/png' });
+
+
+fireEvent.change(productNameInput, { target: { value: 'Sample Product' } });
+fireEvent.change(priceInput, { target: { value: '100' } });
+fireEvent.change(descriptionInput, { target: { value: 'Sample description' } });
+fireEvent.change(emailInput, { target: { value: 'user@vanderbilt.edu' } });
+fireEvent.change(imageInput, { target: { files: [imageFile] } });
+// Submit the form
+fireEvent.click(submitButton);
+
+
+// Access the form elements to retrieve the updated values
+const updatedProductName = productNameInput.value;
+const updatedPrice = priceInput.value;
+const updatedDescription = descriptionInput.value;
+const updatedEmail = emailInput.value;
+
+
+// Check if the form inputs are updated correctly
+expect(updatedProductName).toBe('Sample Product');
+expect(updatedPrice).toBe('100');
+expect(updatedDescription).toBe('Sample description');
+expect(updatedEmail).toBe('user@vanderbilt.edu');
+});
+
+
+test('it should be able to delete the image', async () => {
+// Mock the getUserID function to return a user ID
+URL.createObjectURL = jest.fn((blob) => `blob:${blob}`);
+
+
+dataload.getUserID = jest.fn(() => Promise.resolve('user'));
+
+
+render(
+<MemoryRouter>
+<SellItemForm />
+</MemoryRouter>
+);
+const productNameInput = screen.getByPlaceholderText('Product Name');
+const priceInput = screen.getByPlaceholderText('Price (USD)');
+const descriptionInput = screen.getByPlaceholderText('Enter a description of your item...');
+const emailInput = screen.getByPlaceholderText('Your Email (so potential buyers can contact you!)');
+const imageInput = screen.getByTestId('upload-images-input');
+const submitButton = screen.getByText('Submit');
+const clearImageButton = screen.getByText('Clear Image');
+
+
+const imageFile = new File(['(binary content)'], 'logo192.png', { type: 'image/png' });
+fireEvent.change(productNameInput, { target: { value: 'Sample Product' } });
+fireEvent.change(priceInput, { target: { value: '100' } });
+fireEvent.change(descriptionInput, { target: { value: 'Sample description' } });
+fireEvent.change(emailInput, { target: { value: 'user@vanderbilt.edu' } });
+fireEvent.change(imageInput, { target: { files: [imageFile] } });
+fireEvent.change(imageInput, { target: { files: [imageFile] } });
+expect(imageInput.files[0]).toEqual(imageFile);
+
+
+// empty file
+const emptyFile = new File([], 'empty.jpg', { type: 'image/jpeg' });
+
+
+fireEvent.click(clearImageButton)
+expect(imageInput.files[0]).toEqual(emptyFile);
+
+
+fireEvent.change(imageInput, { target: { files: [imageFile] } });
+expect(imageInput.files[0]).toEqual(imageFile);
+fireEvent.click(submitButton);
+const consoleErrorSpy = jest.spyOn(console, 'debug');
+consoleErrorSpy.mockImplementation(() => {});
+});
+
+
+test('should limit images', async () => {
+// Mock the getUserID function to return a user ID
+URL.createObjectURL = jest.fn((blob) => `blob:${blob}`);
+dataload.getUserID = jest.fn(() => Promise.resolve('user'));
+jest.mock('firebase/firestore', () => {
+const originalModule = jest.requireActual('firebase/firestore');
+return {
+...originalModule,
+getDocs: jest.fn(() => {
+return {
+size: 3, // Simulating 3 items
+};
+}),
+};
+});
+render(
+<MemoryRouter>
+<SellItemForm />
+</MemoryRouter>
+);
+
+
+const productNameInput = screen.getByPlaceholderText('Product Name');
+const priceInput = screen.getByPlaceholderText('Price (USD)');
+const descriptionInput = screen.getByPlaceholderText('Enter a description of your item...');
+const emailInput = screen.getByPlaceholderText('Your Email (so potential buyers can contact you!)');
+const imageInput = screen.getByTestId('upload-images-input');
+const submitButton = screen.getByText('Submit');
+const imageFile = new File(['(binary content)'], 'logo192.png', { type: 'image/png' });
+fireEvent.change(productNameInput, { target: { value: 'Sample Product' } });
+fireEvent.change(priceInput, { target: { value: '100' } });
+fireEvent.change(descriptionInput, { target: { value: 'Sample description' } });
+fireEvent.change(emailInput, { target: { value: 'user@vanderbilt.edu' } });
+fireEvent.change(imageInput, { target: { files: [imageFile] } });
+expect(imageInput.files[0]).toEqual(imageFile);
+fireEvent.click(submitButton);
+const consoleErrorSpy = jest.spyOn(console, 'debug');
+consoleErrorSpy.mockImplementation(() => {});
+await new Promise(resolve => setTimeout(resolve, 2000));
+const errorMessage = screen.getByText("Submission limit exceeded. You may only post 3 items every hour. Try again later.");
+expect(errorMessage).toBeInTheDocument();
+});
