@@ -8,6 +8,11 @@ import { likeItem, unlikeItem } from "../firebaseFunctions/firebaseWrite";
 // Mock Firebase functions and other dependencies
 jest.mock("../firebaseFunctions/dataload");
 jest.mock("../firebaseFunctions/firebaseWrite");
+jest.mock("firebase/firestore", () => ({
+  getFirestore: jest.fn(),
+  doc: jest.fn(),
+  getDoc: jest.fn(),
+}));
 
 const mockItem = {
   id: "1",
@@ -63,7 +68,7 @@ describe("ItemCard component", () => {
 
     // Wait for the heart icon to turn red
     await waitFor(() => {
-      const favoriteIcon = screen.getByTestId("favorite-icon");
+      const favoriteIcon = screen.getByLabelText("favorite-icon");
       expect(window.getComputedStyle(favoriteIcon).color).toBe("red");
     });
 
