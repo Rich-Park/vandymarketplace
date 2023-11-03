@@ -1,4 +1,4 @@
-import { ChakraProvider, Button, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider, Button, extendTheme, Flex } from "@chakra-ui/react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import SellItemForm from "./components/SellItemForm";
 import HomePage from "./components/HomePage";
@@ -31,25 +31,26 @@ function App() {
           <Route
             path="/sell-item"
             element={
-              <>
+              <div>
                 <SellItemForm />
-                <Button
-                  as={Link}
-                  bg={"brand.200"}
-                  color={"black"}
-                  to="/"
-                  borderRadius="full"
-                  boxShadow="md"
-                  width={120}
-                  _hover={{
-                    bg: "brand.500",
-                    boxShadow: "lg",
-                  }}
-                  ml={"1rem"}
-                >
-                  Home Page
-                </Button>
-              </>
+                <Flex justifyContent="center">
+                  <Button
+                    as={Link}
+                    bg={"brand.200"}
+                    color={"black"}
+                    to="/"
+                    borderRadius="full"
+                    boxShadow="md"
+                    width={120}
+                    _hover={{
+                      bg: "brand.500",
+                      boxShadow: "lg",
+                    }}
+                  >
+                    Home Page
+                  </Button>
+                </Flex>
+              </div>
             }
           />
         </Routes>

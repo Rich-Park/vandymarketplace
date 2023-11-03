@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { getUserID } from "../firebaseFunctions/dataload";
 import {
   Modal,
+  Flex,
   ModalOverlay,
   ModalContent,
   ModalHeader,
@@ -87,21 +88,14 @@ function SellItemForm() {
     }
   };
 
-  // const handleRemoveImage = (index) => {
-  //   const updatedImages = [...formData.images];
-  //   updatedImages.splice(index, 1);
-  //   setFormData({
-  //     ...formData,
-  //     images: updatedImages,
-  //   });
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email.endsWith("@vanderbilt.edu")) {
       alert('Email must end with "@vanderbilt.edu"');
       return;
     }
+    const submitButton = e.target.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
     try {
       let userId = await getUserID();
       const tooManyItems = await rateLimitFormSubmissions(userId);
@@ -117,12 +111,14 @@ function SellItemForm() {
       navigate("/");
     } catch (error) {
       console.error(error);
+    } finally {
+      submitButton.disabled = false;
     }
   };
 
   return (
-    <Box p={4}>
-      <Heading as="h2" size="lg" mb={4}>
+    <Box p={4} maxWidth="500px" margin="0 auto">
+      <Heading as="h2" size="lg" mb={4} textAlign="center" >
         Sell Your Item
       </Heading>
       <form onSubmit={handleSubmit}>
@@ -135,9 +131,13 @@ function SellItemForm() {
               value={formData.productName}
               onChange={handleChange}
               placeholder="Product Name"
+              width="100%"
+              border="1px solid #D1C49D"
+              borderRadius="md"
+              _hover={{ border: "1px solid #A8996E" }} 
             />
           </FormControl>
-
+  
           <FormControl id="price" isRequired>
             <FormLabel>Price</FormLabel>
             <Input
@@ -146,9 +146,13 @@ function SellItemForm() {
               value={formData.price}
               onChange={handleChange}
               placeholder="Price (USD)"
+              width="100%"
+              border="1px solid #D1C49D"
+              borderRadius="md"
+              _hover={{ border: "1px solid #A8996E" }} 
             />
           </FormControl>
-
+  
           {/* Description Input */}
           <FormControl id="description" isRequired>
             <FormLabel>Description</FormLabel>
@@ -157,9 +161,13 @@ function SellItemForm() {
               value={formData.description}
               onChange={handleChange}
               placeholder="Enter a description of your item..."
+              width="100%"
+              border="1px solid #D1C49D"
+              borderRadius="md"
+              _hover={{ border: "1px solid #A8996E" }}             
             />
           </FormControl>
-
+  
           <FormControl id="email" isRequired>
             <FormLabel>Email Address</FormLabel>
             <Input
@@ -168,9 +176,12 @@ function SellItemForm() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Your Email (so potential buyers can contact you!)"
+              width="100%"
+              border="1px solid #D1C49D"
+              borderRadius="md"
+              _hover={{ border: "1px solid #A8996E" }} 
             />
           </FormControl>
-
           {/* Image Upload */}
           <FormControl id="images" isRequired>
             <FormLabel>Upload Image</FormLabel>
@@ -180,11 +191,16 @@ function SellItemForm() {
                 name="images"
                 onChange={handleImageUpload}
                 accept="image/*"
-                data-testid="upload-images-input" 
+                data-testid="upload-images-input"
+                width="100%"
+                style={{ textAlign: "center" }}
+                border="1px solid #D1C49D"
+                borderRadius="md"
+                _hover={{ border: "1px solid #A8996E" }} 
               />
-              <InputRightElement style={{ width: "130px" }}>
+              <InputRightElement>
                 <Button
-                  size="md"
+                  style={{ fontSize: "14px", padding: "16px 42px", whiteSpace: "normal" }}
                   bg={"brand.200"}
                   color={"black"}
                   onClick={() => {
@@ -207,7 +223,8 @@ function SellItemForm() {
               />
             )}
           </FormControl>
-
+        </VStack>
+        <Flex justifyContent="center" mt={4}>
           <Button
             type="submit"
             colorScheme="teal"
@@ -223,10 +240,12 @@ function SellItemForm() {
           >
             Submit
           </Button>
-          <Modal
-            isOpen={isErrorModalOpen}
-            onClose={() => setIsErrorModalOpen(false)}
-          >
+        </Flex>
+      </form>
+      <Modal
+        isOpen={isErrorModalOpen}
+        onClose={() => setIsErrorModalOpen(false)}
+      >
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>Error</ModalHeader>
@@ -235,9 +254,7 @@ function SellItemForm() {
                 <Text color="red">{error}</Text>
               </ModalBody>
             </ModalContent>
-          </Modal>
-        </VStack>
-      </form>
+      </Modal>
     </Box>
   );
 }
