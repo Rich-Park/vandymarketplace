@@ -20,6 +20,7 @@ function SearchBar({ onSearch }) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             w="600px"
+            data-testid="search-input"
           />
           <InputRightElement width="4.5rem">
             <Button size="sm" onClick={handleSearch}>
