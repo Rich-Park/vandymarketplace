@@ -1,12 +1,10 @@
 import Header from "./Header";
 import ImageGallery from "./ImageGallery";
 import SearchBar from "./searchbar";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function MyItems() {
-
     const [searchQuery, setSearchQuery] = useState('');
-
     const handleSearch = (query) => {
       setSearchQuery(query);
     };

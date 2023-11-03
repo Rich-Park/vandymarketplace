@@ -19,14 +19,12 @@ import { useNavigate } from "react-router-dom";
 
 
 const Header = () => {
- 
   const navigate = useNavigate();
   const [userImage, setUserImage] = useState(auth.currentUser ? auth.currentUser.photoURL : null);
 
 
   useEffect(() => {
     // Observe auth state to redirect to login/home page
-
     async function load(){
       const delay1 = ms => new Promise(res => setTimeout(res, ms));
       await delay1(10000);

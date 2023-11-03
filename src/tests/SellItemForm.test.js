@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor} from '@testing-library/react';
-import SellItemForm, { rateLimitFormSubmissions } from '../components/SellItemForm';
+import { render, screen, fireEvent } from '@testing-library/react';
+import SellItemForm from '../components/SellItemForm';
 import * as dataload from '../firebaseFunctions/dataload';
 import '@testing-library/jest-dom/extend-expect';
 import { MemoryRouter } from 'react-router-dom';
@@ -20,6 +20,7 @@ size: 3, // Simulating 3 items
 });
 
 
+//since we don't have an @vanderbilt.edu email, it should return an error
 test('it should send an error saying that the email must be a Vanderbilt email', async () => {
 // Mock the getUserID function to return a user ID
 URL.createObjectURL = jest.fn((blob) => `blob:${blob}`);
@@ -64,13 +65,12 @@ alertSpy.mockRestore();
 });
 
 
+//form should successfully submit when given the right information
 test('it should submit the form with valid data', async () => {
 // Mock the getUserID function to return a user ID
 URL.createObjectURL = jest.fn((blob) => `blob:${blob}`);
 
-
 dataload.getUserID = jest.fn(() => Promise.resolve('user'));
-
 
 render(
 <MemoryRouter>
@@ -86,9 +86,7 @@ const emailInput = screen.getByPlaceholderText('Your Email (so potential buyers 
 const imageInput = screen.getByTestId('upload-images-input');
 const submitButton = screen.getByText('Submit');
 
-
 const imageFile = new File(['(binary content)'], 'logo192.png', { type: 'image/png' });
-
 
 fireEvent.change(productNameInput, { target: { value: 'Sample Product' } });
 fireEvent.change(priceInput, { target: { value: '100' } });
@@ -98,13 +96,11 @@ fireEvent.change(imageInput, { target: { files: [imageFile] } });
 // Submit the form
 fireEvent.click(submitButton);
 
-
 // Access the form elements to retrieve the updated values
 const updatedProductName = productNameInput.value;
 const updatedPrice = priceInput.value;
 const updatedDescription = descriptionInput.value;
 const updatedEmail = emailInput.value;
-
 
 // Check if the form inputs are updated correctly
 expect(updatedProductName).toBe('Sample Product');
@@ -113,14 +109,12 @@ expect(updatedDescription).toBe('Sample description');
 expect(updatedEmail).toBe('user@vanderbilt.edu');
 });
 
-
+//be able to upload the image, and then change image to a different one
 test('it should be able to delete the image', async () => {
 // Mock the getUserID function to return a user ID
 URL.createObjectURL = jest.fn((blob) => `blob:${blob}`);
 
-
 dataload.getUserID = jest.fn(() => Promise.resolve('user'));
-
 
 render(
 <MemoryRouter>
@@ -135,7 +129,6 @@ const imageInput = screen.getByTestId('upload-images-input');
 const submitButton = screen.getByText('Submit');
 const clearImageButton = screen.getByText('Clear Image');
 
-
 const imageFile = new File(['(binary content)'], 'logo192.png', { type: 'image/png' });
 fireEvent.change(productNameInput, { target: { value: 'Sample Product' } });
 fireEvent.change(priceInput, { target: { value: '100' } });
@@ -145,14 +138,11 @@ fireEvent.change(imageInput, { target: { files: [imageFile] } });
 fireEvent.change(imageInput, { target: { files: [imageFile] } });
 expect(imageInput.files[0]).toEqual(imageFile);
 
-
 // empty file
 const emptyFile = new File([], 'empty.jpg', { type: 'image/jpeg' });
 
-
 fireEvent.click(clearImageButton)
 expect(imageInput.files[0]).toEqual(emptyFile);
-
 
 fireEvent.change(imageInput, { target: { files: [imageFile] } });
 expect(imageInput.files[0]).toEqual(imageFile);
@@ -161,8 +151,8 @@ const consoleErrorSpy = jest.spyOn(console, 'debug');
 consoleErrorSpy.mockImplementation(() => {});
 });
 
-
-test('should limit images', async () => {
+//can only post 3 items per hour
+test('should limit items per hour', async () => {
 // Mock the getUserID function to return a user ID
 URL.createObjectURL = jest.fn((blob) => `blob:${blob}`);
 dataload.getUserID = jest.fn(() => Promise.resolve('user'));
