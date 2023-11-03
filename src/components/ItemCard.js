@@ -17,6 +17,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
 const ItemCard = ({ item, openModal, myItems }) => {
+  console.log("item", item);
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(item.likesCount || 0);
 
@@ -28,10 +29,12 @@ const ItemCard = ({ item, openModal, myItems }) => {
         const userData = await getDoc(userRef);
         if (userData.exists) {
           const userLikedItems = userData.data().likedItems || [];
-          setLiked(userLikedItems.includes(item.id));
+          setLiked(
+            userLikedItems.some((likedItem) => likedItem.itemId === item.id)
+          );
         }
-      } catch (error) {
-        console.error("Error fetching liked status:", error);
+      } catch (e) {
+        console.log(e);
       }
     };
 
@@ -40,20 +43,16 @@ const ItemCard = ({ item, openModal, myItems }) => {
 
   // Function to handle the liking and unliking process
   const handleLikeToggle = async () => {
-    try {
-      const userId = await getUserID();
+    const userId = await getUserID();
 
-      if (liked) {
-        await unlikeItem(userId, item.sellerId, item.id);
-        setLiked(false);
-        setLikesCount((prevCount) => prevCount - 1); // Decrement likes count
-      } else {
-        await likeItem(userId, item.sellerId, item.id);
-        setLiked(true);
-        setLikesCount((prevCount) => prevCount + 1); // Increment likes count
-      }
-    } catch (error) {
-      console.error("Error toggling like status:", error);
+    if (liked) {
+      await unlikeItem(userId, item.sellerId, item.id);
+      setLiked(false);
+      setLikesCount((prevCount) => prevCount - 1); // Decrement likes count
+    } else {
+      await likeItem(userId, item.sellerId, item.id);
+      setLiked(true);
+      setLikesCount((prevCount) => prevCount + 1); // Increment likes count
     }
   };
 
@@ -95,17 +94,18 @@ const ItemCard = ({ item, openModal, myItems }) => {
                 display={"flex"}
                 aria-label="Favorite Button"
               >
+                <chakra.span marginLeft="2" color="gray.600">
+                  {likesCount}
+                </chakra.span>
                 <Icon
                   as={liked ? AiFillHeart : AiOutlineHeart}
                   h={7}
                   w={7}
                   alignSelf={"center"}
                   color={liked && "red"}
-                  data-testid="favorite-icon"
+                  marginLeft="1"
+                  aria-label="favorite-icon"
                 />
-                <chakra.span marginLeft="2" color="gray.600">
-                  {likesCount}
-                </chakra.span>
               </chakra.button>
             </Tooltip>
           )}
@@ -125,18 +125,16 @@ const ItemCard = ({ item, openModal, myItems }) => {
               placement={"top"}
               color={"gray.800"}
             >
-              <chakra.button display={"flex"}>
+              <chakra.a href={"#"} display={"flex"}>
                 <Icon
                   as={BiMessageRoundedDetail}
                   h={7}
                   w={7}
                   alignSelf={"center"}
-                  onClick={() => {
-                    openModal(item);
-                  }}
+                  onClick={() => openModal(item)}
                   aria-label="Contact Button"
                 />
-              </chakra.button>
+              </chakra.a>
             </Tooltip>
           )}
         </Flex>

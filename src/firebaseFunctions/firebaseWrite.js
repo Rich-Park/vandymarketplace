@@ -54,16 +54,17 @@ export async function likeItem(userId, sellerId, itemId) {
     // Increment the likesCount
     transaction.update(itemRef, { likesCount: increment(1) });
 
+    const likedItemData = { itemId: itemId, sellerId: sellerId };
     // Add itemID to the user's likedItems array
-    transaction.update(userRef, { likedItems: arrayUnion(itemId) });
+    transaction.update(userRef, { likedItems: arrayUnion(likedItemData) });
   });
 }
 
-export async function unlikeItem(userId, sellerId, itemID) {
+export async function unlikeItem(userId, sellerId, itemId) {
   // References
   const userRef = doc(db, "users", userId);
   const sellerRef = doc(db, "users", sellerId);
-  const itemRef = doc(sellerRef, "ItemsToSell", itemID);
+  const itemRef = doc(sellerRef, "ItemsToSell", itemId);
 
   // Transaction to ensure atomicity
   return runTransaction(db, async (transaction) => {
@@ -75,7 +76,8 @@ export async function unlikeItem(userId, sellerId, itemID) {
     // Decrement the likesCount
     transaction.update(itemRef, { likesCount: increment(-1) });
 
-    // Remove itemID from the user's likedItems array
-    transaction.update(userRef, { likedItems: arrayRemove(itemID) });
+    // Remove the object { itemId, sellerId } from the user's likedItems array
+    const dislikedItemData = { itemId: itemId, sellerId: sellerId };
+    transaction.update(userRef, { likedItems: arrayRemove(dislikedItemData) });
   });
 }

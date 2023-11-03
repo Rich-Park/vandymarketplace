@@ -8,7 +8,7 @@ import { auth } from "../firebaseConfig";
 import { Grid, Heading, Box } from "@chakra-ui/react";
 import ItemCard from "./ItemCard";
 
-const ImageGallery = ({ searchQuery, myItems }) => {
+const ImageGallery = ({ searchQuery, myItems, favorites, favoriteItems }) => {
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,7 +18,15 @@ const ImageGallery = ({ searchQuery, myItems }) => {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      if (searchQuery === "") {
+      if (favorites) {
+        const filteredFavorites = favoriteItems.filter(
+          (item) =>
+            item.productName.includes(searchQuery) ||
+            item.description.includes(searchQuery)
+        );
+        filteredFavorites.sort((a, b) => b.timestamp - a.timestamp);
+        setItemsData(filteredFavorites);
+      } else if (searchQuery === "") {
         try {
           let result;
           if (myItems) {
@@ -72,7 +80,7 @@ const ImageGallery = ({ searchQuery, myItems }) => {
       setLoading(false);
     }
     load();
-  }, [searchQuery, myItems]);
+  }, [searchQuery, myItems, favorites, favoriteItems]);
 
   // Event handler to open the modal
   const openModal = (item) => {
@@ -93,7 +101,11 @@ const ImageGallery = ({ searchQuery, myItems }) => {
       ) : itemsData.length > 0 ? (
         <>
           <Heading size="md" m={2}>
-            {myItems ? "My Items For Sale" : "Featured Items"}
+            {favorites
+              ? "My Favorited Items"
+              : myItems
+              ? "My Items For Sale"
+              : "Featured Items"}
           </Heading>
 
           <Grid
