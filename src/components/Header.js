@@ -10,6 +10,7 @@ import {
   MenuItem,
   Image,
 } from "@chakra-ui/react";
+// need router to route to different pages, even though its greyed out
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "firebase/auth";
@@ -28,19 +29,14 @@ const Header = () => {
     async function load() {
       try {
         const delay1 = (ms) => new Promise((res) => setTimeout(res, ms));
-        await delay1(10000);
-        if (auth.currentUser) {
-          console.log("user is logged in");
-        }
+        await delay1(3000);
         setUserImage(auth.currentUser?.photoURL);
       } catch (e) {
         console.log(e);
       }
     }
     load();
-    console.log(userImage);
-  }, [auth]);
-  //const userProfileImageUrl = auth.currentUser?.photoURL;
+  });
 
   const handleLogout = async () => {
     try {
@@ -60,7 +56,6 @@ const Header = () => {
     >
       <Link to="/">
         {" "}
-        {/* Replace "/" with the path to your home page */}
         <Box fontSize="2xl" fontWeight="bold" as="button">
           Vandy Market
         </Box>
@@ -87,7 +82,7 @@ const Header = () => {
           <Menu>
             <MenuButton as={Box} p={2} cursor="pointer">
               <Image
-                src={userImage} // Replace with the URL of your image
+                src={userImage}
                 width="30px"
                 height="30px"
                 borderRadius="50%"
