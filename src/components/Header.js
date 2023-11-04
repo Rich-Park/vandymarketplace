@@ -10,6 +10,7 @@ import {
   MenuItem,
   Image
 } from '@chakra-ui/react';
+// it says Router is not needed for the program to run
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import 'firebase/auth';
@@ -27,7 +28,7 @@ const Header = () => {
     // Observe auth state to redirect to login/home page
     async function load(){
       const delay1 = ms => new Promise(res => setTimeout(res, ms));
-      await delay1(10000);
+      await delay1(3000);
       if(auth.currentUser){
         console.log('user is logged in');
       }
@@ -86,7 +87,7 @@ const Header = () => {
               <Menu>
                 <MenuButton as={Box} p={2} cursor="pointer">
                   <Image
-                    src = {userImage}  // Replace with the URL of your image
+                    src = {userImage}
                     width="30px"
                     height="30px"
                     borderRadius="50%"
