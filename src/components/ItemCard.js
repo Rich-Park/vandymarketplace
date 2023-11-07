@@ -1,3 +1,4 @@
+import React from "react";
 import { useState, useEffect } from "react";
 import {
   Flex,
@@ -16,17 +17,24 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
 const ItemCard = ({ item, openModal, myItems }) => {
+  console.log("item", item);
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(item.likesCount || 0);
 
   useEffect(() => {
     const fetchLikedStatus = async () => {
-      const userId = await getUserID();
-      const userRef = doc(db, "users", userId);
-      const userData = await getDoc(userRef);
-      if (userData.exists) {
-        const userLikedItems = userData.data().likedItems || [];
-        setLiked(userLikedItems.includes(item.id));
+      try {
+        const userId = await getUserID();
+        const userRef = doc(db, "users", userId);
+        const userData = await getDoc(userRef);
+        if (userData.exists) {
+          const userLikedItems = userData.data().likedItems || [];
+          setLiked(
+            userLikedItems.some((likedItem) => likedItem.itemId === item.id)
+          );
+        }
+      } catch (e) {
+        console.log(e);
       }
     };
 
@@ -81,17 +89,23 @@ const ItemCard = ({ item, openModal, myItems }) => {
               placement={"top"}
               color={"gray.800"}
             >
-              <chakra.button onClick={handleLikeToggle} display={"flex"}>
+              <chakra.button
+                onClick={handleLikeToggle}
+                display={"flex"}
+                aria-label="Favorite Button"
+              >
+                <chakra.span marginLeft="2" color="gray.600">
+                  {likesCount}
+                </chakra.span>
                 <Icon
                   as={liked ? AiFillHeart : AiOutlineHeart}
                   h={7}
                   w={7}
                   alignSelf={"center"}
                   color={liked && "red"}
+                  marginLeft="1"
+                  aria-label="favorite-icon"
                 />
-                <chakra.span marginLeft="2" color="gray.600">
-                  {likesCount}
-                </chakra.span>
               </chakra.button>
             </Tooltip>
           )}
@@ -118,6 +132,7 @@ const ItemCard = ({ item, openModal, myItems }) => {
                   w={7}
                   alignSelf={"center"}
                   onClick={() => openModal(item)}
+                  aria-label="Contact Button"
                 />
               </chakra.a>
             </Tooltip>

@@ -8,8 +8,7 @@ import { auth } from "../firebaseConfig";
 import { Grid, Heading, Box } from "@chakra-ui/react";
 import ItemCard from "./ItemCard";
 
-
-const ImageGallery = ({ searchQuery, selectedPrice, myItems }) => {
+const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favoriteItems }) => {
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,7 +28,15 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems }) => {
     console.log(selectedPrice)
     async function load() {
       setLoading(true);
-      if (searchQuery === "" && selectedPrice === "") {
+      if (favorites) {
+        const filteredFavorites = favoriteItems.filter(
+          (item) =>
+            item.productName.includes(searchQuery) ||
+            item.description.includes(searchQuery)
+        );
+        filteredFavorites.sort((a, b) => b.timestamp - a.timestamp);
+        setItemsData(filteredFavorites);
+      } else if (searchQuery === "" && selectedPrice === "") {
         try {
           let result;
           if (myItems) {
@@ -66,7 +73,6 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems }) => {
               auth.currentUser.email,
               myItems
             );
-            console.log(auth.currentUser.email, "hi");
           } else {
             console.log(price)
             result = await QueryItemsLoader(
@@ -91,7 +97,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems }) => {
       setLoading(false);
     }
     load();
-  }, [searchQuery, selectedPrice, myItems]);
+  }, [searchQuery, selectedPrice, myItems, favorites, favoriteItems]);
 
   // Event handler to open the modal
   const openModal = (item) => {
@@ -112,7 +118,11 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems }) => {
       ) : itemsData.length > 0 ? (
         <>
           <Heading size="md" m={2}>
-            {myItems ? "My Items For Sale" : "Featured Items"}
+            {favorites
+              ? "My Favorited Items"
+              : myItems
+              ? "My Items For Sale"
+              : "Featured Items"}
           </Heading>
 
           <Grid

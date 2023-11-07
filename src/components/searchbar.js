@@ -36,6 +36,7 @@ function SearchBar({ onSearch, onPriceChange, searchQuery, selectedPrice }) {
             value={searchQuery}
             onChange={(e) => onSearch(e.target.value)}
             w="600px"
+            data-testid="search-input"
           />
 
         </InputGroup>

@@ -11,7 +11,6 @@ export async function getUserID() {
     userId = docSnap.data().userId;
     console.log(userId);
   } else {
-    console.log("error");
     console.error("Could not find document.");
   }
   return userId;
@@ -20,12 +19,12 @@ export async function getUserID() {
 export async function AllSellItemsLoader(userId) {
   const itemsToSellRef = collection(db, "users"); // Assuming "users" is the top-level collection
   let itemsData = [];
-
   try {
     if (userId) {
       const userRef = doc(db, "users", userId);
       const itemsToSellCollectionRef = collection(userRef, "ItemsToSell");
       const itemsQuerySnapshot = await getDocs(itemsToSellCollectionRef);
+
       itemsQuerySnapshot.forEach((doc) => {
         const itemData = doc.data();
         itemData.id = doc.id;
@@ -54,7 +53,6 @@ export async function AllSellItemsLoader(userId) {
     }
 
     itemsData.sort((a, b) => b.timestamp - a.timestamp);
-
     return itemsData;
   } catch (error) {
     console.error("Error fetching documents:", error);
