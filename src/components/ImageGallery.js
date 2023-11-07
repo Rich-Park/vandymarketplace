@@ -107,10 +107,10 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favorite
    // Function to handle item deletion
    const deleteItem = async (item) => {
     try {
-  
       await deleteItemFunc(item);
-      
-  
+      const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+      await delay(1000);
+      setItemsData((prevItems) => prevItems.filter((prevItem) => prevItem !== item));
     } catch (error) {
       console.error("Error deleting item:", error);
     }

@@ -141,7 +141,7 @@ const ItemCard = ({ item, openModal, myItems, onDelete }) => {
           {myItems && (
             <Tooltip label="Delete" bg="white" placement={"top"} color={"gray.800"}>
               <chakra.button
-                onClick={() => onDelete(item.id)} // Call onDelete function with item id
+                onClick={() => onDelete(item.id)} 
                 display={"flex"}
                 aria-label="Delete Button"
               >
