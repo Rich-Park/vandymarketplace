@@ -11,6 +11,12 @@ import {
   InputGroup,
   InputRightElement,
   Image,
+  Select,
+  Tag,
+  TagLabel,
+  TagCloseButton,
+  Wrap,
+  WrapItem
 } from "@chakra-ui/react";
 import { storeItemsSell } from "../firebaseFunctions/firebaseWrite";
 import { useNavigate } from "react-router-dom";
@@ -59,6 +65,7 @@ function SellItemForm() {
 
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedTag, setSelectedTag] = useState("");
 
   const [formData, setFormData] = useState({
     productName: "",
@@ -66,6 +73,7 @@ function SellItemForm() {
     price: "",
     description: "",
     images: [],
+    tags: [], // Array to store selected tags
     timestamp: serverTimestamp(),
   });
 
@@ -85,6 +93,26 @@ function SellItemForm() {
         images: [files[0]],
       });
     }
+  };
+
+  const addTag = () => {
+    if (selectedTag && !formData.tags.includes(selectedTag)) {
+      console.log("Adding tags:", selectedTag);
+      setFormData({
+        ...formData,
+        tags: [...formData.tags, selectedTag],
+      });
+      setSelectedTag(""); // Reset the selected tag
+    }
+    console.log("updated tags:", formData.tags);
+  };
+
+  const removeTag = (tagToRemove) => {
+    const updatedTags = formData.tags.filter((tag) => tag !== tagToRemove);
+    setFormData({
+      ...formData,
+      tags: updatedTags,
+    });
   };
 
   // const handleRemoveImage = (index) => {
@@ -119,6 +147,7 @@ function SellItemForm() {
     } catch (error) {
       console.error(error);
     }
+    console.log(formData)
   };
 
   return (
@@ -207,6 +236,49 @@ function SellItemForm() {
               />
             )}
           </FormControl>
+
+          <FormControl id="tags">
+            <FormLabel>Tags</FormLabel>
+            <Select
+              value={selectedTag}
+              onChange={(e) => setSelectedTag(e.target.value)}
+            >
+              <option value="">Options</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Furniture">Furniture</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Books">Books</option>
+              <option value="Appliances">Appliances</option>
+              <option value="Home Decor">Home Decor</option>
+              <option value="Jewelry">Jewelry</option>
+              <option value="Toys">Toys</option>
+              <option value="Sports Equipment">Sports Equipment</option>
+              <option value="Antiques">Antiques</option>
+              <option value="Kitchenware">Kitchenware</option>
+              <option value="Office Supplies">Office Supplies</option>
+              {/* Add more tag options as needed */}
+            </Select>
+            <Button
+              bg={"brand.200"}
+              color={"black"}
+              onClick={addTag}
+              mt={2}
+            >
+              Add Tag
+            </Button>
+          </FormControl>
+          {formData.tags.length > 0 && (
+            <Wrap spacing={2}>
+              {formData.tags.map((tag, index) => (
+                <WrapItem key={index}>
+                  <Tag size="lg" variant="solid" bg={"brand.200"} color={"white"}>
+                    <TagLabel>{tag}</TagLabel>
+                    <TagCloseButton onClick={() => removeTag(tag)} />
+                  </Tag>
+                </WrapItem>
+              ))}
+            </Wrap>
+          )}
 
           <Button
             type="submit"

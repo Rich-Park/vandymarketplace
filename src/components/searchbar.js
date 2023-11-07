@@ -48,6 +48,22 @@ function SearchBar({ onSearch, onPriceChange, searchQuery, selectedPrice }) {
           <option value='option5'>100+$</option>
         </Select>
 
+        <Select ml = {2}>
+            <option value="">Category</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Books">Books</option>
+            <option value="Appliances">Appliances</option>
+            <option value="Home Decor">Home Decor</option>
+            <option value="Jewelry">Jewelry</option>
+            <option value="Toys">Toys</option>
+            <option value="Sports Equipment">Sports Equipment</option>
+            <option value="Antiques">Antiques</option>
+            <option value="Kitchenware">Kitchenware</option>
+            <option value="Office Supplies">Office Supplies</option>
+        </Select>
+
       </Center>
     </Flex>
   );

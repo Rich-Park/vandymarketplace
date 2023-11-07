@@ -8,6 +8,7 @@ import { auth } from "../firebaseConfig";
 import { Grid, Heading, Box } from "@chakra-ui/react";
 import ItemCard from "./ItemCard";
 
+
 const ImageGallery = ({ searchQuery, selectedPrice, myItems }) => {
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -15,12 +16,20 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [userEmail, setUserEmail] = useState("");
 
+  const priceMap = {
+    option1: 0,
+    option2: 25,
+    option3: 50,
+    option4: 75,
+    option5: 100,
+  };
+
   useEffect(() => {
     console.log(searchQuery)
     console.log(selectedPrice)
     async function load() {
       setLoading(true);
-      if (searchQuery === "") {
+      if (searchQuery === "" && selectedPrice === "") {
         try {
           let result;
           if (myItems) {
@@ -45,17 +54,24 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems }) => {
         }
       } else {
         try {
+          let price = -1;
+          if(selectedPrice != ""){
+            price = priceMap[selectedPrice]
+          }
           let result;
           if (myItems) {
             result = await QueryItemsLoader(
               searchQuery,
+              price,
               auth.currentUser.email,
               myItems
             );
             console.log(auth.currentUser.email, "hi");
           } else {
+            console.log(price)
             result = await QueryItemsLoader(
               searchQuery,
+              price,
               auth.currentUser.email,
               false
             );

@@ -62,7 +62,9 @@ export async function AllSellItemsLoader(userId) {
   }
 }
 
-export async function QueryItemsLoader(searchQuery, userId, myItems = false) {
+export async function QueryItemsLoader(searchQuery, selectedPrice, userId, myItems = false) {
+  console.log(selectedPrice);
+  console.log("hihi")
   const itemsToSellRef = collection(db, "users"); // Assuming "users" is the top-level collection
   let itemsData = [];
 
@@ -79,24 +81,38 @@ export async function QueryItemsLoader(searchQuery, userId, myItems = false) {
         );
 
         itemsQuerySnapshot.forEach((doc) => {
+
+        
           const itemData = doc.data();
-          if (myItems) {
-            // If myItems is true, filter by userId
-            if (
-              itemData.email === userId &&
-              (itemData.productName.includes(searchQuery) ||
-                itemData.description.includes(searchQuery))
-            ) {
-              itemData.id = doc.id;
-              itemsData.push(itemData);
-            }
-          } else if (
-            itemData.productName.includes(searchQuery) ||
-            itemData.description.includes(searchQuery)
+          const itemPrice = itemData.price;
+          console.log(itemPrice)
+
+          if (
+            (selectedPrice === -1) || // No price filter
+            (selectedPrice === 0 && itemPrice >= 0 && itemPrice < 25) || // 0-25 price range
+            (selectedPrice === 25 && itemPrice >= 25 && itemPrice < 50) || // 25-50 price range
+            (selectedPrice === 50 && itemPrice >= 50 && itemPrice < 75) || // 50-75 price range
+            (selectedPrice === 100 && itemPrice >= 100) // 100+ price range
           ) {
-            itemData.id = doc.id;
-            itemsData.push(itemData);
+              if (myItems) {
+                // If myItems is true, filter by userId
+                if (
+                  itemData.email === userId &&
+                  (itemData.productName.includes(searchQuery) ||
+                    itemData.description.includes(searchQuery))
+                ) {
+                  itemData.id = doc.id;
+                  itemsData.push(itemData);
+                }
+              } else if (
+                itemData.productName.includes(searchQuery) ||
+                itemData.description.includes(searchQuery)
+              ) {
+                itemData.id = doc.id;
+                itemsData.push(itemData);
+              }
           }
+          
         });
       })
     );
