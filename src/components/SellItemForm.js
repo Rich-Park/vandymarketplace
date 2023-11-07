@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -40,6 +40,8 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
+import { auth } from "../firebaseConfig";
+
 
 export async function rateLimitFormSubmissions(userId) {
   const itemsCollectionRef = collection(db, "users", userId, "ItemsToSell");
@@ -77,6 +79,16 @@ function SellItemForm() {
     tags: [], // Array to store selected tags
     timestamp: serverTimestamp(),
   });
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user && user.email) {
+      setFormData((prevData) => ({
+        ...prevData,
+        email: user.email,
+      }));
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -116,21 +128,10 @@ function SellItemForm() {
     });
   };
 
-  // const handleRemoveImage = (index) => {
-  //   const updatedImages = [...formData.images];
-  //   updatedImages.splice(index, 1);
-  //   setFormData({
-  //     ...formData,
-  //     images: updatedImages,
-  //   });
-  // };
-
   const handleSubmit = async (e) => {
+    console.log("formData", formData);
     e.preventDefault();
-    if (!formData.email.endsWith("@vanderbilt.edu")) {
-      alert('Email must end with "@vanderbilt.edu"');
-      return;
-    }
+
     const submitButton = e.target.querySelector('button[type="submit"]');
     submitButton.disabled = true;
     try {
@@ -155,6 +156,18 @@ function SellItemForm() {
   };
 
   return (
+    <div>
+    <Button
+        onClick={() => navigate("/")}
+        bg={"brand.200"}
+        color={"black"}
+        size="sm"
+        mb={4}
+        ml={4}
+        mt={4}
+      >
+        Back
+    </Button>
     <Box p={4} maxWidth="500px" margin="0 auto">
       <Heading as="h2" size="lg" mb={4} textAlign="center" >
         Sell Your Item
@@ -203,21 +216,6 @@ function SellItemForm() {
               border="1px solid #D1C49D"
               borderRadius="md"
               _hover={{ border: "1px solid #A8996E" }}             
-            />
-          </FormControl>
-  
-          <FormControl id="email" isRequired>
-            <FormLabel>Email Address</FormLabel>
-            <Input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Your Email (so potential buyers can contact you!)"
-              width="100%"
-              border="1px solid #D1C49D"
-              borderRadius="md"
-              _hover={{ border: "1px solid #A8996E" }} 
             />
           </FormControl>
           {/* Image Upload */}
@@ -280,7 +278,6 @@ function SellItemForm() {
               <option value="Antiques">Antiques</option>
               <option value="Kitchenware">Kitchenware</option>
               <option value="Office Supplies">Office Supplies</option>
-              {/* Add more tag options as needed */}
             </Select>
             <Button
               bg={"brand.200"}
@@ -336,6 +333,7 @@ function SellItemForm() {
             </ModalContent>
       </Modal>
     </Box>
+    </div>
   );
 }
 

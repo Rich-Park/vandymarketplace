@@ -33,23 +33,6 @@ function App() {
             element={
               <div>
                 <SellItemForm />
-                <Flex justifyContent="center">
-                  <Button
-                    as={Link}
-                    bg={"brand.200"}
-                    color={"black"}
-                    to="/"
-                    borderRadius="full"
-                    boxShadow="md"
-                    width={120}
-                    _hover={{
-                      bg: "brand.500",
-                      boxShadow: "lg",
-                    }}
-                  >
-                    Home Page
-                  </Button>
-                </Flex>
               </div>
             }
           />
