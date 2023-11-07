@@ -3,6 +3,11 @@ import {
   AllSellItemsLoader,
   QueryItemsLoader,
 } from "../firebaseFunctions/dataload";
+
+import {
+  deleteItemFunc,
+} from "../firebaseFunctions/firebaseWrite";
+
 import ContactForm from "./ContactForm";
 import { auth } from "../firebaseConfig";
 import { Grid, Heading, Box } from "@chakra-ui/react";
@@ -62,7 +67,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favorite
       } else {
         try {
           let price = -1;
-          if(selectedPrice != ""){
+          if(selectedPrice !== ""){
             price = priceMap[selectedPrice]
           }
           let result;
@@ -98,6 +103,18 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favorite
     }
     load();
   }, [searchQuery, selectedPrice, myItems, favorites, favoriteItems]);
+
+   // Function to handle item deletion
+   const deleteItem = async (item) => {
+    try {
+  
+      await deleteItemFunc(item);
+      
+  
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+  };
 
   // Event handler to open the modal
   const openModal = (item) => {
@@ -141,6 +158,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favorite
                 item={item}
                 openModal={openModal}
                 myItems={myItems}
+                onDelete={deleteItem}
               />
             ))}
           </Grid>
