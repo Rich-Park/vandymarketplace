@@ -259,9 +259,12 @@ function SellItemForm() {
               />
             )}
           </FormControl>
-          <FormControl id="tags">
+          <FormControl id="tags" >  
             <FormLabel>Tags</FormLabel>
             <Select
+              border="1px solid #D1C49D"
+              borderRadius="md"
+              _hover={{ border: "1px solid #A8996E" }} 
               value={selectedTag}
               onChange={(e) => setSelectedTag(e.target.value)}
             >
