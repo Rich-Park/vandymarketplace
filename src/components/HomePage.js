@@ -12,11 +12,15 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedPrice, setSelectedPrice] = useState('');
 
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
 
+  const handlePriceChange = (priceOption) => {
+    setSelectedPrice(priceOption);
+  };
   
 
   useEffect(() => {
@@ -40,13 +44,19 @@ export default function HomePage() {
 
   }, [auth, navigate]);  
 
-  
+  //<SearchBar onSearch={handleSearch} onPriceChange={handlePriceChange}/>
 
   return (
     <>
       <Header/>
-      <SearchBar onSearch={handleSearch} />
-      <ImageGallery searchQuery={searchQuery}/>
+      
+      <SearchBar
+        onSearch={handleSearch}
+        onPriceChange={handlePriceChange}
+        searchQuery={searchQuery}
+        selectedPrice={selectedPrice}
+      />
+      <ImageGallery searchQuery={searchQuery} selectedPrice={selectedPrice}/>
  
     </>
   );

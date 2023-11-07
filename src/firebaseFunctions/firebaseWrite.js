@@ -30,9 +30,10 @@ export async function storeItemsSell(userId, form_item) {
   await addDoc(collectionVal, {
     productName: form_item.productName,
     email: form_item.email,
-    price: form_item.price,
+    price: parseFloat(form_item.price),
     description: form_item.description,
     imageURLs: imageURLs,
+    tags: form_item.tags,
     timestamp: form_item.timestamp,
     likesCount: 0,
     sellerId: userId,
