@@ -236,7 +236,7 @@ function SellItemForm() {
               />
               <InputRightElement>
                 <Button
-                  style={{ fontSize: "14px", padding: "16px 42px", whiteSpace: "normal" }}
+                  style={{ fontSize: "13px", padding: "16px 28px", whiteSpace: "normal",  marginLeft: "-10px", }}
                   bg={"brand.200"}
                   color={"black"}
                   onClick={() => {
