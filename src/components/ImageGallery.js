@@ -8,7 +8,8 @@ import { auth } from "../firebaseConfig";
 import { Grid, Heading, Box } from "@chakra-ui/react";
 import ItemCard from "./ItemCard";
 
-const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favoriteItems }) => {
+const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favorites, favoriteItems }) => {
+
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,10 +25,14 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favorite
   };
 
   useEffect(() => {
+
     console.log(searchQuery)
     console.log(selectedPrice)
+    console.log(selectedTag)
+
     async function load() {
       setLoading(true);
+
       if (favorites) {
         const filteredFavorites = favoriteItems.filter(
           (item) =>
@@ -36,7 +41,8 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favorite
         );
         filteredFavorites.sort((a, b) => b.timestamp - a.timestamp);
         setItemsData(filteredFavorites);
-      } else if (searchQuery === "" && selectedPrice === "") {
+      } //else if (searchQuery === "" && selectedPrice === "") {
+        /*
         try {
           let result;
           if (myItems) {
@@ -59,7 +65,9 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favorite
         } catch (error) {
           console.error("Error fetching data:", error);
         }
-      } else {
+        */
+      //}
+      else {
         try {
           let price = -1;
           if(selectedPrice != ""){
@@ -93,11 +101,10 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favorite
           console.error("Error fetching data:", error);
         }
       }
-
       setLoading(false);
     }
     load();
-  }, [searchQuery, selectedPrice, myItems, favorites, favoriteItems]);
+  }, [searchQuery, selectedPrice, selectedTag, myItems, favorites, favoriteItems]);
 
   // Event handler to open the modal
   const openModal = (item) => {
