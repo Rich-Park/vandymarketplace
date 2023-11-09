@@ -28,7 +28,7 @@ const Header = () => {
 
     async function load() {
       try {
-        const delay1 = (ms) => new Promise((res) => setTimeout(res, ms));
+        const delay1 = (ms) => new Promise((res) => setTimeout(res, ms))
         await delay1(3000);
         setUserImage(auth.currentUser?.photoURL);
       } catch (e) {
