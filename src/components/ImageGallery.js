@@ -130,11 +130,10 @@ const ImageGallery = ({
 
           <Grid
             templateColumns={{
-              base: "repeat(auto-fit, minmax(150px, 1fr))", // On smaller screens, minimum width is 150px
-              md: "repeat(auto-fit, minmax(200px, 1fr))", // Adjust as needed for different breakpoints
-              lg: "repeat(auto-fit, minmax(250px, 1fr))",
+              sm: "repeat(2, 1fr)",
+              md: "repeat(4, 1fr)",
+              lg: "repeat(6, 1fr)",
             }}
-            gridAutoRows="1fr"
             gap={4}
             p={5}
           >
