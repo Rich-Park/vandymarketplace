@@ -1,3 +1,4 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db, auth } from "../firebaseConfig";
@@ -8,12 +9,13 @@ import ImageGallery from "./ImageGallery";
 import SearchBar from "./searchbar";
 
 export default function HomePage() {
-
   const navigate = useNavigate();
+
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPrice, setSelectedPrice] = useState('');
   const [selectedTag, setSelectedTag] = useState('');
+
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -31,28 +33,32 @@ export default function HomePage() {
   useEffect(() => {
     // Observe auth state to redirect to login/home page
     onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userEmail = user.email;
-        const userIdRef = doc(db, "userIDMap", userEmail);
-        const docSnap = await getDoc(userIdRef);
-    
-        if (docSnap.exists()) {
+      try {
+        if (user) {
+          const userEmail = user.email;
+          const userIdRef = doc(db, "userIDMap", userEmail);
+          const docSnap = await getDoc(userIdRef);
+
+          if (!docSnap.exists()) {
+            console.error("Could not find document.");
+          }
+          // Additional logic if the document exists
         } else {
-          console.error("Could not find document.");
+          console.log("redirect");
+          navigate("/log-in");
         }
-      } else {
-        console.log("redirect");
-        navigate("/log-in");
+      } catch (error) {
+        console.error("An error occurred: ", error);
+        // Handle the error appropriately
+        // Maybe navigate to an error page or display a message
       }
     });
-    
-
-  }, [auth, navigate]);  
+  }, [navigate]);
 
   return (
     <>
-      <Header/>
-      
+      <Header />
+
       <SearchBar
         onSearch={handleSearch}
         onPriceChange={handlePriceChange}
@@ -61,6 +67,7 @@ export default function HomePage() {
         selectedPrice={selectedPrice}
         selectedTag = {selectedTag}
       />
+
       <ImageGallery searchQuery={searchQuery} selectedPrice={selectedPrice} selectedTag = {selectedTag}/>
  
     </>

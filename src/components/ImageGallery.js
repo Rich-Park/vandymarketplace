@@ -9,7 +9,9 @@ import { auth } from "../firebaseConfig";
 import { Grid, Heading, Box, filter } from "@chakra-ui/react";
 import ItemCard from "./ItemCard";
 
+
 const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favorites, favoriteItems }) => {
+
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,6 +41,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
         await delay(2000);
       } else {
         try {
+
           let result;
           result = await QueryItemsLoader(
             searchQuery,
@@ -46,7 +49,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
             selectedTag,
             myItems
           );
-          console.log(result)
+          
           setItemsData(result);
           const user = auth.currentUser;
           if (user && user.email) {
@@ -88,11 +91,10 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
           </Heading>
           <Grid
             templateColumns={{
-              base: "repeat(auto-fit, minmax(150px, 1fr))", // On smaller screens, minimum width is 150px
-              md: "repeat(auto-fit, minmax(200px, 1fr))", // Adjust as needed for different breakpoints
-              lg: "repeat(auto-fit, minmax(250px, 1fr))",
+              sm: "repeat(2, 1fr)",
+              md: "repeat(4, 1fr)",
+              lg: "repeat(6, 1fr)",
             }}
-            gridAutoRows="1fr"
             gap={4}
             p={5}
           >
