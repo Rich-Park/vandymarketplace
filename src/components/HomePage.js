@@ -13,6 +13,7 @@ export default function HomePage() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPrice, setSelectedPrice] = useState('');
+  const [selectedTag, setSelectedTag] = useState('');
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -21,8 +22,12 @@ export default function HomePage() {
   const handlePriceChange = (priceOption) => {
     setSelectedPrice(priceOption);
   };
-  
 
+  const handleTagging = (tagOption) => {
+    setSelectedTag(tagOption);
+  };
+
+  
   useEffect(() => {
     // Observe auth state to redirect to login/home page
     onAuthStateChanged(auth, async (user) => {
@@ -44,8 +49,6 @@ export default function HomePage() {
 
   }, [auth, navigate]);  
 
-  //<SearchBar onSearch={handleSearch} onPriceChange={handlePriceChange}/>
-
   return (
     <>
       <Header/>
@@ -53,10 +56,12 @@ export default function HomePage() {
       <SearchBar
         onSearch={handleSearch}
         onPriceChange={handlePriceChange}
+        onTagChange = {handleTagging}
         searchQuery={searchQuery}
         selectedPrice={selectedPrice}
+        selectedTag = {selectedTag}
       />
-      <ImageGallery searchQuery={searchQuery} selectedPrice={selectedPrice}/>
+      <ImageGallery searchQuery={searchQuery} selectedPrice={selectedPrice} selectedTag = {selectedTag}/>
  
     </>
   );

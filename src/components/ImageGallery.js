@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import {
   AllSellItemsLoader,
   QueryItemsLoader,
+  filterFavorites
 } from "../firebaseFunctions/dataload";
 import ContactForm from "./ContactForm";
 import { auth } from "../firebaseConfig";
-import { Grid, Heading, Box } from "@chakra-ui/react";
+import { Grid, Heading, Box, filter } from "@chakra-ui/react";
 import ItemCard from "./ItemCard";
 
-const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favoriteItems }) => {
+const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favorites, favoriteItems }) => {
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,80 +25,43 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favorite
   };
 
   useEffect(() => {
-    console.log(searchQuery)
-    console.log(selectedPrice)
+
     async function load() {
       setLoading(true);
+      let price = -1;
+      if(selectedPrice != ""){
+        price = priceMap[selectedPrice]
+      }
       if (favorites) {
-        const filteredFavorites = favoriteItems.filter(
-          (item) =>
-            item.productName.includes(searchQuery) ||
-            item.description.includes(searchQuery)
-        );
-        filteredFavorites.sort((a, b) => b.timestamp - a.timestamp);
+        const filteredFavorites = await filterFavorites(favoriteItems, searchQuery, price, selectedTag)
         setItemsData(filteredFavorites);
-      } else if (searchQuery === "" && selectedPrice === "") {
-        try {
-          let result;
-          if (myItems) {
-            let userId = auth.currentUser.email.substring(
-              0,
-              auth.currentUser.email.indexOf("@")
-            );
-            userId = userId.replace(/[^a-zA-Z0-9]/g, "");
-            result = await AllSellItemsLoader(userId);
-          } else {
-            result = await AllSellItemsLoader();
-          }
-          setItemsData(result);
-          const user = auth.currentUser;
-          if (user && user.email) {
-            setUserEmail(user.email);
-          }
-          const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-          await delay(1000);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
+        const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+        await delay(1000);
       } else {
         try {
-          let price = -1;
-          if(selectedPrice != ""){
-            price = priceMap[selectedPrice]
-          }
           let result;
-          if (myItems) {
-            result = await QueryItemsLoader(
-              searchQuery,
-              price,
-              auth.currentUser.email,
-              myItems
-            );
-          } else {
-            console.log(price)
-            result = await QueryItemsLoader(
-              searchQuery,
-              price,
-              auth.currentUser.email,
-              false
-            );
-          }
+          result = await QueryItemsLoader(
+            searchQuery,
+            price,
+            selectedTag,
+            myItems
+          );
+          console.log(result)
           setItemsData(result);
           const user = auth.currentUser;
           if (user && user.email) {
             setUserEmail(user.email);
           }
-          const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-          await delay(1000);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
       }
-
+      const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+      await delay(1000);
       setLoading(false);
     }
     load();
-  }, [searchQuery, selectedPrice, myItems, favorites, favoriteItems]);
+  }, [searchQuery, selectedPrice, selectedTag, myItems, favorites, favoriteItems]);
 
   // Event handler to open the modal
   const openModal = (item) => {
@@ -113,9 +77,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favorite
 
   return (
     <Box>
-      {loading ? ( // Show loading message while data is being fetched
-        <p>Loading images...</p>
-      ) : itemsData.length > 0 ? (
+      {itemsData.length > 0 ? (
         <>
           <Heading size="md" m={2}>
             {favorites
@@ -124,7 +86,6 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favorite
               ? "My Items For Sale"
               : "Featured Items"}
           </Heading>
-
           <Grid
             templateColumns={{
               base: "repeat(auto-fit, minmax(150px, 1fr))", // On smaller screens, minimum width is 150px
@@ -145,6 +106,8 @@ const ImageGallery = ({ searchQuery, selectedPrice, myItems, favorites, favorite
             ))}
           </Grid>
         </>
+      ) : loading ? (
+        <p>Loading images...</p>
       ) : (
         <p>No images available.</p>
       )}

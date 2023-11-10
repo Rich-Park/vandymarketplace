@@ -24,7 +24,7 @@ import { Input, Button, InputGroup, InputRightElement, Flex, Center,  Select} fr
           </InputRightElement>
 */
 
-function SearchBar({ onSearch, onPriceChange, searchQuery, selectedPrice }) {
+function SearchBar({ onSearch, onPriceChange, onTagChange, searchQuery, selectedPrice, selectedTag }) {
   return (
     <Flex justifyContent="center" mt={2}>
       <Center>
@@ -49,7 +49,7 @@ function SearchBar({ onSearch, onPriceChange, searchQuery, selectedPrice }) {
           <option value='option5'>100+$</option>
         </Select>
 
-        <Select ml = {2}>
+        <Select ml = {2} onChange = {(e) => onTagChange(e.target.value)} value = {selectedTag}>
             <option value="">Category</option>
             <option value="Electronics">Electronics</option>
             <option value="Furniture">Furniture</option>

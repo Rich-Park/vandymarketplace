@@ -11,6 +11,8 @@ import { onAuthStateChanged } from "firebase/auth";
 const Favorites = () => {
   const [likedItems, setLikedItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTag, setSelectedTag] = useState('');
+  const [selectedPrice, setSelectedPrice] = useState('');
 
   useEffect(() => {
     // Define the function to fetch liked items
@@ -58,13 +60,30 @@ const Favorites = () => {
     setSearchQuery(query);
   };
 
+  const handlePriceChange = (priceOption) => {
+    setSelectedPrice(priceOption);
+  };
+
+  const handleTagging = (tagOption) => {
+    setSelectedTag(tagOption);
+  };
+
   return (
     <>
       <Header />
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar
+        onSearch={handleSearch}
+        onPriceChange={handlePriceChange}
+        onTagChange = {handleTagging}
+        searchQuery={searchQuery}
+        selectedPrice={selectedPrice}
+        selectedTag = {selectedTag}
+      />
       <ImageGallery
         favoriteItems={likedItems}
         searchQuery={searchQuery}
+        selectedPrice={selectedPrice} 
+        selectedTag = {selectedTag}
         favorites={true}
       />
     </>
