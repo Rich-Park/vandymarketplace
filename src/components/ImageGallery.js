@@ -36,7 +36,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
         const filteredFavorites = await filterFavorites(favoriteItems, searchQuery, price, selectedTag)
         setItemsData(filteredFavorites);
         const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-        await delay(1000);
+        await delay(2000);
       } else {
         try {
           let result;
