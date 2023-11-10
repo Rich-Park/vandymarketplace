@@ -60,9 +60,26 @@ export async function AllSellItemsLoader(userId) {
   }
 }
 
-export async function QueryItemsLoader(searchQuery, selectedPrice, userId, myItems = false) {
-  console.log(selectedPrice);
-  console.log("hihi")
+export async function filterFavorites(favoriteItems, searchQuery, selectedPrice, selectedTag){
+
+  const filteredFavorites = favoriteItems.filter(
+    (item) =>
+      ((selectedPrice === -1) || // No price filter
+      (selectedPrice === 0 && item.price >= 0 && item.price < 25) || // 0-25 price range
+      (selectedPrice === 25 && item.price >= 25 && item.price < 50) || // 25-50 price range
+      (selectedPrice === 50 && item.price >= 50 && item.price < 75) || // 50-75 price range
+      (selectedPrice === 100 && item.price >= 100)) && // 100+ price range
+      (item.productName.includes(searchQuery) ||
+      item.description.includes(searchQuery) ||
+      (item.tags && item.tags.includes(searchQuery))) &&
+      (selectedTag == '' || (item.tags && item.tags.includes(selectedTag)))
+  );
+  filteredFavorites.sort((a, b) => b.timestamp - a.timestamp);
+  return filteredFavorites
+}
+
+export async function QueryItemsLoader(searchQuery, selectedPrice, selectedTag, myItems = false) {
+
   const itemsToSellRef = collection(db, "users"); // Assuming "users" is the top-level collection
   let itemsData = [];
 
@@ -95,16 +112,21 @@ export async function QueryItemsLoader(searchQuery, selectedPrice, userId, myIte
               if (myItems) {
                 // If myItems is true, filter by userId
                 if (
-                  itemData.email === userId &&
+                  itemData.email === auth.currentUser.email &&
                   (itemData.productName.includes(searchQuery) ||
-                    itemData.description.includes(searchQuery))
-                ) {
+                    itemData.description.includes(searchQuery) ||
+                    (itemData.tags && itemData.tags.includes(searchQuery))) && 
+                    (selectedTag == '' || (itemData.tags && itemData.tags.includes(selectedTag))))
+                {
+                  console.log('pushing')
                   itemData.id = doc.id;
                   itemsData.push(itemData);
                 }
               } else if (
-                itemData.productName.includes(searchQuery) ||
-                itemData.description.includes(searchQuery)
+                (selectedTag === '' || (itemData.tags && itemData.tags.includes(selectedTag))) && 
+                (itemData.productName.includes(searchQuery) ||
+                itemData.description.includes(searchQuery) || 
+                (itemData.tags && itemData.tags.includes(searchQuery)))
               ) {
                 itemData.id = doc.id;
                 itemsData.push(itemData);
