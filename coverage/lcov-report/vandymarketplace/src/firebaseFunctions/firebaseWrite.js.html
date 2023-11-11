@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -144,7 +144,10 @@
 <a name='L79'></a><a href='#L79'>79</a>
 <a name='L80'></a><a href='#L80'>80</a>
 <a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,6 +189,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -202,26 +228,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -257,9 +263,10 @@ export async function <span class="fstat-no" title="function not covered" >store
 <span class="cstat-no" title="statement not covered" >  await addDoc(collectionVal, {</span>
     productName: form_item.productName,
     email: form_item.email,
-    price: form_item.price,
+    price: parseFloat(form_item.price),
     description: form_item.description,
     imageURLs: imageURLs,
+    tags: form_item.tags,
     timestamp: form_item.timestamp,
     likesCount: 0,
     sellerId: userId,
@@ -281,16 +288,17 @@ export async function <span class="fstat-no" title="function not covered" >likeI
     // Increment the likesCount
 <span class="cstat-no" title="statement not covered" >    transaction.update(itemRef, { likesCount: increment(1) });</span>
 &nbsp;
+    const likedItemData = <span class="cstat-no" title="statement not covered" >{ itemId: itemId, sellerId: sellerId };</span>
     // Add itemID to the user's likedItems array
-<span class="cstat-no" title="statement not covered" >    transaction.update(userRef, { likedItems: arrayUnion(itemId) });</span>
+<span class="cstat-no" title="statement not covered" >    transaction.update(userRef, { likedItems: arrayUnion(likedItemData) });</span>
   });
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >unlikeItem(</span>userId, sellerId, itemID) {
+export async function <span class="fstat-no" title="function not covered" >unlikeItem(</span>userId, sellerId, itemId) {
   // References
   const userRef = <span class="cstat-no" title="statement not covered" >doc(db, "users", userId);</span>
   const sellerRef = <span class="cstat-no" title="statement not covered" >doc(db, "users", sellerId);</span>
-  const itemRef = <span class="cstat-no" title="statement not covered" >doc(sellerRef, "ItemsToSell", itemID);</span>
+  const itemRef = <span class="cstat-no" title="statement not covered" >doc(sellerRef, "ItemsToSell", itemId);</span>
 &nbsp;
   // Transaction to ensure atomicity
 <span class="cstat-no" title="statement not covered" >  return runTransaction(db, <span class="fstat-no" title="function not covered" >as</span>ync (transaction) =&gt; {</span>
@@ -302,8 +310,9 @@ export async function <span class="fstat-no" title="function not covered" >unlik
     // Decrement the likesCount
 <span class="cstat-no" title="statement not covered" >    transaction.update(itemRef, { likesCount: increment(-1) });</span>
 &nbsp;
-    // Remove itemID from the user's likedItems array
-<span class="cstat-no" title="statement not covered" >    transaction.update(userRef, { likedItems: arrayRemove(itemID) });</span>
+    // Remove the object { itemId, sellerId } from the user's likedItems array
+    const dislikedItemData = <span class="cstat-no" title="statement not covered" >{ itemId: itemId, sellerId: sellerId };</span>
+<span class="cstat-no" title="statement not covered" >    transaction.update(userRef, { likedItems: arrayRemove(dislikedItemData) });</span>
   });
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -313,7 +322,7 @@ export async function <span class="fstat-no" title="function not covered" >unlik
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-10-31T15:21:17.327Z
+                at 2023-11-11T04:43:21.833Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

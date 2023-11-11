@@ -41,7 +41,7 @@ function SearchBar({ onSearch, onPriceChange, onTagChange, searchQuery, selected
 
         </InputGroup>
 
-        <Select ml = {2} placeholder='Price option' onChange={(e) => onPriceChange(e.target.value)} value={selectedPrice}>
+        <Select ml = {2} placeholder='Price option' onChange={(e) => onPriceChange(e.target.value)} data-testid="Price option" value={selectedPrice}>
           <option value='option1'>0$ - 25$</option>
           <option value='option2'>25$ - 50$</option>
           <option value='option3'>50$ - 75$</option>
@@ -49,7 +49,7 @@ function SearchBar({ onSearch, onPriceChange, onTagChange, searchQuery, selected
           <option value='option5'>100+$</option>
         </Select>
 
-        <Select ml = {2} onChange = {(e) => onTagChange(e.target.value)} value = {selectedTag}>
+        <Select ml = {2} onChange = {(e) => onTagChange(e.target.value)} data-testid="Category" value = {selectedTag}>
             <option value="">Category</option>
             <option value="Electronics">Electronics</option>
             <option value="Furniture">Furniture</option>

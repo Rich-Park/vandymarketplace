@@ -1,14 +1,18 @@
 import React from "react";
 import { render, waitFor, screen, getByText } from "@testing-library/react";
-import { getUserID } from "../firebaseFunctions/dataload";
+import { getUserID, filterFavorites } from "../firebaseFunctions/dataload";
 import { doc, getDoc } from "firebase/firestore";
 import Favorites from "../components/Favorites";
 import { BrowserRouter as Router } from "react-router-dom";
 import * as firebaseAuth from "firebase/auth";
+import { act } from "react-dom/test-utils";
+
 
 jest.mock("../firebaseFunctions/dataload", () => ({
   getUserID: jest.fn(),
+  filterFavorites: jest.fn(),
 }));
+
 jest.mock("../firebaseConfig", () => ({
   auth: {
     currentUser: {
@@ -16,6 +20,7 @@ jest.mock("../firebaseConfig", () => ({
     },
   },
 }));
+
 jest.mock("firebase/firestore", () => ({
   doc: jest.fn(),
   getDoc: jest.fn(),
@@ -92,10 +97,14 @@ describe("<Favorites />", () => {
       .mockResolvedValueOnce(mockItemData);
 
     // Render component
-    render(
-      <Router>
-        <Favorites />
-      </Router>
-    );
+    act(() => {
+      render(
+        <Router>
+          <Favorites />
+        </Router>
+      );
+    });
+
+
   });
 });

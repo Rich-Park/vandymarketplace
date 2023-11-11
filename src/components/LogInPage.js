@@ -8,6 +8,8 @@ import {
 import { auth, db } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import React from 'react';
+
 
 export default function LogInPage() {
   const navigate = useNavigate();
@@ -113,6 +115,7 @@ export default function LogInPage() {
                 bg: "brand.500",
                 boxShadow: "lg",
               }}
+              data-testid="LogIn"
               onClick={handleLogIn}
             >
               Log In
