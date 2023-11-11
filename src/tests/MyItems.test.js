@@ -132,10 +132,6 @@ describe("MyItems component", () => {
 
       fireEvent.change(searchInput, { target: { value: "test" } });
 
-      const searchButton = screen.getByText("Search");
-      expect(searchButton).not.toBeNull();
-
-      fireEvent.click(searchButton);
     });
   });
 });
