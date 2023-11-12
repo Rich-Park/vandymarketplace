@@ -6,9 +6,11 @@ import {
   arrayUnion,
   arrayRemove,
   runTransaction,
+  deleteDoc,
+  getDoc
 } from "firebase/firestore";
 import { db, storage } from "../firebaseConfig";
-import { ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes, getStorage, deleteObject } from "firebase/storage";
 import { getDownloadURL } from "firebase/storage";
 import { getUserID } from "./dataload";
 
@@ -18,14 +20,20 @@ export async function storeItemsSell(userId, form_item) {
   const collectionVal = collection(docRef, "ItemsToSell");
 
   const imageURLs = [];
+  const imageNames = [];
 
   for (const image of form_item.images) {
-    const storageRef = ref(storage, `${userId}/${image.name}`);
+
+    const timestamp = new Date().getTime();
+    const uniqueFilename = `${timestamp}_${image.name}`;
+
+    const storageRef = ref(storage, `${userId}/${uniqueFilename}`);
     await uploadBytes(storageRef, image);
 
     // Get the download URL for the uploaded image
     const downloadURL = await getDownloadURL(storageRef);
     imageURLs.push(downloadURL);
+    imageNames.push(`${userId}/${uniqueFilename}`)
   }
 
   await addDoc(collectionVal, {
@@ -38,6 +46,7 @@ export async function storeItemsSell(userId, form_item) {
     timestamp: form_item.timestamp,
     likesCount: 0,
     sellerId: userId,
+    itemName: imageNames
   });
 }
 
@@ -84,10 +93,23 @@ export async function unlikeItem(userId, sellerId, itemId) {
   });
 }
 
-export async function deleteItemFunc(itemId){
+export async function deleteItemFunc(item){
+
   const userId = await getUserID();
   const docRef = doc(db, "users", userId);
   const collectionVal = collection(docRef, "ItemsToSell");
-  const itemRef = doc(collectionVal, itemId);
+  const itemRef = doc(collectionVal, item);
+
+  // Retrieve the item document
+  const itemDoc =  await getDoc(itemRef);
+  if (!itemDoc.exists()) {
+    throw new Error("Item does not exist!");
+  }
+  
+  const imageNames = itemDoc.data().itemName || [];
+
   await deleteDoc(itemRef);
+  const storageRef = ref(storage, imageNames[0]);
+  await deleteObject(storageRef);
+
 };

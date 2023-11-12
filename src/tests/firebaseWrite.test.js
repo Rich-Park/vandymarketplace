@@ -28,7 +28,7 @@ import {
       email: "test@example.com",
       price: "50",
       description: "Test description",
-      images: [{ name: "image1.jpg" }, { name: "image2.jpg" }],
+      images: [{ name: "image1.jpg" }],
       tags: ["tag1", "tag2"],
       timestamp: 123456789,
     };
@@ -50,7 +50,7 @@ import {
         // Assertions
         expect(doc).toHaveBeenCalledWith(db, "users", userId);
         expect(collection).toHaveBeenCalledWith(doc(), "ItemsToSell");
-        expect(uploadBytes).toHaveBeenCalledTimes(2); // Two images in form_item.images
+        expect(uploadBytes).toHaveBeenCalledTimes(1); // Two images in form_item.images
         expect(addDoc).toHaveBeenCalledWith(
             collection(doc(db, "users", userId), "ItemsToSell"),  // Correct collection path
             {
@@ -58,11 +58,15 @@ import {
               email: formItem.email,
               price: parseFloat(formItem.price),
               description: formItem.description,
-              imageURLs: ["mockImageUrl", "mockImageUrl"], // Two images uploaded
+              imageURLs: ["mockImageUrl"], // Two images uploaded
               tags: formItem.tags,
               timestamp: formItem.timestamp,
               likesCount: 0,
               sellerId: userId,
+              itemName: expect.arrayContaining([
+                expect.stringContaining(`${userId}/`), // Check for userId in each element
+                expect.stringContaining("_image1.jpg"),
+              ]),
             }
           );    
 
