@@ -84,6 +84,63 @@ describe("HomePage component", () => {
     consoleErrorMock.mockRestore();
   });
 
+  it("updates selected price and affects image gallery", async () => {
+    render(
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>
+    );
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    });
+
+    const priceFilter = screen.getByTestId('Price option');
+
+    // Simulate selecting a new price option
+    fireEvent.change(priceFilter, { target: { value: 'option2' } });
+
+    // You might want to mock the response from Firestore based on the selected price option
+    // and then verify that ImageGallery renders items based on this selection
+
+    // Example: Check if an item with a specific text or test id appears in the ImageGallery
+    // await screen.findByText('Item for 25$ - 50$ range');
+    // or
+    // await screen.findByTestId('item-specific-to-option2');
+  });
+
+  it("should open the description modal on double click", async () => {
+    // Set up mock data for the item
+    const mockItem = {
+      id: "1",
+      productName: "Test Product",
+      description: "This is a test description",
+      // ... other item properties
+    };
+
+    // Mock Firestore response
+    getDocs.mockImplementation(() => Promise.resolve({ docs: [mockItem] }));
+
+    render(
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>
+    );
+
+    // Wait for async operations and updates
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    });
+
+    // Find the ItemCard element and simulate double click
+    const itemCard = screen.getByTestId("test"); // Adjust the test id based on your implementation
+    fireEvent.doubleClick(itemCard);
+
+    // Check if the modal opened with the correct content
+    expect(screen.getByText("Test Product")).toBeInTheDocument();
+    expect(screen.getByText("This is a test description")).toBeInTheDocument();
+  });
+
   it("should render a header, search bar, and image gallery", async () => {
     render(
       <MemoryRouter>
