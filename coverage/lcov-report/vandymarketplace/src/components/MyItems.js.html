@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>8/10</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/4</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/10</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -109,24 +109,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -146,26 +146,26 @@ import ImageGallery from "./ImageGallery";
 import SearchBar from "./searchbar";
 import React, { useState } from "react";
 &nbsp;
-export default function MyItems() {
+export default function <span class="fstat-no" title="function not covered" >MyItems(</span>) {
 &nbsp;
-    const [searchQuery, setSearchQuery] = useState('');
-    const [selectedPrice, setSelectedPrice] = useState('');
-    const [selectedTag, setSelectedTag] = useState('');
+    const [searchQuery, setSearchQuery] = <span class="cstat-no" title="statement not covered" >useState('');</span>
+    const [selectedPrice, setSelectedPrice] = <span class="cstat-no" title="statement not covered" >useState('');</span>
+    const [selectedTag, setSelectedTag] = <span class="cstat-no" title="statement not covered" >useState('');</span>
 &nbsp;
 &nbsp;
-    const handleSearch = (query) =&gt; {
-      setSearchQuery(query);
+    const handleSearch = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(q</span>uery) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      setSearchQuery(query);</span>
     };
 &nbsp;
-    const handlePriceChange = <span class="fstat-no" title="function not covered" >(p</span>riceOption) =&gt; {
+    const handlePriceChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>riceOption) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      setSelectedPrice(priceOption);</span>
     };
   
-    const handleTagging = <span class="fstat-no" title="function not covered" >(t</span>agOption) =&gt; {
+    const handleTagging = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>agOption) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      setSelectedTag(tagOption);</span>
     };
 &nbsp;
-    return (
+<span class="cstat-no" title="statement not covered" >    return (</span>
         &lt;div&gt;
             &lt;Header /&gt;
             &lt;SearchBar
@@ -187,7 +187,7 @@ export default function MyItems() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-11T05:56:59.926Z
+                at 2023-11-12T01:00:57.324Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

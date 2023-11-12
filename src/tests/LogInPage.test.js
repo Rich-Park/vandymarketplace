@@ -78,4 +78,32 @@ describe('LogInPage', () => {
     });
 
   });
+
+  it('logs in successfully and redirects', async () => {
+    // Set the user type to Vanderbilt email
+    setUserType(true);
+
+    const history = createMemoryHistory();
+  
+    render(
+      <Router history={history}>
+        <LogInPage />
+      </Router>
+    );
+  
+    fireEvent.click(screen.getByTestId('LogIn'));
+  
+    // Assert that the signInWithPopup function is called
+    expect(signInWithPopup).toHaveBeenCalled();
+  
+    // Simulate a successful login
+    await act(async () => {
+      onAuthStateChanged.mock.calls[0][1]({ email: 'user@vanderbilt.edu' });
+    });
+  
+    // Assert that the user is redirected
+    expect(history.location.pathname).toBe('/'); // assuming 'navigate("/")' redirects the user
+  });
+
+  
 });

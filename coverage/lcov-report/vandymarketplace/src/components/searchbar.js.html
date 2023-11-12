@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -163,7 +163,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -172,14 +172,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -187,7 +187,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -235,8 +235,8 @@ import { Input, Button, InputGroup, InputRightElement, Flex, Center,  Select} fr
           &lt;/InputRightElement&gt;
 */
 &nbsp;
-function SearchBar({ onSearch, onPriceChange, onTagChange, searchQuery, selectedPrice, selectedTag }) {
-  return (
+function <span class="fstat-no" title="function not covered" >SearchBar(</span>{ onSearch, onPriceChange, onTagChange, searchQuery, selectedPrice, selectedTag }) {
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Flex justifyContent="center" mt={2}&gt;
       &lt;Center&gt;
 &nbsp;
@@ -245,14 +245,14 @@ function SearchBar({ onSearch, onPriceChange, onTagChange, searchQuery, selected
             type="text"
             placeholder="Search for images"
             value={searchQuery}
-            onChange={(e) =&gt; onSearch(e.target.value)}
+            onChange={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >onSearch(e.target.value)}</span>
             w="600px"
             data-testid="search-input"
           /&gt;
 &nbsp;
         &lt;/InputGroup&gt;
 &nbsp;
-        &lt;Select ml = {2} placeholder='Price option' onChange={(e) =&gt; onPriceChange(e.target.value)} data-testid="Price option" value={selectedPrice}&gt;
+        &lt;Select ml = {2} placeholder='Price option' onChange={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >onPriceChange(e.target.value)}</span> data-testid="Price option" value={selectedPrice}&gt;
           &lt;option value='option1'&gt;0$ - 25$&lt;/option&gt;
           &lt;option value='option2'&gt;25$ - 50$&lt;/option&gt;
           &lt;option value='option3'&gt;50$ - 75$&lt;/option&gt;
@@ -260,7 +260,7 @@ function SearchBar({ onSearch, onPriceChange, onTagChange, searchQuery, selected
           &lt;option value='option5'&gt;100+$&lt;/option&gt;
         &lt;/Select&gt;
 &nbsp;
-        &lt;Select ml = {2} onChange = {(e) =&gt; onTagChange(e.target.value)} data-testid="Category" value = {selectedTag}&gt;
+        &lt;Select ml = {2} onChange = {<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >onTagChange(e.target.value)}</span> data-testid="Category" value = {selectedTag}&gt;
             &lt;option value=""&gt;Category&lt;/option&gt;
             &lt;option value="Electronics"&gt;Electronics&lt;/option&gt;
             &lt;option value="Furniture"&gt;Furniture&lt;/option&gt;
@@ -289,7 +289,7 @@ export default SearchBar;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-11T05:56:59.926Z
+                at 2023-11-12T01:00:57.324Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
