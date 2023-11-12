@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Flex,
   Box,
@@ -8,16 +7,16 @@ import {
   Icon,
   chakra,
   Tooltip,
-} from "@chakra-ui/react";
-import { getUserID } from "../firebaseFunctions/dataload";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { BiMessageRoundedDetail } from "react-icons/bi";
-import { likeItem, unlikeItem } from "../firebaseFunctions/firebaseWrite";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+  Text
+} from '@chakra-ui/react';
+import { getUserID } from '../firebaseFunctions/dataload';
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import { BiMessageRoundedDetail } from 'react-icons/bi';
+import { likeItem, unlikeItem } from '../firebaseFunctions/firebaseWrite';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
 
-const ItemCard = ({ item, openModal, myItems }) => {
-  console.log("item", item);
+const ItemCard = ({ item, openModal, onDoubleClick, myItems }) => {
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(item.likesCount || 0);
 
@@ -25,7 +24,7 @@ const ItemCard = ({ item, openModal, myItems }) => {
     const fetchLikedStatus = async () => {
       try {
         const userId = await getUserID();
-        const userRef = doc(db, "users", userId);
+        const userRef = doc(db, 'users', userId);
         const userData = await getDoc(userRef);
         if (userData.exists) {
           const userLikedItems = userData.data().likedItems || [];
@@ -41,18 +40,17 @@ const ItemCard = ({ item, openModal, myItems }) => {
     fetchLikedStatus();
   }, [item.id]);
 
-  // Function to handle the liking and unliking process
   const handleLikeToggle = async () => {
     const userId = await getUserID();
 
     if (liked) {
       await unlikeItem(userId, item.sellerId, item.id);
       setLiked(false);
-      setLikesCount((prevCount) => prevCount - 1); // Decrement likes count
+      setLikesCount((prevCount) => prevCount - 1);
     } else {
       await likeItem(userId, item.sellerId, item.id);
       setLiked(true);
-      setLikesCount((prevCount) => prevCount + 1); // Increment likes count
+      setLikesCount((prevCount) => prevCount + 1);
     }
   };
 
@@ -66,11 +64,12 @@ const ItemCard = ({ item, openModal, myItems }) => {
       borderWidth="1px"
       rounded="lg"
       _hover={{ transform: "scale(1.05)", transition: ".3s" }}
+      onDoubleClick={() => onDoubleClick(item)}
     >
       <Box width="100%" height="100%" overflow="hidden">
         <Image
           src={item.imageURLs[0]}
-          alt={`Image of ${item.name}`}
+          alt={`Image of ${item.productName}`}
           objectFit="cover"
           width="100%"
           height="100%"
@@ -102,7 +101,7 @@ const ItemCard = ({ item, openModal, myItems }) => {
                   h={7}
                   w={7}
                   alignSelf={"center"}
-                  color={liked && "red"}
+                  color={liked ? "red" : "gray.600"}
                   marginLeft="1"
                   aria-label="favorite-icon"
                 />
@@ -139,7 +138,7 @@ const ItemCard = ({ item, openModal, myItems }) => {
           )}
         </Flex>
       </Box>
-    </Flex>
+    </Flex> // Closing tag for Flex
   );
 };
 
