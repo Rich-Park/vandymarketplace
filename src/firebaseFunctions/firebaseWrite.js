@@ -82,3 +82,11 @@ export async function unlikeItem(userId, sellerId, itemId) {
     transaction.update(userRef, { likedItems: arrayRemove(dislikedItemData) });
   });
 }
+
+export async function deleteItemFunc(itemId){
+  const userId = await getUserID();
+  const docRef = doc(db, "users", userId);
+  const collectionVal = collection(docRef, "ItemsToSell");
+  const itemRef = doc(collectionVal, itemId);
+  await deleteDoc(itemRef);
+};
