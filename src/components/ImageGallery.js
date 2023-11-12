@@ -6,7 +6,16 @@ import {
 } from "../firebaseFunctions/dataload";
 import ContactForm from "./ContactForm";
 import { auth } from "../firebaseConfig";
-import { Grid, Heading, Box, filter } from "@chakra-ui/react";
+import { Grid, Heading, Box, filter, Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Text } from "@chakra-ui/react";
+
 import ItemCard from "./ItemCard";
 import {
   deleteItemFunc,
@@ -22,6 +31,8 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
   const [selectedItem, setSelectedItem] = useState(null);
   const [userEmail, setUserEmail] = useState("");
   const [updateItems, setUpdateItems] = useState(false);
+  const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
+  const [descriptionItem, setDescriptionItem] = useState(null);
 
   const priceMap = {
     option1: 0,
@@ -84,6 +95,19 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
     }
   };
 
+    // Handler for opening description modal
+    const handleItemDoubleClick = (item) => {
+      setDescriptionItem(item);
+      setIsDescriptionModalOpen(true);
+    };
+  
+    // Handler for closing description modal
+    const closeDescriptionModal = () => {
+      setIsDescriptionModalOpen(false);
+      setDescriptionItem(null);
+    };
+  
+
   // Event handler to open the modal
   const openModal = (item) => {
     setIsModalOpen(true);
@@ -121,6 +145,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
                 key={index}
                 item={item}
                 openModal={openModal}
+                onDoubleClick={handleItemDoubleClick}
                 myItems={myItems}
                 onDelete={deleteItem}
               />
@@ -142,6 +167,25 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
           userEmail={userEmail}
         />
       )}
+      {/* Description Modal */}
+      {descriptionItem && (
+        <Modal isOpen={isDescriptionModalOpen} onClose={closeDescriptionModal}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>{descriptionItem.productName}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Text>{descriptionItem.description}</Text>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={closeDescriptionModal}>
+                Close
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      )}
+
     </Box>
   );
 };
