@@ -16,7 +16,7 @@ import { likeItem, unlikeItem } from "../firebaseFunctions/firebaseWrite";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
-const ItemCard = ({ item, openModal, myItems, onDelete }) => {
+const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) => {
   console.log("item", item);
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(item.likesCount || 0);
@@ -66,6 +66,7 @@ const ItemCard = ({ item, openModal, myItems, onDelete }) => {
       borderWidth="1px"
       rounded="lg"
       _hover={{ transform: "scale(1.05)", transition: ".3s" }}
+      onDoubleClick={() => onDoubleClick(item)}
     >
       <Box width="100%" height="100%" overflow="hidden">
         <Image
