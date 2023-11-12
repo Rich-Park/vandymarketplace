@@ -10,13 +10,13 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { getUserID } from "../firebaseFunctions/dataload";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiOutlineDelete, AiFillHeart } from "react-icons/ai";
 import { BiMessageRoundedDetail } from "react-icons/bi";
 import { likeItem, unlikeItem } from "../firebaseFunctions/firebaseWrite";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
-const ItemCard = ({ item, openModal, myItems }) => {
+const ItemCard = ({ item, openModal, myItems, onDelete }) => {
   console.log("item", item);
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(item.likesCount || 0);
@@ -135,6 +135,17 @@ const ItemCard = ({ item, openModal, myItems }) => {
                   aria-label="Contact Button"
                 />
               </chakra.a>
+            </Tooltip>
+          )}
+          {myItems && (
+            <Tooltip label="Delete" bg="white" placement={"top"} color={"gray.800"}>
+              <chakra.button
+                onClick={() => onDelete(item.id)} 
+                display={"flex"}
+                aria-label="Delete Button"
+              >
+                <Icon as={AiOutlineDelete} h={7} w={7} color="red" />
+              </chakra.button>
             </Tooltip>
           )}
         </Flex>

@@ -4,6 +4,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import LogInPage from '../components/LogInPage';
 import { act } from 'react-dom/test-utils';
 import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
+import { createMemoryHistory } from 'history';
+
 
 // Helper function to set user type
 const setUserType = (useVanderbiltUser) => {
@@ -50,11 +52,12 @@ describe('LogInPage', () => {
       </Router>
     );
 
-    fireEvent.click(screen.getByTestId('LogIn'));
-
-    expect(signInWithPopup).toHaveBeenCalled();
-    expect(signOut).not.toHaveBeenCalled();
-
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('LogIn'));
+      // Assert that the signInWithPopup function is called
+      expect(signInWithPopup).toHaveBeenCalled();
+      expect(signOut).not.toHaveBeenCalled();
+    });
   });
 
   it('logs out if user does not have Vanderbilt email', async () => {
@@ -67,15 +70,44 @@ describe('LogInPage', () => {
       </Router>
     );
 
-    fireEvent.click(screen.getByTestId('LogIn'));
-
-    // Assert that the signInWithPopup function is called
-    expect(signInWithPopup).toHaveBeenCalled();
-
-    await waitFor(() => {
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('LogIn'));
+      // Assert that the signInWithPopup function is called
+      expect(signInWithPopup).toHaveBeenCalled();
+      // Wait for asynchronous operations to complete
+      await waitFor(() => {
         // Assert that signOut has been called
         expect(signOut).toHaveBeenCalled();
+      });
     });
 
   });
+
+  it('logs in successfully and redirects', async () => {
+    // Set the user type to Vanderbilt email
+    setUserType(true);
+
+    const history = createMemoryHistory();
+  
+    render(
+      <Router history={history}>
+        <LogInPage />
+      </Router>
+    );
+  
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('LogIn'));
+      // Assert that the signInWithPopup function is called
+      expect(signInWithPopup).toHaveBeenCalled();
+      // Simulate a successful login
+      onAuthStateChanged.mock.calls[0][1]({ email: 'user@vanderbilt.edu' });
+      // Assert that the user is redirected
+      expect(history.location.pathname).toBe('/');
+    });
+
+
+  });
+
+  
 });
