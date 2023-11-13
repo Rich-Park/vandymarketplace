@@ -5,6 +5,8 @@ import LogInPage from '../components/LogInPage';
 import { act } from 'react-dom/test-utils';
 import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
 import { createMemoryHistory } from 'history';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+
 
 
 // Helper function to set user type
@@ -39,6 +41,13 @@ jest.mock('firebase/auth', () => {
 jest.mock('../firebaseConfig', () => ({
   auth: jest.requireActual('../firebaseConfig').auth,
   db: jest.requireActual('../firebaseConfig').db,
+}));
+
+// Mock the firestore functions
+jest.mock('firebase/firestore', () => ({
+  ...jest.requireActual('firebase/firestore'),
+  getDoc: jest.fn(() => Promise.resolve({ data: jest.fn(() => ({ userId: 'mockUserId' })), exists: jest.fn(() => false) })),
+  setDoc: jest.fn(),
 }));
 
 describe('LogInPage', () => {
@@ -105,9 +114,36 @@ describe('LogInPage', () => {
       // Assert that the user is redirected
       expect(history.location.pathname).toBe('/');
     });
-
-
   });
 
+  it('creates a new docSnap if it does not exist', async () => {
+    // Set the user type to Vanderbilt email
+    setUserType(true);
+
+    // Mock that getDoc returns a non-existing document
+    getDoc.mockImplementation(() => Promise.resolve({ data: jest.fn(() => ({ userId: 'mockUserId' })), exists: jest.fn(() => false) }));
+
+    render(
+      <Router>
+        <LogInPage />
+      </Router>
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('LogIn'));
+      // Assert that the signInWithPopup function is called
+      expect(signInWithPopup).toHaveBeenCalled();
+      // Simulate a successful login
+      onAuthStateChanged.mock.calls[0][1]({ email: 'user@vanderbilt.edu' });
+
+      // Wait for asynchronous operations to complete
+      await waitFor(() => {
+        // Assert that setDoc has been called to create a new document
+        expect(setDoc).toHaveBeenCalled();
+      });
+
+      // Additional assertions based on your logic
+    });
+  });
   
 });

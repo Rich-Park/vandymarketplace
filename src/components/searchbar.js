@@ -1,29 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Button, InputGroup, InputRightElement, Flex, Center,  Select} from "@chakra-ui/react";
 
-//function SearchBar({ onSearch, onPriceChange }) {
-    
-  /*
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedPrice, setSelectedPrice] = useState('');
-
-  const handleSearch = () => {
-    onSearch(searchQuery);
-  };
-
-  const handlePriceChange = (event) => {
-    const selectedOption = event.target.value;
-    setSelectedPrice(selectedOption);
-    onPriceChange(selectedOption);
-  };
-
-            <InputRightElement width="4.5rem">
-            <Button size="sm" onClick={handleSearch}>
-              Search
-            </Button>
-          </InputRightElement>
-*/
-
 function SearchBar({ onSearch, onPriceChange, onTagChange, searchQuery, selectedPrice, selectedTag }) {
   return (
     <Flex justifyContent="center" mt={2}>
