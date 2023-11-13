@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  AllSellItemsLoader,
   QueryItemsLoader,
   filterFavorites
 } from "../firebaseFunctions/dataload";

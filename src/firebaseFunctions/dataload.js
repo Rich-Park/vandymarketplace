@@ -16,8 +16,9 @@ export async function getUserID() {
   return userId;
 }
 
+/*
 export async function AllSellItemsLoader(userId) {
-  const itemsToSellRef = collection(db, "users"); // Assuming "users" is the top-level collection
+  const itemsToSellRef = collection(db, "users"); 
   let itemsData = [];
   try {
     if (userId) {
@@ -59,7 +60,7 @@ export async function AllSellItemsLoader(userId) {
     return []; // Return an empty array in case of an error
   }
 }
-
+*/
 export async function filterFavorites(favoriteItems, searchQuery, selectedPrice, selectedTag){
 
   const filteredFavorites = favoriteItems.filter(

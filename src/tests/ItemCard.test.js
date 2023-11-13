@@ -93,4 +93,73 @@ describe("ItemCard component", () => {
     // Check if the openModal prop function was called
     expect(openModalMock).toHaveBeenCalledWith(mockItem);
   });
+
+  it("handles double-click events correctly", async () => {
+    const handleItemDoubleClickMock = jest.fn();
+  
+    render(
+      <ItemCard
+        item={mockItem}
+        onDoubleClick={handleItemDoubleClickMock}
+        myItems={false}
+      />
+    );
+  
+    // Find the item card and simulate a double click
+    const itemCard = screen.getByText(/Test Product/i);
+    fireEvent.doubleClick(itemCard);
+  
+    // Check if the onDoubleClick prop function was called
+    expect(handleItemDoubleClickMock).toHaveBeenCalledWith(mockItem);
+  });
+
+  it("handles delete button click", async () => {
+    const onDeleteMock = jest.fn();
+
+    render(<ItemCard item={mockItem} myItems={true} onDelete={onDeleteMock} />);
+
+    // Find the delete button and click it
+    const deleteButton = screen.getByLabelText("Delete Button");
+    fireEvent.click(deleteButton);
+
+    // Check if the onDelete prop function was called
+    expect(onDeleteMock).toHaveBeenCalledWith(mockItem.id);
+  });
+
+  it("changes the favorite icon and decrements likesCount when favorite button is clicked", async () => {
+    render(<ItemCard item={mockItem} myItems={false} />);
+  
+    // Find favorite button and click it
+    const favoriteButton = screen.getByLabelText("Favorite Button");
+    fireEvent.click(favoriteButton);
+  
+    // Wait for the heart icon to turn red
+    await waitFor(() => {
+      const favoriteIcon = screen.getByLabelText("favorite-icon");
+      expect(window.getComputedStyle(favoriteIcon).color).toBe("red");
+    });
+  
+    // Check if likes count is incremented by one
+    const incrementedLikesCount = mockItem.likesCount + 1;
+    expect(
+      screen.getByText(incrementedLikesCount.toString())
+    ).toBeInTheDocument();
+  
+    // Click the favorite button again to "unlike"
+    fireEvent.click(favoriteButton);
+  
+    // Wait for the heart icon to revert to its original color
+    await waitFor(() => {
+      const favoriteIcon = screen.getByLabelText("favorite-icon");
+      expect(window.getComputedStyle(favoriteIcon).color).not.toBe("red");
+    });
+  
+    // Check if likes count is decremented by one
+    const decrementedLikesCount = mockItem.likesCount;
+    expect(
+      screen.getByText(decrementedLikesCount.toString())
+    ).toBeInTheDocument();
+  });
+  
+
 });
