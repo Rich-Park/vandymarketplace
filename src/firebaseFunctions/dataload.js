@@ -69,6 +69,7 @@ export async function filterFavorites(favoriteItems, searchQuery, selectedPrice,
       (selectedPrice === 0 && item.price >= 0 && item.price < 25) || // 0-25 price range
       (selectedPrice === 25 && item.price >= 25 && item.price < 50) || // 25-50 price range
       (selectedPrice === 50 && item.price >= 50 && item.price < 75) || // 50-75 price range
+      (selectedPrice === 75 && item.price >= 75 && item.price < 100) ||
       (selectedPrice === 100 && item.price >= 100)) && // 100+ price range
       (item.productName.includes(searchQuery) ||
       item.description.includes(searchQuery) ||
@@ -108,6 +109,7 @@ export async function QueryItemsLoader(searchQuery, selectedPrice, selectedTag, 
             (selectedPrice === 0 && itemPrice >= 0 && itemPrice < 25) || // 0-25 price range
             (selectedPrice === 25 && itemPrice >= 25 && itemPrice < 50) || // 25-50 price range
             (selectedPrice === 50 && itemPrice >= 50 && itemPrice < 75) || // 50-75 price range
+            (selectedPrice === 75 && itemPrice >= 75 && itemPrice < 100) || // 75-100 price range
             (selectedPrice === 100 && itemPrice >= 100) // 100+ price range
           ) {
               if (myItems) {
