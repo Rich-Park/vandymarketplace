@@ -15,11 +15,13 @@ import { BiMessageRoundedDetail } from "react-icons/bi";
 import { likeItem, unlikeItem } from "../firebaseFunctions/firebaseWrite";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
+import { debounce } from "lodash";
 
 const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) => {
   console.log("item", item);
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(item.likesCount || 0);
+  const [isLikeInProgress, setIsLikeInProgress] = useState(false);
 
   useEffect(() => {
     const fetchLikedStatus = async () => {
@@ -43,6 +45,7 @@ const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) => {
 
   // Function to handle the liking and unliking process
   const handleLikeToggle = async () => {
+    setIsLikeInProgress(true);
     const userId = await getUserID();
 
     if (liked) {
@@ -54,7 +57,12 @@ const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) => {
       setLiked(true);
       setLikesCount((prevCount) => prevCount + 1); // Increment likes count
     }
+    setIsLikeInProgress(false);
   };
+
+  // const debouncedHandleLikeToggle = debounce(async () => {
+  //   handleLikeToggle();
+  // }, 1000);
 
   return (
     <Flex
@@ -91,6 +99,7 @@ const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) => {
               color={"gray.800"}
             >
               <chakra.button
+                disabled={isLikeInProgress}
                 onClick={handleLikeToggle}
                 display={"flex"}
                 aria-label="Favorite Button"
@@ -139,9 +148,14 @@ const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) => {
             </Tooltip>
           )}
           {myItems && (
-            <Tooltip label="Delete" bg="white" placement={"top"} color={"gray.800"}>
+            <Tooltip
+              label="Delete"
+              bg="white"
+              placement={"top"}
+              color={"gray.800"}
+            >
               <chakra.button
-                onClick={() => onDelete(item.id)} 
+                onClick={() => onDelete(item.id)}
                 display={"flex"}
                 aria-label="Delete Button"
               >
