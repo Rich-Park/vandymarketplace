@@ -34,7 +34,7 @@ const ContactForm = ({
   };
   const handleSubmit = async () => {
     try {
-      const response = await fetch("http://localhost:8080/send-email", {
+      const response = await fetch("http://localhost:10000/send-email", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
