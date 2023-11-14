@@ -34,7 +34,7 @@ const ContactForm = ({
   };
   const handleSubmit = async () => {
     try {
-      const response = await fetch("https://backend-581u.onrender.com", {
+      const response = await fetch("https://backend-581u.onrender.com/send-email", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
