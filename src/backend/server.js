@@ -87,6 +87,8 @@ const nodemailer = require("nodemailer");
 module.exports = async (req, res) => {
   try {
     const transporter = nodemailer.createTransport({
+      port: 465,
+      host: "smtp.gmail.com",
       service: "Gmail",
       auth: {
         user: "noreply.vandymarketplace@gmail.com",
