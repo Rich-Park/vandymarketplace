@@ -49,13 +49,9 @@ const ContactForm = ({
         }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data.message); // Log the server's response
-        onClose(); // Close the modal after submission
-      } else {
-        console.error("Error submitting form:", response.statusText);
-      }
+      const data = await response.json();
+      console.log(data.message); // Log the server's response
+      onClose(); // Close the modal after submission
     } catch (error) {
       console.error("Error submitting form:", error);
     }
