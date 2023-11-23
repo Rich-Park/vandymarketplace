@@ -82,6 +82,7 @@ export async function filterFavorites(favoriteItems, searchQuery, selectedPrice,
 
 export async function QueryItemsLoader(searchQuery, selectedPrice, selectedTag, myItems = false) {
 
+  searchQuery = searchQuery.toLowerCase();
   const itemsToSellRef = collection(db, "users"); // Assuming "users" is the top-level collection
   let itemsData = [];
 
@@ -116,8 +117,8 @@ export async function QueryItemsLoader(searchQuery, selectedPrice, selectedTag, 
                 // If myItems is true, filter by userId
                 if (
                   itemData.email === auth.currentUser.email &&
-                  (itemData.productName.includes(searchQuery) ||
-                    itemData.description.includes(searchQuery) ||
+                  (itemData.productName.toLowerCase().includes(searchQuery) ||
+                    itemData.description.toLowerCase().includes(searchQuery) ||
                     (itemData.tags && itemData.tags.includes(searchQuery))) && 
                     (selectedTag == '' || (itemData.tags && itemData.tags.includes(selectedTag))))
                 {
@@ -127,8 +128,8 @@ export async function QueryItemsLoader(searchQuery, selectedPrice, selectedTag, 
                 }
               } else if (
                 (selectedTag === '' || (itemData.tags && itemData.tags.includes(selectedTag))) && 
-                (itemData.productName.includes(searchQuery) ||
-                itemData.description.includes(searchQuery) || 
+                (itemData.productName.toLowerCase().includes(searchQuery) ||
+                itemData.description.toLowerCase().includes(searchQuery) || 
                 (itemData.tags && itemData.tags.includes(searchQuery)))
               ) {
                 itemData.id = doc.id;
