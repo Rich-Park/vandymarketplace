@@ -1,9 +1,8 @@
 
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import SearchBar from "../components/searchbar";; // Update the path
+import SearchBar from "../components/searchbar"; // Update the path
 import '@testing-library/jest-dom/extend-expect';
-
 
 test('renders SearchBar component', () => {
   const onSearchMock = jest.fn();

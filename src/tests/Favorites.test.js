@@ -1,6 +1,6 @@
 import React from "react";
-import { render, waitFor, screen, getByText } from "@testing-library/react";
-import { getUserID, filterFavorites } from "../firebaseFunctions/dataload";
+import render from "@testing-library/react";
+import getUserID from "../firebaseFunctions/dataload";
 import { doc, getDoc } from "firebase/firestore";
 import Favorites from "../components/Favorites";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -96,7 +96,6 @@ describe("<Favorites />", () => {
       .mockResolvedValueOnce(mockItemData)
       .mockResolvedValueOnce(mockItemData);
 
-    // Render component
     act(() => {
       render(
         <Router>

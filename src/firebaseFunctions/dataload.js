@@ -16,51 +16,6 @@ export async function getUserID() {
   return userId;
 }
 
-/*
-export async function AllSellItemsLoader(userId) {
-  const itemsToSellRef = collection(db, "users"); 
-  let itemsData = [];
-  try {
-    if (userId) {
-      const userRef = doc(db, "users", userId);
-      const itemsToSellCollectionRef = collection(userRef, "ItemsToSell");
-      const itemsQuerySnapshot = await getDocs(itemsToSellCollectionRef);
-
-      itemsQuerySnapshot.forEach((doc) => {
-        const itemData = doc.data();
-        itemData.id = doc.id;
-        itemsData.push(itemData);
-      });
-    } else {
-      const querySnapshot = await getDocs(itemsToSellRef);
-      await Promise.all(
-        querySnapshot.docs.map(async (userDoc) => {
-          const itemsToSellCollectionRef = collection(
-            userDoc.ref,
-            "ItemsToSell"
-          );
-
-          // Create a query to retrieve documents that have imageURLs
-          const itemsQuerySnapshot = await getDocs(
-            query(itemsToSellCollectionRef, orderBy("timestamp", "desc"))
-          );
-          itemsQuerySnapshot.forEach((doc) => {
-            const itemData = doc.data();
-            itemData.id = doc.id;
-            itemsData.push(itemData);
-          });
-        })
-      );
-    }
-
-    itemsData.sort((a, b) => b.timestamp - a.timestamp);
-    return itemsData;
-  } catch (error) {
-    console.error("Error fetching documents:", error);
-    return []; // Return an empty array in case of an error
-  }
-}
-*/
 export async function filterFavorites(favoriteItems, searchQuery, selectedPrice, selectedTag){
 
   const filteredFavorites = favoriteItems.filter(
@@ -74,7 +29,7 @@ export async function filterFavorites(favoriteItems, searchQuery, selectedPrice,
       (item.productName.includes(searchQuery) ||
       item.description.includes(searchQuery) ||
       (item.tags && item.tags.includes(searchQuery))) &&
-      (selectedTag == '' || (item.tags && item.tags.includes(selectedTag)))
+      (selectedTag === '' || (item.tags && item.tags.includes(selectedTag)))
   );
   filteredFavorites.sort((a, b) => b.timestamp - a.timestamp);
   return filteredFavorites

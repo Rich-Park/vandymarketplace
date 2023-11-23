@@ -3,17 +3,14 @@ import {
     collection,
     addDoc,
     runTransaction,
-    increment,
-    arrayUnion,
-    arrayRemove,
+
   } from "firebase/firestore";
   import {
-    ref,
     uploadBytes,
     getDownloadURL,
   } from "firebase/storage";
   import { storeItemsSell, likeItem, unlikeItem } from "../firebaseFunctions/firebaseWrite";
-  import { db, storage } from "../firebaseConfig";
+  import db from "../firebaseConfig";
   
   // Mock Firebase functions
   jest.mock("firebase/firestore");

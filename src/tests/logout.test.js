@@ -1,6 +1,5 @@
 
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { logout } from '../authentication/logout';
 
@@ -24,9 +23,7 @@ describe('Logout Functionality', () => {
     await waitFor(() => {});
 
     // Assert that the signOut function was called
-    //expect(signOut).toHaveBeenCalled();
+
     expect(require('../firebaseConfig').auth.signOut).toHaveBeenCalled();
   });
-
-  // Add more test cases as needed
 });

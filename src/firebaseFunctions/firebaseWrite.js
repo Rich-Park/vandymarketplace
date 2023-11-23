@@ -10,7 +10,7 @@ import {
   getDoc
 } from "firebase/firestore";
 import { db, storage } from "../firebaseConfig";
-import { ref, uploadBytes, getStorage, deleteObject } from "firebase/storage";
+import { ref, uploadBytes, deleteObject } from "firebase/storage";
 import { getDownloadURL } from "firebase/storage";
 import { getUserID } from "./dataload";
 

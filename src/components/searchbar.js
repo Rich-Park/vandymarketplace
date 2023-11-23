@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Input, Button, InputGroup, InputRightElement, Flex, Center,  Select} from "@chakra-ui/react";
+import React from 'react';
+import { Input, InputGroup, Flex, Center,  Select} from "@chakra-ui/react";
 
 function SearchBar({ onSearch, onPriceChange, onTagChange, searchQuery, selectedPrice, selectedTag }) {
   return (

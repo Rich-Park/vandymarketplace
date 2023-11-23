@@ -15,8 +15,8 @@ import { BiMessageRoundedDetail } from "react-icons/bi";
 import { likeItem, unlikeItem } from "../firebaseFunctions/firebaseWrite";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
-import { debounce } from "lodash";
 
+// show the individual item with all of its information
 const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) => {
   console.log("item", item);
   const [liked, setLiked] = useState(false);
@@ -59,10 +59,6 @@ const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) => {
     }
     setIsLikeInProgress(false);
   };
-
-  // const debouncedHandleLikeToggle = debounce(async () => {
-  //   handleLikeToggle();
-  // }, 1000);
 
   return (
     <Flex

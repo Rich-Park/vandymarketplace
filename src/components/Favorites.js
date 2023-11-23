@@ -6,7 +6,6 @@ import SearchBar from "./searchbar";
 import { getUserID } from "../firebaseFunctions/dataload";
 import { doc, getDoc } from "firebase/firestore";
 import { db, auth } from "../firebaseConfig";
-import { onAuthStateChanged } from "firebase/auth";
 
 const Favorites = () => {
   const [likedItems, setLikedItems] = useState([]);

@@ -65,21 +65,6 @@ describe('Header component', () => {
     expect(logOutMenuItem).toBeTruthy();
   });
 
-//   test('Header component handles log out when Log Out is clicked', () => {
-//     render(
-//       <Router>
-//         <Header />
-//       </Router>
-//     );
-
-//     const menuButton = screen.getByRole('img');
-//     fireEvent.click(menuButton);
-
-//     const logOutMenuItem = screen.getByText('Log Out');
-//     fireEvent.click(logOutMenuItem);
-
-//     expect(useNavigate).toHaveBeenCalled();
-//   });
 
   test('Clicking "Favorites" button navigates to /favorites', () => {
     const navigate = jest.fn();
