@@ -119,7 +119,4 @@ export async function deleteItemFunc(item){
 
   await Promise.all(deletePromises);
 
-  //const storageRef = ref(storage, imageNames[0]);
-  //await deleteObject(storageRef);
-
 };
