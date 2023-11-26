@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import React from 'react';
 
-
 export default function LogInPage() {
   const navigate = useNavigate();
 
@@ -29,22 +28,18 @@ export default function LogInPage() {
 
     await signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        //const credential = GoogleAuthProvider.credentialFromResult(result);
-        //const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
         if (!user.email.endsWith("@vanderbilt.edu")) {
           logOut();
         }
       })
       .catch((error) => {
-        // Handle Errors here.
+        console.log(error);
       });
 
     onAuthStateChanged(auth, async (user) => {
+      //make sure user is a Vanderbilt user
       if (user && user.email.endsWith("@vanderbilt.edu")) {
         console.log("auth changed");
         const userEmail = user.email;

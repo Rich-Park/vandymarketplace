@@ -76,7 +76,7 @@ function SellItemForm() {
     price: "",
     description: "",
     images: [],
-    tags: [], // Array to store selected tags
+    tags: [],
     timestamp: serverTimestamp(),
   });
 

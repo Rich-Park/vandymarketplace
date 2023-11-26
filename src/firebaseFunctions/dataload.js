@@ -29,7 +29,7 @@ export async function filterFavorites(favoriteItems, searchQuery, selectedPrice,
       (item.productName.includes(searchQuery) ||
       item.description.includes(searchQuery) ||
       (item.tags && item.tags.includes(searchQuery))) &&
-      (selectedTag == '' || (item.tags && item.tags.includes(selectedTag)))
+      (selectedTag === '' || (item.tags && item.tags.includes(selectedTag)))
   );
   filteredFavorites.sort((a, b) => b.timestamp - a.timestamp);
   return filteredFavorites

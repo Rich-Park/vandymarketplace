@@ -5,9 +5,7 @@ import LogInPage from '../components/LogInPage';
 import { act } from 'react-dom/test-utils';
 import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
 import { createMemoryHistory } from 'history';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-
-
+import { getDoc, setDoc } from 'firebase/firestore';
 
 // Helper function to set user type
 const setUserType = (useVanderbiltUser) => {

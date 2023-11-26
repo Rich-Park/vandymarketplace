@@ -1,6 +1,4 @@
 // firebaseFunctions.test.js
-
-import { render, screen } from '@testing-library/react';
 import {
   getUserID,
 } from '../firebaseFunctions/dataload'; // Adjust the path accordingly

@@ -5,7 +5,7 @@ import {
 } from "../firebaseFunctions/dataload";
 import ContactForm from "./ContactForm";
 import { auth } from "../firebaseConfig";
-import { Grid, Heading, Box, filter, Modal,
+import { Grid, Heading, Box, Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
@@ -45,11 +45,11 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
   };
 
   useEffect(() => {
-
+    // load the items to be displayed
     async function load() {
       setLoading(true);
       let price = -1;
-      if(selectedPrice != ""){
+      if(selectedPrice !== ""){
         price = priceMap[selectedPrice]
       }
       if (favorites) {
