@@ -22,6 +22,8 @@ export async function storeItemsSell(userId, form_item) {
   const imageURLs = [];
   const imageNames = [];
 
+  const lowerCaseTags = form_item.tags.map(tag => tag.toLowerCase());
+
   for (const image of form_item.images) {
 
     const timestamp = new Date().getTime();
@@ -42,7 +44,7 @@ export async function storeItemsSell(userId, form_item) {
     price: parseFloat(form_item.price),
     description: form_item.description,
     imageURLs: imageURLs,
-    tags: form_item.tags,
+    tags: lowerCaseTags,
     timestamp: form_item.timestamp,
     likesCount: 0,
     sellerId: userId,
@@ -109,7 +111,12 @@ export async function deleteItemFunc(item){
   const imageNames = itemDoc.data().itemName || [];
 
   await deleteDoc(itemRef);
-  const storageRef = ref(storage, imageNames[0]);
-  await deleteObject(storageRef);
+
+  const deletePromises = imageNames.map((imageName) => {
+    const storageRef = ref(storage, imageName);
+    return deleteObject(storageRef);
+  });
+
+  await Promise.all(deletePromises);
 
 };

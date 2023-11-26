@@ -99,13 +99,22 @@ function SellItemForm() {
   };
 
   const handleImageUpload = (e) => {
-    const files = e.target.files;
-    if (files.length > 0) {
+
+    const files = Array.from(e.target.files);
+    const filteredFiles = files.slice(0, 5); // Limit to the first 5 files
+    if (filteredFiles.length > 0) {
       setFormData({
         ...formData,
-        images: [files[0]],
+        images: filteredFiles,
       });
     }
+    //const files = e.target.files;
+    //if (files.length > 0) {
+      //setFormData({
+        //...formData,
+        //images: [files[0]],
+      //});
+    //}
   };
 
   const addTag = () => {
@@ -220,13 +229,14 @@ function SellItemForm() {
           </FormControl>
           {/* Image Upload */}
           <FormControl id="images" isRequired>
-            <FormLabel>Upload Image</FormLabel>
+            <FormLabel>Upload Image (Choose upto 5 images)</FormLabel>
             <InputGroup>
               <Input
                 type="file"
                 name="images"
                 onChange={handleImageUpload}
                 accept="image/*"
+                multiple
                 data-testid="upload-images-input"
                 width="100%"
                 style={{ textAlign: "center" }}
@@ -250,13 +260,26 @@ function SellItemForm() {
                 </Button>
               </InputRightElement>
             </InputGroup>
-            {formData.images.length > 0 && (
+            {/*formData.images.length > 0 && (
               <Image
                 src={URL.createObjectURL(formData.images[0])}
                 alt="Uploaded Image"
                 maxH="100px"
                 mt={2}
               />
+            )*/}
+            {formData.images.length > 0 && (
+              <Flex direction="row" wrap="wrap" mt={2}>
+                {formData.images.map((image, index) => (
+                  <Box key={index} p={1}>
+                    <Image
+                      src={URL.createObjectURL(image)}
+                      alt={`Uploaded Image ${index + 1}`}
+                      maxH="100px"
+                    />
+                  </Box>
+                ))}
+              </Flex>
             )}
           </FormControl>
           <FormControl id="tags" >  
@@ -274,13 +297,15 @@ function SellItemForm() {
               <option value="Clothing">Clothing</option>
               <option value="Books">Books</option>
               <option value="Appliances">Appliances</option>
-              <option value="Home Decor">Home Decor</option>
+              <option value="Home">Home Decor</option>
               <option value="Jewelry">Jewelry</option>
               <option value="Toys">Toys</option>
-              <option value="Sports Equipment">Sports Equipment</option>
+              <option value="Sports">Sports</option>
               <option value="Antiques">Antiques</option>
               <option value="Kitchenware">Kitchenware</option>
-              <option value="Office Supplies">Office Supplies</option>
+              <option value="Office">Office Supplies</option>
+              <option value="Vehicles">Vehicles</option>
+
             </Select>
             <Button
               bg={"brand.200"}

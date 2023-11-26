@@ -13,7 +13,9 @@ import { Grid, Heading, Box, Modal,
   ModalBody,
   ModalFooter,
   Button,
-  Text } from "@chakra-ui/react";
+  Text, 
+  Image,
+  Flex } from "@chakra-ui/react";
 
 import ItemCard from "./ItemCard";
 import {
@@ -32,6 +34,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
   const [updateItems, setUpdateItems] = useState(false);
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
   const [descriptionItem, setDescriptionItem] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const priceMap = {
     option1: 0,
@@ -97,7 +100,16 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
     // Handler for opening description modal
     const handleItemDoubleClick = (item) => {
       setDescriptionItem(item);
+      setCurrentImageIndex(0); // Reset to the first image
       setIsDescriptionModalOpen(true);
+    };
+
+    const goToPreviousImage = () => {
+      setCurrentImageIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : 0));
+    };
+    
+    const goToNextImage = () => {
+      setCurrentImageIndex(prevIndex => (prevIndex < descriptionItem.imageURLs.length - 1 ? prevIndex + 1 : prevIndex));
     };
   
     // Handler for closing description modal
@@ -167,7 +179,8 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
         />
       )}
       {/* Description Modal */}
-      {descriptionItem && (
+      
+      {/*descriptionItem && (
         <Modal isOpen={isDescriptionModalOpen} onClose={closeDescriptionModal}>
           <ModalOverlay />
           <ModalContent>
@@ -175,6 +188,57 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
             <ModalCloseButton />
             <ModalBody>
               <Text>{descriptionItem.description}</Text>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={closeDescriptionModal}>
+                Close
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      )*/}
+      {descriptionItem && (
+        <Modal isOpen={isDescriptionModalOpen} onClose={closeDescriptionModal}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>{descriptionItem.productName}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Flex direction="column" alignItems="center" position="relative">
+                {/* Image */}
+                <Image
+                  src={descriptionItem.imageURLs[currentImageIndex]}
+                  alt={`Image ${currentImageIndex + 1} of ${descriptionItem.productName}`}
+                  objectFit="cover"
+                  maxWidth="100%"
+                />
+
+                {/* Navigation Buttons (only shown if there are multiple images) */}
+                <Flex justify="center" align="center" mt={2}>
+                  {descriptionItem.imageURLs.length > 1 && (
+                    <>
+                      <Button 
+                        onClick={goToPreviousImage} 
+                        disabled={currentImageIndex === 0}
+                      >
+                        ←
+                      </Button>
+                      <Text mx={2}>
+                        {currentImageIndex + 1} of {descriptionItem.imageURLs.length}
+                      </Text>
+                      <Button 
+                        onClick={goToNextImage} 
+                        disabled={currentImageIndex === descriptionItem.imageURLs.length - 1}
+                      >
+                        →
+                      </Button>
+                    </>
+                  )}
+                </Flex>
+                
+                {/* Description and Tags */}
+                <Text mt={4}>{descriptionItem.description}</Text>
+              </Flex>
             </ModalBody>
             <ModalFooter>
               <Button colorScheme="blue" mr={3} onClick={closeDescriptionModal}>
