@@ -33,6 +33,7 @@ const ContactForm = ({
     setMessage(event.target.value);
   };
   const handleSubmit = async () => {
+    onClose();
     try {
       const response = await fetch("https://backend-581u.onrender.com/send-email", {
         method: "POST",
@@ -53,8 +54,6 @@ const ContactForm = ({
       console.log(data.message); // Log the server's response
     } catch (error) {
       console.error("Error submitting form:", error);
-    } finally {
-      onClose(); // Close the modal after submission
     }
   };
 
