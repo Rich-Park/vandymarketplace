@@ -75,7 +75,7 @@ export async function QueryItemsLoader(searchQuery, selectedPrice, selectedTag, 
                   (itemData.productName.toLowerCase().includes(searchQuery) ||
                     itemData.description.toLowerCase().includes(searchQuery) ||
                     (itemData.tags && itemData.tags.includes(searchQuery))) && 
-                    (selectedTag == '' || (itemData.tags && itemData.tags.includes(selectedTag))))
+                    (selectedTag === '' || (itemData.tags && itemData.tags.includes(selectedTag))))
                 {
                   console.log('pushing')
                   itemData.id = doc.id;
