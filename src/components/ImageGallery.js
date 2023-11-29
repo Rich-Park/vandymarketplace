@@ -24,7 +24,7 @@ import {
 
 
 
-const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favorites, favoriteItems }) => {
+const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, selectedSort, myItems, favorites, favoriteItems }) => {
 
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -59,15 +59,16 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
         await delay(2000);
       } else {
         try {
-
+  
           let result;
           result = await QueryItemsLoader(
             searchQuery,
             price,
             selectedTag,
+            selectedSort,
             myItems
           );
-          
+
           setItemsData(result);
           const user = auth.currentUser;
           if (user && user.email) {
@@ -84,7 +85,15 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
     }
     setUpdateItems(false);
     load();
-  }, [searchQuery, selectedPrice, selectedTag, myItems, favorites, favoriteItems, updateItems]);
+  }, [searchQuery, selectedPrice, selectedTag, selectedSort, myItems, favorites, favoriteItems, updateItems]);
+
+  const updateLikesCount = (itemId, newLikesCount) => {
+    setItemsData((currentItems) => 
+      currentItems.map((item) => 
+        item.id === itemId ? { ...item, likesCount: newLikesCount } : item
+      )
+    );
+  };
 
   // Function to handle item deletion
   const deleteItem = async (item) => {
@@ -159,6 +168,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
                 onDoubleClick={handleItemDoubleClick}
                 myItems={myItems}
                 onDelete={deleteItem}
+                updateLikesCount={updateLikesCount}
               />
             ))}
           </Grid>

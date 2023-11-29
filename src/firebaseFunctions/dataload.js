@@ -35,7 +35,7 @@ export async function filterFavorites(favoriteItems, searchQuery, selectedPrice,
   return filteredFavorites
 }
 
-export async function QueryItemsLoader(searchQuery, selectedPrice, selectedTag, myItems = false) {
+export async function QueryItemsLoader(searchQuery, selectedPrice, selectedTag, selectedSort, myItems = false) {
 
   searchQuery = searchQuery.toLowerCase();
   const itemsToSellRef = collection(db, "users"); // Assuming "users" is the top-level collection
@@ -95,7 +95,18 @@ export async function QueryItemsLoader(searchQuery, selectedPrice, selectedTag, 
         });
       })
     );
-    itemsData.sort((a, b) => b.timestamp - a.timestamp);
+    //itemsData.sort((a, b) => b.timestamp - a.timestamp);
+    console.log("sort is selected");
+    // Sort items based on selectedSort
+    if (selectedSort === "popularity") {
+      console.log("popularity is selected");
+      console.log("popularity is selected");
+      // Sort by likesCount in descending order
+      itemsData.sort((a, b) => (b.likesCount || 0) - (a.likesCount || 0));
+    } else if (selectedSort === "time") {
+      // Sort by timestamp in descending order
+      itemsData.sort((a, b) => b.timestamp - a.timestamp);
+    }
 
     return itemsData;
   } catch (error) {

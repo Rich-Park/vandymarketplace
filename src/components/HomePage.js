@@ -15,6 +15,7 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPrice, setSelectedPrice] = useState('');
   const [selectedTag, setSelectedTag] = useState('');
+  const [selectedSort, setSelectedSort] = useState("time");
 
 
   const handleSearch = (query) => {
@@ -27,6 +28,10 @@ export default function HomePage() {
 
   const handleTagging = (tagOption) => {
     setSelectedTag(tagOption);
+  };
+
+  const handleSortChange = (sortOption) => {
+    setSelectedSort(sortOption);
   };
 
   
@@ -63,12 +68,14 @@ export default function HomePage() {
         onSearch={handleSearch}
         onPriceChange={handlePriceChange}
         onTagChange = {handleTagging}
+        onSortChange={handleSortChange}
         searchQuery={searchQuery}
         selectedPrice={selectedPrice}
         selectedTag = {selectedTag}
+        selectedSort={selectedSort}
       />
 
-      <ImageGallery searchQuery={searchQuery} selectedPrice={selectedPrice} selectedTag = {selectedTag}/>
+      <ImageGallery searchQuery={searchQuery} selectedPrice={selectedPrice} selectedTag = {selectedTag} selectedSort = {selectedSort}/>
  
     </>
   );
