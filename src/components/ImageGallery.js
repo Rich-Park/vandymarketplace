@@ -168,7 +168,8 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, selectedSort, m
                 onDoubleClick={handleItemDoubleClick}
                 myItems={myItems}
                 onDelete={deleteItem}
-                updateLikesCount={updateLikesCount}
+                item_likes_count={item.likesCount}
+                updateLikesCount = {updateLikesCount}
               />
             ))}
           </Grid>
