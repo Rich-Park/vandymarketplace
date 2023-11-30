@@ -35,6 +35,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, selectedSort, m
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
   const [descriptionItem, setDescriptionItem] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [loadFav, setLoadFav] = useState(false);
 
   const priceMap = {
     option1: 0,
@@ -83,16 +84,13 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, selectedSort, m
       await delay(1000);
       setLoading(false);
     }
+    setLoadFav(false);
     setUpdateItems(false);
     load();
-  }, [searchQuery, selectedPrice, selectedTag, selectedSort, myItems, favorites, favoriteItems, updateItems]);
+  }, [searchQuery, selectedPrice, selectedTag, selectedSort, myItems, favorites, favoriteItems, updateItems, loadFav]);
 
-  const updateLikesCount = (itemId, newLikesCount) => {
-    setItemsData((currentItems) => 
-      currentItems.map((item) => 
-        item.id === itemId ? { ...item, likesCount: newLikesCount } : item
-      )
-    );
+  const updateLikesCount = () => {
+    setLoadFav(true);
   };
 
   // Function to handle item deletion
