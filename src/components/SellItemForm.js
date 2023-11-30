@@ -292,19 +292,19 @@ function SellItemForm() {
               onChange={(e) => setSelectedTag(e.target.value)}
             >
               <option value="">Options</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Furniture">Furniture</option>
-              <option value="Clothing">Clothing</option>
-              <option value="Books">Books</option>
-              <option value="Appliances">Appliances</option>
-              <option value="Home">Home Decor</option>
-              <option value="Jewelry">Jewelry</option>
-              <option value="Toys">Toys</option>
-              <option value="Sports">Sports</option>
-              <option value="Antiques">Antiques</option>
-              <option value="Kitchenware">Kitchenware</option>
-              <option value="Office">Office Supplies</option>
-              <option value="Vehicles">Vehicles</option>
+              <option value="electronics">Electronics</option>
+              <option value="furniture">Furniture</option>
+              <option value="clothing">Clothing</option>
+              <option value="books">Books</option>
+              <option value="appliances">Appliances</option>
+              <option value="home">Home Decor</option>
+              <option value="jewelry">Jewelry</option>
+              <option value="toys">Toys</option>
+              <option value="sports">Sports</option>
+              <option value="antiques">Antiques</option>
+              <option value="kitchenware">Kitchenware</option>
+              <option value="office">Office Supplies</option>
+              <option value="vehicles">Vehicles</option>
 
             </Select>
             <Button

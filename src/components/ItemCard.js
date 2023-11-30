@@ -53,12 +53,14 @@ const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete, item_like
       setLiked(false);
       const newLikesCount = likesCount - 1; //setLikesCount((prevCount) => prevCount - 1); Decrement likes count
       setLikesCount(newLikesCount);
+      updateLikesCount();
       //updateLikesCount(item.id, newLikesCount);
     } else {
       await likeItem(userId, item.sellerId, item.id);
       setLiked(true);
       const newLikesCount = likesCount + 1;
       setLikesCount(newLikesCount);
+      updateLikesCount();
       //updateLikesCount(item.id, newLikesCount);//setLikesCount((prevCount) => prevCount + 1); // Increment likes count
     }
     setIsLikeInProgress(false);
