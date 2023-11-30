@@ -69,7 +69,7 @@ const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete, item_like
   return (
     <Flex
       direction="column"
-      h="100%"
+      h="300"
       w="100%"
       justifyContent="center"
       overflow="hidden"
@@ -82,7 +82,7 @@ const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete, item_like
         <Image
           src={item.imageURLs[0]}
           alt={`Image of ${item.name}`}
-          objectFit="cover"
+          objectFit="contain"
           width="100%"
           height="100%"
         />
