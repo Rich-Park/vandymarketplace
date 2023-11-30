@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import {
   QueryItemsLoader,
-  filterFavorites
+  filterFavorites,
 } from "../firebaseFunctions/dataload";
 import ContactForm from "./ContactForm";
 import { auth } from "../firebaseConfig";
-import { Grid, Heading, Box, Modal,
+import {
+  Grid,
+  Heading,
+  Box,
+  Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
@@ -13,19 +17,22 @@ import { Grid, Heading, Box, Modal,
   ModalBody,
   ModalFooter,
   Button,
-  Text, 
+  Text,
   Image,
-  Flex } from "@chakra-ui/react";
+  Flex,
+} from "@chakra-ui/react";
 
 import ItemCard from "./ItemCard";
-import {
-  deleteItemFunc,
-} from "../firebaseFunctions/firebaseWrite";
+import { deleteItemFunc } from "../firebaseFunctions/firebaseWrite";
 
-
-
-const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favorites, favoriteItems }) => {
-
+const ImageGallery = ({
+  searchQuery,
+  selectedPrice,
+  selectedTag,
+  myItems,
+  favorites,
+  favoriteItems,
+}) => {
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,17 +56,21 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
     async function load() {
       setLoading(true);
       let price = -1;
-      if(selectedPrice !== ""){
-        price = priceMap[selectedPrice]
+      if (selectedPrice !== "") {
+        price = priceMap[selectedPrice];
       }
       if (favorites) {
-        const filteredFavorites = await filterFavorites(favoriteItems, searchQuery, price, selectedTag)
+        const filteredFavorites = await filterFavorites(
+          favoriteItems,
+          searchQuery,
+          price,
+          selectedTag
+        );
         setItemsData(filteredFavorites);
         const delay = (ms) => new Promise((res) => setTimeout(res, ms));
         await delay(2000);
       } else {
         try {
-
           let result;
           result = await QueryItemsLoader(
             searchQuery,
@@ -67,7 +78,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
             selectedTag,
             myItems
           );
-          
+
           setItemsData(result);
           const user = auth.currentUser;
           if (user && user.email) {
@@ -76,7 +87,6 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
         } catch (error) {
           console.error("Error fetching data:", error);
         }
-        
       }
       const delay = (ms) => new Promise((res) => setTimeout(res, ms));
       await delay(1000);
@@ -84,40 +94,51 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
     }
     setUpdateItems(false);
     load();
-  }, [searchQuery, selectedPrice, selectedTag, myItems, favorites, favoriteItems, updateItems]);
+  }, [
+    searchQuery,
+    selectedPrice,
+    selectedTag,
+    myItems,
+    favorites,
+    favoriteItems,
+    updateItems,
+  ]);
 
   // Function to handle item deletion
   const deleteItem = async (item) => {
     try {
       await deleteItemFunc(item);
-      setUpdateItems(true)
-      console.log(itemsData)
+      setUpdateItems(true);
+      console.log(itemsData);
     } catch (error) {
       console.error("Error deleting item:", error);
     }
   };
 
-    // Handler for opening description modal
-    const handleItemDoubleClick = (item) => {
-      setDescriptionItem(item);
-      setCurrentImageIndex(0); // Reset to the first image
-      setIsDescriptionModalOpen(true);
-    };
+  // Handler for opening description modal
+  const handleItemDoubleClick = (item) => {
+    setDescriptionItem(item);
+    setCurrentImageIndex(0); // Reset to the first image
+    setIsDescriptionModalOpen(true);
+  };
 
-    const goToPreviousImage = () => {
-      setCurrentImageIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : 0));
-    };
-    
-    const goToNextImage = () => {
-      setCurrentImageIndex(prevIndex => (prevIndex < descriptionItem.imageURLs.length - 1 ? prevIndex + 1 : prevIndex));
-    };
-  
-    // Handler for closing description modal
-    const closeDescriptionModal = () => {
-      setIsDescriptionModalOpen(false);
-      setDescriptionItem(null);
-    };
-  
+  const goToPreviousImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
+  };
+
+  const goToNextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex < descriptionItem.imageURLs.length - 1
+        ? prevIndex + 1
+        : prevIndex
+    );
+  };
+
+  // Handler for closing description modal
+  const closeDescriptionModal = () => {
+    setIsDescriptionModalOpen(false);
+    setDescriptionItem(null);
+  };
 
   // Event handler to open the modal
   const openModal = (item) => {
@@ -179,7 +200,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
         />
       )}
       {/* Description Modal */}
-      
+
       {/*descriptionItem && (
         <Modal isOpen={isDescriptionModalOpen} onClose={closeDescriptionModal}>
           <ModalOverlay />
@@ -208,7 +229,9 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
                 {/* Image */}
                 <Image
                   src={descriptionItem.imageURLs[currentImageIndex]}
-                  alt={`Image ${currentImageIndex + 1} of ${descriptionItem.productName}`}
+                  alt={`Image ${currentImageIndex + 1} of ${
+                    descriptionItem.productName
+                  }`}
                   objectFit="cover"
                   maxWidth="100%"
                 />
@@ -217,25 +240,29 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
                 <Flex justify="center" align="center" mt={2}>
                   {descriptionItem.imageURLs.length > 1 && (
                     <>
-                      <Button 
-                        onClick={goToPreviousImage} 
+                      <Button
+                        onClick={goToPreviousImage}
                         disabled={currentImageIndex === 0}
                       >
                         ←
                       </Button>
                       <Text mx={2}>
-                        {currentImageIndex + 1} of {descriptionItem.imageURLs.length}
+                        {currentImageIndex + 1} of{" "}
+                        {descriptionItem.imageURLs.length}
                       </Text>
-                      <Button 
-                        onClick={goToNextImage} 
-                        disabled={currentImageIndex === descriptionItem.imageURLs.length - 1}
+                      <Button
+                        onClick={goToNextImage}
+                        disabled={
+                          currentImageIndex ===
+                          descriptionItem.imageURLs.length - 1
+                        }
                       >
                         →
                       </Button>
                     </>
                   )}
                 </Flex>
-                
+
                 {/* Description and Tags */}
                 <Text mt={4}>{descriptionItem.description}</Text>
               </Flex>
@@ -248,7 +275,6 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, myItems, favori
           </ModalContent>
         </Modal>
       )}
-
     </Box>
   );
 };
