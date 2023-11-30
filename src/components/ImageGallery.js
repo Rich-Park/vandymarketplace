@@ -92,7 +92,10 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, selectedSort, m
 
   const updateLikesCount = () => {
     setLoadFav(true);
-    reloadFav(true);
+    if(favorites){
+      reloadFav(true);
+    }
+    
   };
 
   // Function to handle item deletion
