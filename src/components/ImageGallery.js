@@ -108,6 +108,7 @@ const ImageGallery = ({
     searchQuery,
     selectedPrice,
     selectedTag,
+    selectedSort,
     myItems,
     favorites,
     favoriteItems,
@@ -116,7 +117,9 @@ const ImageGallery = ({
   ]);
   
   const updateLikesCount = () => {
+
     setLoadFav(true);
+
     if(favorites){
       reloadFav(true);
     }
