@@ -21,10 +21,11 @@ import ItemCard from "./ItemCard";
 import {
   deleteItemFunc,
 } from "../firebaseFunctions/firebaseWrite";
+import { reload } from "firebase/auth";
 
 
 
-const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, selectedSort, myItems, favorites, favoriteItems }) => {
+const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, selectedSort, myItems, favorites, favoriteItems, reloadFav }) => {
 
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -54,7 +55,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, selectedSort, m
         price = priceMap[selectedPrice]
       }
       if (favorites) {
-        const filteredFavorites = await filterFavorites(favoriteItems, searchQuery, price, selectedTag)
+        const filteredFavorites = await filterFavorites(favoriteItems, searchQuery, price, selectedTag, selectedSort)
         setItemsData(filteredFavorites);
         const delay = (ms) => new Promise((res) => setTimeout(res, ms));
         await delay(2000);
@@ -91,6 +92,7 @@ const ImageGallery = ({ searchQuery, selectedPrice, selectedTag, selectedSort, m
 
   const updateLikesCount = () => {
     setLoadFav(true);
+    reloadFav(true);
   };
 
   // Function to handle item deletion

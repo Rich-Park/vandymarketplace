@@ -12,6 +12,8 @@ const Favorites = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState('');
   const [selectedPrice, setSelectedPrice] = useState('');
+  const [selectedSort, setSelectedSort] = useState("time");
+  const [loadFav, setLoadFav] = useState(false);
 
   useEffect(() => {
     // Define the function to fetch liked items
@@ -53,7 +55,8 @@ const Favorites = () => {
 
     // Cleanup auth observer on component unmount
     return () => unsubscribe();
-  }, []);
+    setLoadFav(false);
+  }, [loadFav]);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -67,6 +70,15 @@ const Favorites = () => {
     setSelectedTag(tagOption);
   };
 
+  const handleSortChange = (sortOption) => {
+    setSelectedSort(sortOption);
+  };
+
+  const updateLoadFilterFav = () => {
+    setLoadFav(true);
+  };
+
+
   return (
     <>
       <Header />
@@ -74,16 +86,20 @@ const Favorites = () => {
         onSearch={handleSearch}
         onPriceChange={handlePriceChange}
         onTagChange = {handleTagging}
+        onSortChange={handleSortChange}
         searchQuery={searchQuery}
         selectedPrice={selectedPrice}
         selectedTag = {selectedTag}
+        selectedSort = {selectedSort}
       />
       <ImageGallery
         favoriteItems={likedItems}
         searchQuery={searchQuery}
         selectedPrice={selectedPrice} 
         selectedTag = {selectedTag}
+        selectedSort = {selectedSort}
         favorites={true}
+        reloadFav = {updateLoadFilterFav}
       />
     </>
   );

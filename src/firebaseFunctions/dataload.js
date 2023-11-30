@@ -16,7 +16,7 @@ export async function getUserID() {
   return userId;
 }
 
-export async function filterFavorites(favoriteItems, searchQuery, selectedPrice, selectedTag){
+export async function filterFavorites(favoriteItems, searchQuery, selectedPrice, selectedTag, selectedSort){
 
   const filteredFavorites = favoriteItems.filter(
     (item) =>
@@ -31,7 +31,16 @@ export async function filterFavorites(favoriteItems, searchQuery, selectedPrice,
       (item.tags && item.tags.includes(searchQuery))) &&
       (selectedTag === '' || (item.tags && item.tags.includes(selectedTag)))
   );
-  filteredFavorites.sort((a, b) => b.timestamp - a.timestamp);
+  //filteredFavorites.sort((a, b) => b.timestamp - a.timestamp);
+  if (selectedSort === "popularity") {
+    console.log("popularity is selected");
+    console.log("popularity is selected");
+    // Sort by likesCount in descending order
+    filteredFavorites.sort((a, b) => (b.likesCount || 0) - (a.likesCount || 0));
+  } else if (selectedSort === "time") {
+    // Sort by timestamp in descending order
+    filteredFavorites.sort((a, b) => b.timestamp - a.timestamp);
+  }
   return filteredFavorites
 }
 
