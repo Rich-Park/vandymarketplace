@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input, InputGroup, Flex, Center,  Select} from "@chakra-ui/react";
 
-function SearchBar({ onSearch, onPriceChange, onTagChange, searchQuery, selectedPrice, selectedTag }) {
+function SearchBar({ onSearch, onPriceChange, onTagChange, onSortChange, searchQuery, selectedPrice, selectedTag, selectedSort }) {
   return (
     <Flex justifyContent="center" mt={2}>
       <Center>
@@ -41,6 +41,11 @@ function SearchBar({ onSearch, onPriceChange, onTagChange, searchQuery, selected
             <option value="kitchenware">Kitchenware</option>
             <option value="office">Office Supplies</option>
             <option value="vehicles">Vehicles</option>
+        </Select>
+
+        <Select ml={2} onChange={(e) => onSortChange(e.target.value)} data-testid="Sort option" value={selectedSort}>
+          <option value="popularity">Popularity</option>
+          <option value="time">Time</option>
         </Select>
 
       </Center>

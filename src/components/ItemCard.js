@@ -17,7 +17,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
 // show the individual item with all of its information
-const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) => {
+const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete, item_likes_count, updateLikesCount }) => {
   console.log("item", item);
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(item.likesCount || 0);
@@ -51,11 +51,17 @@ const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) => {
     if (liked) {
       await unlikeItem(userId, item.sellerId, item.id);
       setLiked(false);
-      setLikesCount((prevCount) => prevCount - 1); // Decrement likes count
+      const newLikesCount = likesCount - 1; //setLikesCount((prevCount) => prevCount - 1); Decrement likes count
+      setLikesCount(newLikesCount);
+      updateLikesCount();
+      //updateLikesCount(item.id, newLikesCount);
     } else {
       await likeItem(userId, item.sellerId, item.id);
       setLiked(true);
-      setLikesCount((prevCount) => prevCount + 1); // Increment likes count
+      const newLikesCount = likesCount + 1;
+      setLikesCount(newLikesCount);
+      updateLikesCount();
+      //updateLikesCount(item.id, newLikesCount);//setLikesCount((prevCount) => prevCount + 1); // Increment likes count
     }
     setIsLikeInProgress(false);
   };
@@ -101,7 +107,7 @@ const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) => {
                 aria-label="Favorite Button"
               >
                 <chakra.span marginLeft="2" color="gray.600">
-                  {likesCount}
+                  {item_likes_count}
                 </chakra.span>
                 <Icon
                   as={liked ? AiFillHeart : AiOutlineHeart}

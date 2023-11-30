@@ -8,6 +8,7 @@ export default function MyItems() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedPrice, setSelectedPrice] = useState('');
     const [selectedTag, setSelectedTag] = useState('');
+    const [selectedSort, setSelectedSort] = useState("time");
 
 
     const handleSearch = (query) => {
@@ -22,6 +23,10 @@ export default function MyItems() {
       setSelectedTag(tagOption);
     };
 
+    const handleSortChange = (sortOption) => {
+      setSelectedSort(sortOption);
+    };
+
     return (
         <div>
             <Header />
@@ -29,11 +34,13 @@ export default function MyItems() {
               onSearch={handleSearch}
               onPriceChange={handlePriceChange}
               onTagChange = {handleTagging}
+              onSortChange={handleSortChange}
               searchQuery={searchQuery}
               selectedPrice={selectedPrice}
               selectedTag = {selectedTag}
+              selectedSort={selectedSort}
             />
-            <ImageGallery searchQuery={searchQuery} selectedPrice={selectedPrice} selectedTag = {selectedTag} myItems={true}/>
+            <ImageGallery searchQuery={searchQuery} selectedPrice={selectedPrice} selectedTag = {selectedTag} selectedSort = {selectedSort} myItems={true}/>
         </div>
 
     );

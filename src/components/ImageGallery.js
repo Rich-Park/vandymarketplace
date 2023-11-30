@@ -23,15 +23,21 @@ import {
 } from "@chakra-ui/react";
 
 import ItemCard from "./ItemCard";
-import { deleteItemFunc } from "../firebaseFunctions/firebaseWrite";
+
+import {
+  deleteItemFunc,
+} from "../firebaseFunctions/firebaseWrite";
+import { reload } from "firebase/auth";
 
 const ImageGallery = ({
   searchQuery,
   selectedPrice,
   selectedTag,
+  selectedSort,
   myItems,
   favorites,
   favoriteItems,
+  reloadFav
 }) => {
   const [itemsData, setItemsData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -42,6 +48,7 @@ const ImageGallery = ({
   const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
   const [descriptionItem, setDescriptionItem] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [loadFav, setLoadFav] = useState(false);
 
   const priceMap = {
     option1: 0,
@@ -64,7 +71,8 @@ const ImageGallery = ({
           favoriteItems,
           searchQuery,
           price,
-          selectedTag
+          selectedTag,
+          selectedSort
         );
         setItemsData(filteredFavorites);
         const delay = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -76,6 +84,7 @@ const ImageGallery = ({
             searchQuery,
             price,
             selectedTag,
+            selectedSort,
             myItems
           );
 
@@ -92,6 +101,7 @@ const ImageGallery = ({
       await delay(1000);
       setLoading(false);
     }
+    setLoadFav(false);
     setUpdateItems(false);
     load();
   }, [
@@ -102,7 +112,16 @@ const ImageGallery = ({
     favorites,
     favoriteItems,
     updateItems,
+    loadFav
   ]);
+  
+  const updateLikesCount = () => {
+    setLoadFav(true);
+    if(favorites){
+      reloadFav(true);
+    }
+    
+  };
 
   // Function to handle item deletion
   const deleteItem = async (item) => {
@@ -180,6 +199,8 @@ const ImageGallery = ({
                 onDoubleClick={handleItemDoubleClick}
                 myItems={myItems}
                 onDelete={deleteItem}
+                item_likes_count={item.likesCount}
+                updateLikesCount = {updateLikesCount}
               />
             ))}
           </Grid>
