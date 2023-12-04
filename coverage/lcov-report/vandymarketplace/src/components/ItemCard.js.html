@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.32% </span>
+                <span class="strong">91.17% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>28/31</span>
+                <span class='fraction'>31/34</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">89.65% </span>
+                <span class="strong">90.62% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>26/29</span>
+                <span class='fraction'>29/32</span>
             </div>
         
             
@@ -221,7 +221,22 @@
 <a name='L156'></a><a href='#L156'>156</a>
 <a name='L157'></a><a href='#L157'>157</a>
 <a name='L158'></a><a href='#L158'>158</a>
-<a name='L159'></a><a href='#L159'>159</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -240,11 +255,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
@@ -265,7 +281,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
@@ -277,9 +294,14 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -355,7 +377,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -396,11 +424,13 @@ import { BiMessageRoundedDetail } from "react-icons/bi";
 import { likeItem, unlikeItem } from "../firebaseFunctions/firebaseWrite";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
+import { debounce } from "lodash";
 &nbsp;
 const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) =&gt; {
   console.log("item", item);
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(item.likesCount || 0);
+  const [isLikeInProgress, setIsLikeInProgress] = useState(false);
 &nbsp;
   useEffect(() =&gt; {
     const fetchLikedStatus = async () =&gt; {
@@ -424,6 +454,7 @@ const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) =&gt; {
 &nbsp;
   // Function to handle the liking and unliking process
   const handleLikeToggle = async () =&gt; {
+    setIsLikeInProgress(true);
     const userId = await getUserID();
 &nbsp;
     if (liked) {
@@ -435,7 +466,12 @@ const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) =&gt; {
       setLiked(true);
       setLikesCount((prevCount) =&gt; prevCount + 1); // Increment likes count
     }
+    setIsLikeInProgress(false);
   };
+&nbsp;
+  // const debouncedHandleLikeToggle = debounce(async () =&gt; {
+  //   handleLikeToggle();
+  // }, 1000);
 &nbsp;
   return (
     &lt;Flex
@@ -472,6 +508,7 @@ const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) =&gt; {
               color={"gray.800"}
             &gt;
               &lt;chakra.button
+                disabled={isLikeInProgress}
                 onClick={handleLikeToggle}
                 display={"flex"}
                 aria-label="Favorite Button"
@@ -520,9 +557,14 @@ const ItemCard = ({ item, openModal, onDoubleClick, myItems, onDelete }) =&gt; {
             &lt;/Tooltip&gt;
           )}
           {myItems &amp;&amp; (
-            &lt;Tooltip label="Delete" bg="white" placement={"top"} color={"gray.800"}&gt;
+            &lt;Tooltip
+              label="Delete"
+              bg="white"
+              placement={"top"}
+              color={"gray.800"}
+            &gt;
               &lt;chakra.button
-                onClick={() =&gt; onDelete(item.id)} 
+                onClick={() =&gt; onDelete(item.id)}
                 display={"flex"}
                 aria-label="Delete Button"
               &gt;
@@ -544,7 +586,7 @@ export default ItemCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-14T01:19:57.625Z
+                at 2023-11-14T02:28:25.404Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

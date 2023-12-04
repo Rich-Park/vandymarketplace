@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.08% </span>
+                <span class="strong">4.61% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/59</span>
+                <span class='fraction'>3/65</span>
             </div>
         
             
@@ -228,7 +228,9 @@
 <a name='L163'></a><a href='#L163'>163</a>
 <a name='L164'></a><a href='#L164'>164</a>
 <a name='L165'></a><a href='#L165'>165</a>
-<a name='L166'></a><a href='#L166'>166</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -305,35 +307,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -464,6 +468,7 @@ export async function <span class="fstat-no" title="function not covered" >filte
       (selectedPrice === 0 &amp;&amp; item.price &gt;= 0 &amp;&amp; item.price &lt; 25) || // 0-25 price range
       (selectedPrice === 25 &amp;&amp; item.price &gt;= 25 &amp;&amp; item.price &lt; 50) || // 25-50 price range
       (selectedPrice === 50 &amp;&amp; item.price &gt;= 50 &amp;&amp; item.price &lt; 75) || // 50-75 price range
+      (selectedPrice === 75 &amp;&amp; item.price &gt;= 75 &amp;&amp; item.price &lt; 100) ||
       (selectedPrice === 100 &amp;&amp; item.price &gt;= 100)) &amp;&amp; // 100+ price range
       (item.productName.includes(searchQuery) ||
       item.description.includes(searchQuery) ||
@@ -503,6 +508,7 @@ export async function QueryItemsLoader(searchQuery, selectedPrice, selectedTag, 
             (selectedPrice === 0 &amp;&amp; itemPrice &gt;= 0 &amp;&amp; itemPrice &lt; 25) || // 0-25 price range
             (selectedPrice === 25 &amp;&amp; itemPrice &gt;= 25 &amp;&amp; itemPrice &lt; 50) || // 25-50 price range
             (selectedPrice === 50 &amp;&amp; itemPrice &gt;= 50 &amp;&amp; itemPrice &lt; 75) || // 50-75 price range
+            (selectedPrice === 75 &amp;&amp; itemPrice &gt;= 75 &amp;&amp; itemPrice &lt; 100) || // 75-100 price range
             (selectedPrice === 100 &amp;&amp; itemPrice &gt;= 100) // 100+ price range
           ) {
 <span class="cstat-no" title="statement not covered" >              if (myItems) {</span>
@@ -565,7 +571,7 @@ export async function <span class="fstat-no" title="function not covered" >UserS
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-14T01:19:57.625Z
+                at 2023-11-14T02:28:25.404Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

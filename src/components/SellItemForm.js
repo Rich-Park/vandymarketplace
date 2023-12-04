@@ -99,23 +99,19 @@ function SellItemForm() {
   };
 
   const handleImageUpload = (e) => {
-
     const files = Array.from(e.target.files);
-    const filteredFiles = files.slice(0, 5); // Limit to the first 5 files
-    if (filteredFiles.length > 0) {
-      setFormData({
-        ...formData,
-        images: filteredFiles,
-      });
+  
+    if (files.length > 5) {
+      alert("You can only upload up to 5 images.");
+      return; // Exit the function if more than 5 files are selected
     }
-    //const files = e.target.files;
-    //if (files.length > 0) {
-      //setFormData({
-        //...formData,
-        //images: [files[0]],
-      //});
-    //}
+  
+    setFormData({
+      ...formData,
+      images: files,
+    });
   };
+  
 
   const addTag = () => {
     if (selectedTag && !formData.tags.includes(selectedTag)) {
@@ -136,6 +132,14 @@ function SellItemForm() {
       tags: updatedTags,
     });
   };
+
+  const removeImage = (index) => {
+    setFormData({
+      ...formData,
+      images: formData.images.filter((_, i) => i !== index),
+    });
+  };
+  
 
   const handleSubmit = async (e) => {
     console.log("formData", formData);
@@ -228,6 +232,7 @@ function SellItemForm() {
             />
           </FormControl>
           {/* Image Upload */}
+          
           <FormControl id="images" isRequired>
             <FormLabel>Upload Image (Choose upto 5 images)</FormLabel>
             <InputGroup>
@@ -268,7 +273,8 @@ function SellItemForm() {
                 mt={2}
               />
             )*/}
-            {formData.images.length > 0 && (
+            
+            {/* {formData.images.length > 0 && (
               <Flex direction="row" wrap="wrap" mt={2}>
                 {formData.images.map((image, index) => (
                   <Box key={index} p={1}>
@@ -280,7 +286,29 @@ function SellItemForm() {
                   </Box>
                 ))}
               </Flex>
-            )}
+            )} */}
+            {formData.images.length > 0 && (
+            <Flex direction="row" wrap="wrap" mt={2}>
+              {formData.images.map((image, index) => (
+              <Box key={index} p={1} position="relative">
+                <Image
+                src={URL.createObjectURL(image)}
+                alt={`Uploaded Image ${index + 1}`}
+                maxH="100px"
+                />
+                <Button 
+                position="absolute"
+                top="0"
+                right="0"
+                size="sm"
+                onClick={() => removeImage(index)}
+                >
+                  ×
+                  </Button>
+                  </Box>
+                  ))}
+                  </Flex>
+                  )}
           </FormControl>
           <FormControl id="tags" >  
             <FormLabel>Tags</FormLabel>
