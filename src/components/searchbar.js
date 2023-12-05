@@ -19,11 +19,11 @@ function SearchBar({ onSearch, onPriceChange, onTagChange, onSortChange, searchQ
         </InputGroup>
 
         <Select ml = {2} placeholder='Price option' onChange={(e) => onPriceChange(e.target.value)} data-testid="Price option" value={selectedPrice}>
-          <option value='option1'>0$ - 25$</option>
-          <option value='option2'>25$ - 50$</option>
-          <option value='option3'>50$ - 75$</option>
-          <option value='option4'>75$ - 100$</option>
-          <option value='option5'>100+$</option>
+          <option value='option1'>$0 - $25</option>
+          <option value='option2'>$25 - $50</option>
+          <option value='option3'>$50 - $75</option>
+          <option value='option4'>$75 - $100</option>
+          <option value='option5'>$100+</option>
         </Select>
 
         <Select ml = {2} onChange = {(e) => onTagChange(e.target.value)} data-testid="Category" value = {selectedTag}>
