@@ -234,7 +234,7 @@ function SellItemForm() {
           {/* Image Upload */}
           
           <FormControl id="images" isRequired>
-            <FormLabel>Upload Image (Choose upto 5 images)</FormLabel>
+            <FormLabel>Upload Image (Choose up to 5 images)</FormLabel>
             <InputGroup>
               <Input
                 type="file"
