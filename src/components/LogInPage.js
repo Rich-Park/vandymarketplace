@@ -31,7 +31,7 @@ export default function LogInPage() {
         // The signed-in user info.
         const user = result.user;
         if (!user.email.endsWith("@vanderbilt.edu")) {
-          logOut();
+          //logOut();
         }
       })
       .catch((error) => {
@@ -40,7 +40,7 @@ export default function LogInPage() {
 
     onAuthStateChanged(auth, async (user) => {
       //make sure user is a Vanderbilt user
-      if (user && user.email.endsWith("@vanderbilt.edu")) {
+      if (user){   //&& user.email.endsWith("@vanderbilt.edu")) {
         console.log("auth changed");
         const userEmail = user.email;
         const userIdRef = doc(db, "userIDMap", userEmail);
